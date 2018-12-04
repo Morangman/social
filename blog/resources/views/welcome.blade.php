@@ -102,42 +102,11 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
             <div id="app">
-                <div class="content">
-                    <div class="container">
-                        <div class="card bg-light">
-                            <article class="card-body mx-auto" style="max-width: 400px;">
-                                <h4 class="card-title mt-3 text-center">Create Account</h4>
-                                <p class="text-center">Get started with your free account</p>
-                                <p>
-                                    <a href="" class="btn btn-block btn-twitter"> <i class="fab fa-twitter"></i>   Login via Twitter</a>
-                                    <a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
-                                </p>
-                                <p class="divider-text">
-                                    <span class="bg-light">OR</span>
-                                </p>
-                                <regform></regform>
-                            <p class="text-center">Have an account? <a href="">Log In</a> </p>   
-                            </article>
-                        </div> <!-- card.// -->
-                    </div> 
-                    <!--container end.//-->
-                </div>
+                <router-view></router-view>
             </div>
         </div>
 
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     </body>

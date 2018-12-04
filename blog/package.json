@@ -19,6 +19,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "vue-router": "^3.0.2"
+        "npm": "^6.4.1",
+        "vue-router": "^3.0.2",
+        "vue-tel-input": "^2.0.12"
     }
 }
