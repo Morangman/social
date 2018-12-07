@@ -1,71 +1,490 @@
+<style>
+    body {
+        background-color: #eeeeee;
+    }
+
+    .h7 {
+        font-size: 0.8rem;
+    }
+
+    .gedf-wrapper {
+        margin-top: 0.97rem;
+    }
+
+    @media (min-width: 992px) {
+        .gedf-main {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
+        .gedf-card {
+            margin-bottom: 2.77rem;
+        }
+    }
+
+    /**Reset Bootstrap*/
+    .dropdown-toggle::after {
+        content: none;
+    }
+    .container{
+        margin-top:100px;
+    }
+</style>
 <template>
-<div class="content">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-            <ul class="navbar-nav">
-                <router-link to="/" class="nav-link">Home</router-link>
-                <router-link to="/" class="nav-link" >Spa-Page</router-link>
+<div class="content-home">
+    <nav class="navbar navbar-light navbar-expand-sm navbar-template">
+        <a class="navbar-brand" href="/home">Social</a>
+        <div class="d-flex flex-row order-2 order-sm-3">
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-facebook"></i></a></li>
+                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-twitter"></i></a></li>
+                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-youtube"></i></a></li>
+                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-instagram"></i></a></li>
+                <li class="nav-item"><router-link class="nav-link px-2" to="settings"><i class="fas fa-cog"></i></router-link></li>
+                <li class="nav-item"><a class="nav-link px-2"  @click="Logout" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
             </ul>
         </div>
     </nav>
         <div class="container">
-            <div class="card bg-light">
-                <article class="card-body mx-auto" style="max-width: 400px;">
-                    <h1>Data from server</h1>
-                    {{info.name}}
+        <div class="container-fluid gedf-wrapper">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <img class="card-img-top" src="https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg" alt="Card image cap"></img>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="h5">@{{info.name}}</div>
+                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
+                            etc.
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Followers</div>
+                            <div class="h5">5.2342</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="h6 text-muted">Following</div>
+                            <div class="h5">6758</div>
+                        </li>
+                        <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 gedf-main">
 
-                    <p><router-link to="/">Home</router-link> </p>
+                <!--- \\\\\\\Post-->
+                <div class="card gedf-card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Make
+                                    a publication</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">Tags</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
                     <form>
-                    <button @click.prevent="Logout" type="submit" class="btn btn-primary btn-block"> Logout </button>
-                    </form>
-                </article>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                                <div class="form-group">
+                                    <label class="sr-only" for="message">title</label>
+                                    <input class="form-control" id="message" name="title" v-model="title" placeholder="Title"></input>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="message">post</label>
+                                    <textarea class="form-control" id="message" name="text" v-model="text" rows="3" placeholder="What are you thinking?"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile01" v-on:change="changeImage" aria-describedby="inputGroupFileAddon01"></input>
+                                        <label class="custom-file-label" for="inputGroupFile01"><p>Select photo</p></label>
+                                        <div class="custom-file-label" v-if="name.name">{{name.name}}</div>
+                                    </div>
+                                </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile"></input>
+                                        <label class="custom-file-label" for="customFile">Upload image</label>
+                                    </div>
+                                </div>
+                                <div class="py-4"></div>
+                            </div>
+                        </div>
+                        <div class="btn-toolbar justify-content-between">
+                            <div class="btn-group">
+                                <button type="submit" @click.prevent="addPost" class="btn btn-primary" >share</button>
+                            </div>
+                            <div class="btn-group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <i class="fa fa-globe"></i> Public
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <a class="dropdown-item" href="#"><i class="fa fa-globe"></i> Public</a>
+                                    <a class="dropdown-item" href="#"><i class="fa fa-users"></i> Friends</a>
+                                    <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Just me</a>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card gedf-card" v-for="post in posts">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="mr-2">
+                                    <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt=""></img>
+                                </div>
+                                <div class="ml-2">
+                                    <div class="h5 m-0">@{{info.name}}</div>
+                                    <div class="h7 text-muted">{{ post.created_at | moment("calendar") }}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="dropdown">
+                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                        <div class="h6 dropdown-header">Configuration</div>
+                                        <a class="dropdown-item" href="#">Save</a>
+                                        <a class="dropdown-item" href="#">Hide</a>
+                                        <a class="dropdown-item" href="#">Report</a>
+                                        <a class="dropdown-item" href="#" @click.prevent="deletePost(post.id)">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <a class="card-link" href="#">
+                            <h5 class="card-title"> {{post.title}}</h5>
+                        </a>
+                        <div class="card" v-if="post.src">
+                            <img class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
+                        </div>
+                        <hr>
+                        <p class="card-text" v-linkified>
+                            {{post.text}}
+                        </p>
+                        <div>
+                            <span class="badge badge-primary">JavaScript</span>
+                            <span class="badge badge-primary">Android</span>
+                            <span class="badge badge-primary">PHP</span>
+                            <span class="badge badge-primary">Node.js</span>
+                            <span class="badge badge-primary">Ruby</span>
+                            <span class="badge badge-primary">Paython</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>{{post.likes_cnt }}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Like</a>
+                        <span>{{post.dislikes_cnt }}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Dislike</a>
+                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+                        <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="card gedf-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+                <div class="card gedf-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+            </div>
+    </div>
 </div>
+
 </template>
 
 <script>
     export default {
 
+
         data () {
             return {
-                info: []
+                info: [],
+                posts: [],
+                title: null,
+                text: null,
+                image: '',
+                name: '',
+                likes: '',
+                dislikes: '',
+                array_likes: []
             }
         },
         mounted () {
             let currentObj = this;
+            currentObj.$Progress.start();
             axios.get(`/getdata`)
                 .then(function (response) {
                     if(response){
-                        console.log(response);
                         currentObj.info = response.data.user;
+                        currentObj.$Progress.finish();
+                        
                         if(response.data.success == false){
+                            currentObj.$Progress.fail();
+                            currentObj.$router.push('/');
+                        }
+                    }
+                }),
+                axios.get(`/posts`)
+                .then(function (response) {
+                    if(response){
+                        currentObj.posts = response.data.posts;
+                        currentObj.$Progress.finish();
+                        
+                        if(response.data.success == false){
+                            currentObj.$Progress.fail();
                             currentObj.$router.push('/');
                         }
                     }
                 })
         },
+
         methods:{
             Logout(){
                 let currentObj = this;
+                currentObj.$Progress.start();
                 axios.post('/logout', {
-                },
-                {
-                    headers: {
-                        'accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
                 })
                 .then(function (response) {
                     if(response){
-                        currentObj.$router.push('/');
+                        currentObj.$router.push('/login');
+                        currentObj.$Progress.finish();
                     }
                 })
                 .catch(function (error) {
+                    currentObj.$Progress.fail();
                     console.log(error);
                 });
-            }
+            },
+
+            changeImage(e) {
+                this.name = e.target.files[0];
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            createImage(file) {
+                let reader = new FileReader();
+                let vm = this;
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+
+            getPosts(){
+                let currentObj = this;
+                axios.get(`/posts`)
+                .then(function (response) {
+                    if(response){
+                        currentObj.posts = response.data.posts;
+                        currentObj.$Progress.finish();
+                        
+                        if(response.data.success == false){
+                            currentObj.$Progress.fail();
+                            currentObj.$router.push('/');
+                        }
+                    }
+                })
+            },
+
+            addPost(e) {
+                e.preventDefault();
+                let currentObj = this;
+                currentObj.$Progress.start();
+                if(!this.title || !this.text){
+                    currentObj.$Progress.fail();
+                    this.error = true;
+                    this.success = false;
+                    this.msg = "Empty fields!";
+                } else {
+                    axios.post('/add_post', {
+                        title: this.title,
+                        text: this.text,
+                        image: this.image
+                    },
+
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                             currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    }).then(() => {
+                        currentObj.getPosts();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                }
+            },
+
+            deletePost(id) {
+                let currentObj = this;
+                currentObj.$Progress.start();
+                let post_id = id;
+                    axios.delete('/post_delete/'+ post_id, {
+                    },
+
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                             currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    }).then(() => {
+                        currentObj.getPosts();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+
+                addLike(postId) {
+                let post_id = postId;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                    axios.post('/like', {
+                        postId: post_id
+                    },
+
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                           // console.log(response.data);
+                            //currentObj.array_likes = response.data;
+                             currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+
+                addDislike(postId) {
+                let post_id = postId;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                    axios.post('/dislike', {
+                        postId: post_id
+                    },
+
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                            console.log(response.data);
+                             currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                }
         }
     }
 </script>

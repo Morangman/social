@@ -17,10 +17,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/posts', 'PostController@index');
+
+Route::post('/add_post', 'PostController@add_post');
+Route::delete('/post_delete/{post_id}', 'PostController@destroy');
+
+Route::post('/like', [ 'uses' => 'PostController@postLikePost', 'as' => 'like']);
+Route::post('/dislike', [ 'uses' => 'PostController@postDislikePost', 'as' => 'dislike']);
+
 Route::post('/get', 'RequestController@index');
 Route::get('/getdata', 'RequestController@getdata');
 
 Route::get('/home', function () {
     return view('home');
    });
+
+Route::get('/settings', function () {
+    return view('settings');
+});
