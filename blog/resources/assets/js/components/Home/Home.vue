@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     body {
         background-color: #eeeeee;
     }
@@ -26,7 +26,33 @@
         content: none;
     }
     .container{
-        margin-top:100px;
+        margin-top:50px;
+    }
+
+    .profile-pic {
+        height: 270px;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        vertical-align: middle;
+        text-align: center;
+        color: transparent;
+        transition: all .3s ease;
+        text-decoration: none;
+    }
+
+    .profile-pic:hover {
+        background-color: rgba(0,0,0,.5);
+        z-index: 10000;
+        color: #fff;
+        transition: all .3s ease;
+        text-decoration: none;
+    }
+
+    .profile-pic span {
+        display: inline-block;
+        padding-top: 8em;
+        padding-bottom: 4.5em;
     }
 </style>
 <template>
@@ -59,12 +85,27 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
-                    <img class="card-img-top" src="https://www.codeproject.com/KB/GDI-plus/ImageProcessing2/img.jpg" alt="Card image cap"></img>
+                <form>
+                    <div class="profile-pic" @click="$refs.file.click()" v-bind:style="{ backgroundImage: 'url(' + info.photo + ')' }">
+                    
+                        <span><i class="fas fa-camera"></i></span>
+                        <input type="file" ref="file" hidden  v-on:change="changeProfileImage" ></input>
+                    
+                    </div>
+                    <button v-if="img_name.name" type="submit" @click="updateProfileImage()">Update photo</button>
+                    <div id="preview">
+                      <img style="width: 20px; height: 20px;" v-if="prof_image" :src="prof_image" />
+                    </div>
+                    <p>{{img_name.name}}</p>
+                </form>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="h5">@{{info.name}}</div>
-                        <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
+                        <div class="h5">@{{info.nick}}</div>
+                        <div class="h7 text-muted">Fullname : {{info.name}}</div>
+                        <div class="h7 text-muted">E-mail : {{info.email}}</div>
+                        <div class="h7 text-muted">Phone: : {{info.phone}}</div>
+                        <hr>
                         <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
                             etc.
                         </div>
@@ -111,23 +152,20 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
-
+                                    <div id="preview">
+                                            <img style=" height: 38px;" v-if="image" :src="image" />
+                                </div>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="inputGroupFile01" v-on:change="changeImage" aria-describedby="inputGroupFileAddon01"></input>
                                         <label class="custom-file-label" for="inputGroupFile01"><p>Select photo</p></label>
-                                        <div class="custom-file-label" v-if="name.name">{{name.name}}</div>
+                                        <div class="custom-file-label" v-if="image">{{name.name}}</div>
                                     </div>
                                 </div>
                                 </div>
 
                             </div>
                             <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
-                                <div class="form-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile"></input>
-                                        <label class="custom-file-label" for="customFile">Upload image</label>
-                                    </div>
-                                </div>
+                                <input-tag v-model="tags" placeholder="Input tags"></input-tag>
                                 <div class="py-4"></div>
                             </div>
                         </div>
@@ -156,10 +194,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="mr-2">
-                                    <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt=""></img>
+                                    <img class="rounded-circle" width="45" v-bind:src="'http://localhost:8000/' + info.photo" alt=""></img>
                                 </div>
                                 <div class="ml-2">
-                                    <div class="h5 m-0">@{{info.name}}</div>
+                                    <div class="h5 m-0">@{{info.nick}}</div>
                                     <div class="h7 text-muted">{{ post.created_at | moment("calendar") }}</div>
                                 </div>
                             </div>
@@ -185,11 +223,11 @@
                             <h5 class="card-title"> {{post.title}}</h5>
                         </a>
                         <div class="card" v-if="post.src">
-                            <img class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
+                            <img v-img class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
                         </div>
                         <hr>
-                        <p class="card-text" v-linkified>
-                            {{post.text}}
+                        <p class="card-text" >
+                            {{post.post_body}}
                         </p>
                         <div>
                             <span class="badge badge-primary">JavaScript</span>
@@ -201,8 +239,8 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span>{{post.likes_cnt }}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Like</a>
-                        <span>{{post.dislikes_cnt }}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Dislike</a>
+                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Like</a>
+                        <span>{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Dislike</a>
                         <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
                         <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
                     </div>
@@ -212,12 +250,14 @@
             <div class="col-md-3">
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                            card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">Find friends!</h5>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-4" v-for="user in users">
+                                    <a href="#"><img  class="card-img-top" style="max-height: 35px; max-width:35px;" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card gedf-card">
@@ -247,13 +287,15 @@
             return {
                 info: [],
                 posts: [],
+                users: [],
                 title: null,
                 text: null,
                 image: '',
                 name: '',
                 likes: '',
                 dislikes: '',
-                array_likes: []
+                prof_image: '',
+                img_name: ''
             }
         },
         mounted () {
@@ -267,7 +309,7 @@
                         
                         if(response.data.success == false){
                             currentObj.$Progress.fail();
-                            currentObj.$router.push('/');
+                            currentObj.$router.push('/login');
                         }
                     }
                 }),
@@ -279,7 +321,19 @@
                         
                         if(response.data.success == false){
                             currentObj.$Progress.fail();
-                            currentObj.$router.push('/');
+                            currentObj.$router.push('/login');
+                        }
+                    }
+                }),
+                axios.get(`/get_users`)
+                .then(function (response) {
+                    if(response){
+                        currentObj.users = response.data.users;
+                        currentObj.$Progress.finish();
+                        
+                        if(response.data.success == false){
+                            currentObj.$Progress.fail();
+                            currentObj.$router.push('/login');
                         }
                     }
                 })
@@ -319,6 +373,56 @@
                 reader.readAsDataURL(file);
             },
 
+            changeProfileImage(e) {
+                this.img_name = e.target.files[0];
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createProfileImage(files[0]);
+            },
+            createProfileImage(file) {
+                let reader = new FileReader();
+                let vm = this;
+                reader.onload = (e) => {
+                    vm.prof_image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+
+            updateProfileImage(){
+                let currentObj = this;
+                currentObj.$Progress.start();
+                axios.post('/update_image', {
+                    prof_image: this.prof_image
+                },
+
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                        currentObj.$router.push('/home');
+                        currentObj.$Progress.finish();
+                    }
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            
+            },
+
             getPosts(){
                 let currentObj = this;
                 axios.get(`/posts`)
@@ -329,7 +433,7 @@
                         
                         if(response.data.success == false){
                             currentObj.$Progress.fail();
-                            currentObj.$router.push('/');
+                            currentObj.$router.push('/login');
                         }
                     }
                 })
@@ -362,8 +466,11 @@
                         if(response){
                             // currentObj.error = false;
                             // currentObj.success = true;
-                             currentObj.$router.push('home');
+                            currentObj.$router.push('/home');
                             currentObj.$Progress.finish();
+                            currentObj.title = undefined;
+                            currentObj.text = undefined;
+                            currentObj.image = undefined;
                         }
                     }).then(() => {
                         currentObj.getPosts();
@@ -439,6 +546,8 @@
                              currentObj.$router.push('home');
                             currentObj.$Progress.finish();
                         }
+                    }).then(() => {
+                        currentObj.getPosts();
                     })
                     .catch(function (error) {
                         if(error){
@@ -470,10 +579,11 @@
                         if(response){
                             // currentObj.error = false;
                             // currentObj.success = true;
-                            console.log(response.data);
                              currentObj.$router.push('home');
                             currentObj.$Progress.finish();
                         }
+                    }).then(() => {
+                        currentObj.getPosts();
                     })
                     .catch(function (error) {
                         if(error){
@@ -488,7 +598,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

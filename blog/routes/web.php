@@ -23,10 +23,12 @@ Route::get('/posts', 'PostController@index');
 Route::post('/add_post', 'PostController@add_post');
 Route::delete('/post_delete/{post_id}', 'PostController@destroy');
 
+Route::post('/update_image', 'UserController@update_image');
+
 Route::post('/like', [ 'uses' => 'PostController@postLikePost', 'as' => 'like']);
 Route::post('/dislike', [ 'uses' => 'PostController@postDislikePost', 'as' => 'dislike']);
 
-Route::post('/get', 'RequestController@index');
+Route::get('/get_users', 'UserController@get_users');
 Route::get('/getdata', 'RequestController@getdata');
 
 Route::get('/home', function () {

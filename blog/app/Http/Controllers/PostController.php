@@ -54,8 +54,6 @@ class PostController extends Controller
         }
         $post->updated_at = Carbon::now();
         $post->save();
-        \Session::flash('save_post', 'Пост был успешно изменен!');
-        return redirect ('/post');
     }
     
     //добавление нового поста
@@ -63,7 +61,7 @@ class PostController extends Controller
         $post = new Post();
         $post->title = $request->input('title');
         $post->user_id = \Auth::user()->id;
-        $post->text = $request->input('text');
+        $post->post_body = $request->input('text');
 
         if($request->get('image'))
         {
@@ -84,7 +82,6 @@ class PostController extends Controller
         //     $post->tag()->sync(array());
         // }
         
-        // \Session::flash('save_message', 'Пост был успешно добавлен!');
         return response()->json([
             'success' => true
         ]);
@@ -134,6 +131,12 @@ class PostController extends Controller
                    'status' => 'error',
                    'msg' => 'Fail to delete'
                ]);
+
+               if($post){
+                $post->likes_cnt = $post->likes->sum('like');
+                $post->dislikes = $post->likes->where('like',0)->count();
+                $post->update();
+                }
            } else {
                return json_encode([
                    'status' => 'ok',
@@ -142,6 +145,12 @@ class PostController extends Controller
                    'likes' => $post->likes->sum('like'),
                    'dislikes' => $post->likes->where('like',0)->count()
                ]);
+
+               if($post){
+                $post->likes_cnt = $post->likes->sum('like');
+                $post->dislikes = $post->likes->where('like',0)->count();
+                $post->update();
+            }
            }
        } else {
            $not_like = $user->likes()
@@ -151,6 +160,12 @@ class PostController extends Controller
            if ($not_like){
                $not_like->like = (($is_like)? 1:0);
                $not_like->update();
+
+               if($post){
+                $post->likes_cnt = $post->likes->sum('like');
+                $post->dislikes = $post->likes->where('like',0)->count();
+                $post->update();
+            }
            } else {
                $new_like = new Like();
                $new_like->like = (($is_like)? 1:0);
@@ -161,8 +176,8 @@ class PostController extends Controller
                //ToDO: не сохраняет лайки и дизы
                 if($post){
                     $post->likes_cnt = $post->likes->sum('like');
-                    $post->dislikes_cnt = $post->likes->where('like',0)->count();
-                    $post->save();
+                    $post->dislikes = $post->likes->where('like',0)->count();
+                    $post->update();
                 }
            }
 
@@ -173,6 +188,12 @@ class PostController extends Controller
                'likes' => $post->likes->sum('like'),
                'dislikes' => $post->likes->where('like',0)->count()
            ]);
+
+           if($post){
+            $post->likes_cnt = $post->likes->sum('like');
+            $post->dislikes = $post->likes->where('like',0)->count();
+            $post->update();
+        }
        } 
 
    }

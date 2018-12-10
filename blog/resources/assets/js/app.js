@@ -2,7 +2,9 @@ import VueRouter from 'vue-router'
 import Axios from 'axios'
 import VueProgressBar from 'vue-progressbar'
 import Lightbox from 'vue-pure-lightbox'
+import VueImg from 'v-img';
 import linkify from 'vue-linkify'
+import InputTag from 'vue-input-tag'
 
 
 /**
@@ -15,11 +17,13 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-Vue.use(Lightbox);
+Vue.use(VueImg);
 
 Vue.directive('linkified', linkify);
 
 Vue.use(require('vue-moment'));
+
+Vue.component('input-tag', InputTag);
 
 Vue.use(VueRouter);
 

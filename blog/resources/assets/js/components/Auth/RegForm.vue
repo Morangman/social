@@ -97,6 +97,12 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                 </div>
+                                <input name="" class="form-control" placeholder="Nick name" type="text" v-model="nick" :maxlength="max">
+                            </div> <!-- form-group// -->
+                            <div class="form-group input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                                </div>
                                 <input name="" class="form-control" placeholder="Full name" type="text" v-model="name" :maxlength="max">
                             </div> <!-- form-group// -->
                             <div class="form-group input-group">
@@ -149,6 +155,7 @@
     export default {
         data() {
             return {
+                nick: null,
                 name: null,
                 email: null,
                 phone: null,
@@ -166,7 +173,7 @@
                 e.preventDefault();
                 let currentObj = this;
                 currentObj.$Progress.start();
-                if(!this.name || !this.email || !this.phone || !this.password || !this.password_confirmation){
+                if(!this.nick || !this.name || !this.email || !this.phone || !this.password || !this.password_confirmation){
                     currentObj.$Progress.fail();
                     this.error = true;
                     this.success = false;
@@ -181,7 +188,12 @@
                     this.error = true;
                     this.success = false;
                     this.msg = "Name not correct!";
-                } else if(this.password.length <= 3){
+                } else if(!this.validNick(this.nick)){
+                    currentObj.$Progress.fail();
+                    this.error = true;
+                    this.success = false;
+                    this.msg = "Nick not correct!";
+                }  else if(this.password.length <= 3){
                     currentObj.$Progress.fail();
                     this.error = true;
                     this.success = false;
@@ -198,6 +210,7 @@
                     this.msg = "Phone number not valid!";
                 } else {
                     axios.post('/register', {
+                        nick: this.nick,
                         name: this.name,
                         email: this.email,
                         phone: this.phone,
@@ -239,6 +252,10 @@
             validName: function (name) {
                 let re = /[a-zA-ZА-яЁё]+/;
                 return re.test(name);
+            },
+            validNick: function (nick) {
+                let re = /[a-zA-ZА-яЁё0-9]+/;
+                return re.test(nick);
             },
             onInput({ isValid}) {
                 console.log(isValid);
