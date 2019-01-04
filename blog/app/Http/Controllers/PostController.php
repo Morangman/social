@@ -31,6 +31,18 @@ class PostController extends Controller
         }
 
     }
+
+    public function get_posts(Request $request){
+            $user_id = $request->user_id;
+            $posts = Post::orderBy('created_at', 'desc')
+            ->where('user_id',$user_id)->get();
+
+            return response()->json([
+                'error' => null,
+                'success' => true,
+                'posts' => $posts
+            ]);
+    }
     
     //импорт данных в таблицу с новыми параметрами
     public function update_info(int $id, Request $request){

@@ -81,7 +81,7 @@
                     <h4 class="card-title mt-3 text-center">Create Account</h4>
                     <p class="text-center">Get started with your free account</p>
                     <p>
-                        <a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
+                        <a  href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Registration via facebook</a>
                     </p>
                     <p class="divider-text">
                         <span class="bg-light">OR</span>
@@ -245,6 +245,8 @@
                     });
                 }
             },
+
+
             validEmail: function (email) {
                 let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);

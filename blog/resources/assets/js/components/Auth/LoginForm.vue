@@ -81,7 +81,7 @@
                     <h4 class="card-title mt-3 text-center">Login</h4>
                     <p class="text-center">Log In to your account</p>
                     <p>
-                        <a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
+                        <a href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
                     </p>
                     <p class="divider-text">
                         <span class="bg-light">OR</span>
@@ -109,7 +109,7 @@
                                 <button @click.prevent="formSubmit" type="submit" class="btn btn-primary btn-block"> Log In </button>
                             </div> 
                         </form>
-                    <p class="text-center">First time? <router-link to="/">Register</router-link> </p>
+                    <p class="text-center">First time?<router-link to="/">Register</router-link> </p>
                 </article>
             </div>
         </div>

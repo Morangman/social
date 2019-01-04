@@ -54,6 +54,10 @@
         padding-top: 8em;
         padding-bottom: 4.5em;
     }
+
+    .fa-camera { transform: scale(2,2); cursor: pointer;}
+    .fa-trash { transform: scale(2,2); cursor: pointer;}
+
 </style>
 <template>
 <div class="content-home">
@@ -86,17 +90,11 @@
             <div class="col-md-3">
                 <div class="card">
                 <form>
-                    <div class="profile-pic" @click="$refs.file.click()" v-bind:style="{ backgroundImage: 'url(' + info.photo + ')' }">
-                    
-                        <span><i class="fas fa-camera"></i></span>
+                    <div class="profile-pic" v-bind:style="{ backgroundImage: 'url(' + info.photo + ')' }">
+                        <span><a @click="$refs.file.click()"><i style="margin-right: 50px;" class="fas fa-camera"></i></a></span>
+                        <span><a @click="deleteUserPhoto()"><i class="fas fa-trash"></i></a></span>
                         <input type="file" ref="file" hidden  v-on:change="changeProfileImage" ></input>
-                    
                     </div>
-                    <button v-if="img_name.name" type="submit" @click="updateProfileImage()">Update photo</button>
-                    <div id="preview">
-                      <img style="width: 20px; height: 20px;" v-if="prof_image" :src="prof_image" />
-                    </div>
-                    <p>{{img_name.name}}</p>
                 </form>
                 </div>
                 <div class="card">
@@ -154,7 +152,7 @@
                                     <div class="input-group">
                                     <div id="preview">
                                             <img style=" height: 38px;" v-if="image" :src="image" />
-                                </div>
+                                    </div>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="inputGroupFile01" v-on:change="changeImage" aria-describedby="inputGroupFileAddon01"></input>
                                         <label class="custom-file-label" for="inputGroupFile01"><p>Select photo</p></label>
@@ -185,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                        </form>
+                    </form>
                     </div>
                 </div>
 
@@ -254,7 +252,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm-4" v-for="user in users">
-                                    <a href="#"><img  class="card-img-top" style="max-height: 35px; max-width:35px;" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></a>
+                                    <a @click="GoToProfile(user.id)"><img  class="card-img-top" style="max-height: 35px; max-width:35px;" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></a>
                                 </div>
                             </div>
                         </div>
@@ -385,8 +383,10 @@
                 let vm = this;
                 reader.onload = (e) => {
                     vm.prof_image = e.target.result;
+                    vm.updateProfileImage();
                 };
                 reader.readAsDataURL(file);
+                
             },
 
             updateProfileImage(){
@@ -410,6 +410,10 @@
                         currentObj.$router.push('/home');
                         currentObj.$Progress.finish();
                     }
+                }).then(() => {
+                    currentObj.getUser();
+                }).then(() => {
+                    currentObj.getUsers();
                 })
                 .catch(function (error) {
                     if(error){
@@ -429,6 +433,38 @@
                 .then(function (response) {
                     if(response){
                         currentObj.posts = response.data.posts;
+                        currentObj.$Progress.finish();
+                        
+                        if(response.data.success == false){
+                            currentObj.$Progress.fail();
+                            currentObj.$router.push('/login');
+                        }
+                    }
+                })
+            },
+
+            getUser(){
+                let currentObj = this;
+                currentObj.$Progress.start();
+                axios.get(`/getdata`)
+                    .then(function (response) {
+                        if(response){
+                            currentObj.info = response.data.user;
+                            currentObj.$Progress.finish();
+                            
+                            if(response.data.success == false){
+                                currentObj.$Progress.fail();
+                                currentObj.$router.push('/login');
+                            }
+                        }
+                    })
+            },
+
+            getUsers(){
+                axios.get(`/get_users`)
+                .then(function (response) {
+                    if(response){
+                        currentObj.users = response.data.users;
                         currentObj.$Progress.finish();
                         
                         if(response.data.success == false){
@@ -491,110 +527,148 @@
                 let currentObj = this;
                 currentObj.$Progress.start();
                 let post_id = id;
-                    axios.delete('/post_delete/'+ post_id, {
-                    },
-
-                    {
-                        headers: {
-                            'accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    })
-                    .then(function (response) {
-                        if(response){
-                            // currentObj.error = false;
-                            // currentObj.success = true;
-                             currentObj.$router.push('home');
-                            currentObj.$Progress.finish();
-                        }
-                    }).then(() => {
-                        currentObj.getPosts();
-                    })
-                    .catch(function (error) {
-                        if(error){
-                            currentObj.$Progress.fail();
-                            console.log(error.response.data);
-                            // currentObj.error = true;
-                            // currentObj.success = false;
-                            // currentObj.msg = error.response.data.message;
-                        }
-                    })
+                axios.delete('/post_delete/'+ post_id, {
                 },
 
-                addLike(postId) {
-                let post_id = postId;
-                let currentObj = this;
-                currentObj.$Progress.start();
-                    axios.post('/like', {
-                        postId: post_id
-                    },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                            currentObj.$router.push('home');
+                        currentObj.$Progress.finish();
+                    }
+                }).then(() => {
+                    currentObj.getPosts();
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            },
 
-                    {
-                        headers: {
-                            'accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    })
-                    .then(function (response) {
-                        if(response){
-                            // currentObj.error = false;
-                            // currentObj.success = true;
-                           // console.log(response.data);
-                            //currentObj.array_likes = response.data;
-                             currentObj.$router.push('home');
-                            currentObj.$Progress.finish();
-                        }
-                    }).then(() => {
-                        currentObj.getPosts();
-                    })
-                    .catch(function (error) {
-                        if(error){
-                            currentObj.$Progress.fail();
-                            console.log(error.response.data);
-                            // currentObj.error = true;
-                            // currentObj.success = false;
-                            // currentObj.msg = error.response.data.message;
-                        }
-                    })
+            addLike(postId) {
+            let post_id = postId;
+            let currentObj = this;
+            currentObj.$Progress.start();
+                axios.post('/like', {
+                    postId: post_id
                 },
 
-                addDislike(postId) {
-                let post_id = postId;
-                let currentObj = this;
-                currentObj.$Progress.start();
-                    axios.post('/dislike', {
-                        postId: post_id
-                    },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                        // console.log(response.data);
+                        //currentObj.array_likes = response.data;
+                            currentObj.$router.push('home');
+                        currentObj.$Progress.finish();
+                    }
+                }).then(() => {
+                    currentObj.getPosts();
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            },
 
-                    {
-                        headers: {
-                            'accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    })
-                    .then(function (response) {
-                        if(response){
-                            // currentObj.error = false;
-                            // currentObj.success = true;
-                             currentObj.$router.push('home');
-                            currentObj.$Progress.finish();
-                        }
-                    }).then(() => {
-                        currentObj.getPosts();
-                    })
-                    .catch(function (error) {
-                        if(error){
-                            currentObj.$Progress.fail();
-                            console.log(error.response.data);
-                            // currentObj.error = true;
-                            // currentObj.success = false;
-                            // currentObj.msg = error.response.data.message;
-                        }
-                    })
-                }
+            addDislike(postId) {
+            let post_id = postId;
+            let currentObj = this;
+            currentObj.$Progress.start();
+                axios.post('/dislike', {
+                    postId: post_id
+                },
+
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                            currentObj.$router.push('home');
+                        currentObj.$Progress.finish();
+                    }
+                }).then(() => {
+                    currentObj.getPosts();
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            },
+
+            deleteUserPhoto() {
+            let currentObj = this;
+            currentObj.$Progress.start();
+                axios.delete('/delete_image' , {
+                },
+
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                            currentObj.$router.push('home');
+                        currentObj.$Progress.finish();
+                    }
+                }).then(() => {
+                    currentObj.getUser();
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            },
+
+            GoToProfile(id){
+                this.$router.push('/profile/'+id);
+            }
         }
     }
 </script>

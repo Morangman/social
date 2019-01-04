@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/posts', 'PostController@index');
 
+Route::post('/get_posts', 'PostController@get_posts');
+
 Route::post('/add_post', 'PostController@add_post');
 Route::delete('/post_delete/{post_id}', 'PostController@destroy');
 
@@ -29,6 +31,9 @@ Route::post('/like', [ 'uses' => 'PostController@postLikePost', 'as' => 'like'])
 Route::post('/dislike', [ 'uses' => 'PostController@postDislikePost', 'as' => 'dislike']);
 
 Route::get('/get_users', 'UserController@get_users');
+Route::post('/get_user', 'UserController@get_user');
+Route::delete('/delete_image', 'UserController@delete_image');
+
 Route::get('/getdata', 'RequestController@getdata');
 
 Route::get('/home', function () {
@@ -38,3 +43,10 @@ Route::get('/home', function () {
 Route::get('/settings', function () {
     return view('settings');
 });
+
+Route::get('/profile/{user_id}', function () {
+    return view('profile');
+});
+
+Route::get('/redirect', 'SocialAuthFacebookController@redirect');
+Route::get('/callback', 'SocialAuthFacebookController@callback');
