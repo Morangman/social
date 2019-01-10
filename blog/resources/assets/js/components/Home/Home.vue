@@ -58,6 +58,21 @@
     .fa-camera { transform: scale(2,2); cursor: pointer;}
     .fa-trash { transform: scale(2,2); cursor: pointer;}
 
+    .list{    
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li.list-item{
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+    #friendName{
+        margin-left: 5px;
+    }
 </style>
 <template>
 <div class="content-home">
@@ -69,7 +84,7 @@
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-twitter"></i></a></li>
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-youtube"></i></a></li>
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-instagram"></i></a></li>
-                <li class="nav-item"><router-link class="nav-link px-2" to="settings"><i class="fas fa-cog"></i></router-link></li>
+                <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
                 <li class="nav-item"><a class="nav-link px-2"  @click="Logout" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
@@ -78,8 +93,8 @@
         </div>
         <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
+                <li class="nav-item"><router-link class="nav-link" to="/home">Home</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" to="/chat">Messages</router-link></li>
                 <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
             </ul>
         </div>
@@ -100,12 +115,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="h5">@{{info.nick}}</div>
-                        <div class="h7 text-muted">Fullname : {{info.name}}</div>
+                        <div class="h5 text-muted"> {{info.name}}</div>
                         <div class="h7 text-muted">E-mail : {{info.email}}</div>
-                        <div class="h7 text-muted">Phone: : {{info.phone}}</div>
+                        <div class="h7 text-muted">Phone : {{info.phone}}</div>
                         <hr>
-                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
-                            etc.
+                        <div class="h7">{{info.info}}
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -249,24 +263,19 @@
                 <div class="card gedf-card">
                     <div class="card-body">
                         <h5 class="card-title">Find friends!</h5>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-4" v-for="user in users">
-                                    <a @click="GoToProfile(user.id)"><img  class="card-img-top" style="max-height: 35px; max-width:35px;" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></a>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list"  v-for="user in users">
+                            <a  @click="GoToProfile(user.id)" href="#"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + user.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ user.name }} </p></li></a>
+                        </ul>
                     </div>
                 </div>
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                            card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">My friends</h5>
+                        <ul class="list"  v-for="friend in friends">
+                            <a  @click="GoToProfile(friend.id)" href="#"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + friend.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ friend.name }} </p><i class="fas fa-comment-alt"></i></li></a>
+                        </ul>
                     </div>
+                    <a href="#" class="card-link" style="text-align:center;">View all</a>
                 </div>
             </div>
         </div>
@@ -278,6 +287,7 @@
 </template>
 
 <script>
+
     export default {
 
 
@@ -286,6 +296,7 @@
                 info: [],
                 posts: [],
                 users: [],
+                friends: [],
                 title: null,
                 text: null,
                 image: '',
@@ -327,6 +338,19 @@
                 .then(function (response) {
                     if(response){
                         currentObj.users = response.data.users;
+                        currentObj.$Progress.finish();
+                        
+                        if(response.data.success == false){
+                            currentObj.$Progress.fail();
+                            currentObj.$router.push('/login');
+                        }
+                    }
+                }),
+
+                axios.get(`/get_all_friends`)
+                .then(function (response) {
+                    if(response){
+                        currentObj.friends = response.data.friends;
                         currentObj.$Progress.finish();
                         
                         if(response.data.success == false){

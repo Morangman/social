@@ -32,9 +32,16 @@ Route::post('/dislike', [ 'uses' => 'PostController@postDislikePost', 'as' => 'd
 
 Route::get('/get_users', 'UserController@get_users');
 Route::post('/get_user', 'UserController@get_user');
+Route::post('/update_profile_info', 'UserController@update_profile_info');
+Route::get('/get_user_info', 'UserController@get_user_info');
 Route::delete('/delete_image', 'UserController@delete_image');
 
 Route::get('/getdata', 'RequestController@getdata');
+
+Route::post('/add_friend', 'FriendController@add_friend');
+Route::delete('/delete_friend/{friend_id}', 'FriendController@delete_friend');
+Route::post('/check_friend', 'FriendController@check_friend');
+Route::get('/get_all_friends', 'FriendController@get_all_friends');
 
 Route::get('/home', function () {
     return view('home');
@@ -42,6 +49,10 @@ Route::get('/home', function () {
 
 Route::get('/settings', function () {
     return view('settings');
+});
+
+Route::get('/chat', function () {
+    return view('chat');
 });
 
 Route::get('/profile/{user_id}', function () {

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class About extends Model
+class Message extends Model
 {
-    protected $fillable = ['created_at'];
+    protected $fillable = ['user_id', 'message'];
     
     public function user()
     {

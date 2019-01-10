@@ -40,6 +40,7 @@ const Login = Vue.component('loginform', require('./components/Auth/LoginForm.vu
 const Home = Vue.component('datacomponent', require('./components/Home/Home.vue'));
 const ShowProfile = Vue.component('profile', require('./components/Home/ShowProfile.vue'));
 const Settings = Vue.component('settingscomponent', require('./components/Settings/Settings.vue'));
+const ChatRoom = Vue.component('chatcomponent', require('./components/Chatroom/ChatRoom.vue'));
 
 
 const routes = [
@@ -47,7 +48,8 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/home', component: Home },
   { path: '/profile/:id', component: ShowProfile },
-  { path: '/settings', component: Settings }
+  { path: '/settings', component: Settings },
+  { path: '/chat', component: ChatRoom }
 ]
 
 const router = new VueRouter({

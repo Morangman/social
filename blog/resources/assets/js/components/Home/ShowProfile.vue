@@ -56,6 +56,10 @@
         padding-bottom: 4.5em;
     }
 
+    #add_to_friends{
+        margin-top: 10px;
+    }
+
 </style>
 <template>
 <div class="content-home">
@@ -67,7 +71,7 @@
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-twitter"></i></a></li>
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-youtube"></i></a></li>
                 <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-instagram"></i></a></li>
-                <li class="nav-item"><router-link class="nav-link px-2" to="settings"><i class="fas fa-cog"></i></router-link></li>
+                <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
                 <li class="nav-item"><a class="nav-link px-2"  @click="Logout" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
             </ul>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
@@ -89,15 +93,21 @@
                 <div class="card">
                     <img v-img class="card-img-top" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></img>
                 </div>
+
+                <div class="card">
+                    <button id="wrtite" name="submit" type="submit" class="btn btn-primary"><i class="fas fa-comments"></i> Write</button></hr>
+                    <button id="add_to_friends" name="submit" v-if="!check"  @click.prevent="addFriend(user.id)" type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add to friends</button>
+                    <a v-if="check"  @click.prevent="deleteFriend(user.id)" href="#" style="text-align:center; color: red;"><i class="fas fa-user-times"></i> Delete from friends</a>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <div class="h5">@{{user.nick}}</div>
-                        <div class="h7 text-muted">Fullname : {{user.name}}</div>
+                        <div class="h5 text-muted"> {{user.name}}</div>
                         <div class="h7 text-muted">E-mail : {{user.email}}</div>
                         <div class="h7 text-muted">Phone: : {{user.phone}}</div>
                         <hr>
-                        <div class="h7">Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js,
-                            etc.
+                        <div class="h7">{{user.info}}
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -221,10 +231,12 @@ data () {
         user_id: '',
         user: '',
         posts: [],
+        check: true
     }
 },
 mounted () {
     this.Start();
+    this.checkFriend();
     this.getUser();
     this.getPosts();
 },
@@ -354,7 +366,7 @@ mounted () {
                 })
             },
 
-            addDislike(postId) {
+        addDislike(postId) {
             let post_id = postId;
             let currentObj = this;
             currentObj.$Progress.start();
@@ -388,7 +400,118 @@ mounted () {
                         // currentObj.msg = error.response.data.message;
                     }
                 })
-            }
+            },
+
+            addFriend(friendId) {
+                let friend_id = friendId;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                    axios.post('/add_friend', {
+                        friend_id: friend_id
+                    },
+    
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                            //    currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    }).then(() => {
+                        currentObj.checkFriend();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+
+            deleteFriend(friendId) {
+                let friend_id = friendId;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                axios.delete('/delete_friend/'+ friend_id, {
+                    },
+    
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                            // currentObj.success = true;
+                            //    currentObj.$router.push('home');
+                            currentObj.$Progress.finish();
+                        }
+                    }).then(() => {
+                        currentObj.checkFriend();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+                
+            checkFriend() {
+                let friend_id = this.user_id;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                    axios.post('/check_friend', {
+                        friend_id: friend_id
+                    },
+    
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                            // currentObj.error = false;
+                             currentObj.check = false;
+                             currentObj.check = response.data.check;
+                             console.log(currentObj.check);
+                            //    currentObj.$router.push('home');
+                            //currentObj.$Progress.finish();
+                        }else{
+                            currentObj.check = true;
+                        }
+                    }).then(() => {
+                        //currentObj.getPosts();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
     }
 }
 
