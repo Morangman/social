@@ -34,6 +34,7 @@ class PostController extends Controller
 
     public function get_posts(Request $request){
             $user_id = $request->user_id;
+
             $posts = Post::orderBy('created_at', 'desc')
             ->where('user_id',$user_id)->get();
 
@@ -42,6 +43,14 @@ class PostController extends Controller
                 'success' => true,
                 'posts' => $posts
             ]);
+    }
+
+    public function hide_post(Request $request){
+        $post_id = $request->postId;
+        $post = Post::where('id',$post_id)->first();
+        $post->is_visible = 2;
+        $post->updated_at = Carbon::now();
+        $post->save();
     }
     
     //импорт данных в таблицу с новыми параметрами
@@ -57,13 +66,13 @@ class PostController extends Controller
             $file->move(public_path() . '/img', $file_name);
             $post->src = str_replace("\\", "/", '\img'.'\\'. $file_name);
         }
-        $post->category_id = $request->input('category');
-        $tags = $request->input('tags', []);
-        if (isset ($request->tags)){
-            $post->tag()->sync($tags, true);
-        }else{
-            $post->tag()->sync(array());
-        }
+        //$post->category_id = $request->input('category');
+        // $tags = $request->input('tags', []);
+        // if (isset ($request->tags)){
+        //     $post->tag()->sync($tags, true);
+        // }else{
+        //     $post->tag()->sync(array());
+        // }
         $post->updated_at = Carbon::now();
         $post->save();
     }
@@ -74,6 +83,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->user_id = \Auth::user()->id;
         $post->post_body = $request->input('text');
+        $post->is_visible = $request->input('is_visible');
 
         if($request->get('image'))
         {
@@ -81,7 +91,7 @@ class PostController extends Controller
            $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
            \Image::make($request->get('image'))->save(public_path('images/').$name);
             $post->src = 'images/'.$name;
-         }
+        }
 
         $post->created_at = Carbon::now();
         $post->updated_at = Carbon::now();
@@ -89,7 +99,7 @@ class PostController extends Controller
         
         // $tags = $request->input('tags', []);
         // if (isset ($request->tags)){
-        //     $post->tag()->sync($tags, true);
+        //     $post->tag()->sync($tags, false);
         // }else{
         //     $post->tag()->sync(array());
         // }

@@ -67,24 +67,20 @@
         background-color: #405D9D;
         color: #fff;
     }
-    .btn-twitter {
-        background-color: #42AEEC;
-        color: #fff;
-    }
 </style>
 <template>
 <div class="flex-center position-ref full-height">
     <div class="content">
         <div class="container">
             <div class="card bg-light">
-                <article class="card-body mx-auto" style="max-width: 400px;">
-                    <h4 class="card-title mt-3 text-center">Create Account</h4>
-                    <p class="text-center">Get started with your free account</p>
+                <article class="card-body mx-auto" style="max-width: 400px; width: 318px;">
+                    <h4 class="card-title mt-3 text-center">Создание аккаунта</h4>
+                    <p class="text-center">Начните со своим бесплатным аккаунтом</p>
                     <p>
-                        <a  href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Registration via facebook</a>
+                        <a  href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Регистрация через facebook</a>
                     </p>
                     <p class="divider-text">
-                        <span class="bg-light">OR</span>
+                        <span class="bg-light">или</span>
                     </p>
                         <form>
                             <div class="alert alert-danger" v-if="error">
@@ -97,19 +93,19 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                 </div>
-                                <input name="" class="form-control" placeholder="Nick name" type="text" v-model="nick" :maxlength="max">
+                                <input name="" class="form-control" placeholder="Ник" type="text" v-model="nick" :maxlength="max">
                             </div> <!-- form-group// -->
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                 </div>
-                                <input name="" class="form-control" placeholder="Full name" type="text" v-model="name" :maxlength="max">
+                                <input name="" class="form-control" placeholder="ФИО" type="text" v-model="name" :maxlength="max">
                             </div> <!-- form-group// -->
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                 </div>
-                                <input name="" class="form-control" placeholder="Email address" type="email" v-model="email">
+                                <input name="" class="form-control" placeholder="E-mail адресс" type="email" v-model="email">
                             </div> <!-- form-group// -->
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
@@ -123,19 +119,19 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" placeholder="Create password" type="password" v-model="password">
+                                <input class="form-control" placeholder="Придумайте пароль" type="password" v-model="password">
                             </div> <!-- form-group// -->
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" placeholder="Repeat password" type="password" v-model="password_confirmation">
+                                <input class="form-control" placeholder="Повторите пароль" type="password" v-model="password_confirmation">
                             </div> <!-- form-group// -->
                             <div class="form-group">
-                                <button @click.prevent="formSubmit" type="submit" class="btn btn-primary btn-block"> Create Account  </button>
+                                <button @click.prevent="formSubmit" type="submit" class="btn btn-primary btn-block"> Регистрация  </button>
                             </div> <!-- form-group// -->
                         </form>
-                    <p class="text-center">Have an account? <router-link to="login">Log In</router-link> </p>
+                    <p class="text-center">Уже есть аккаунт? <router-link to="login">Войти</router-link> </p>
                 </article>
                 <p><router-link to="home">Server Data</router-link> </p>
             </div> <!-- card.// -->

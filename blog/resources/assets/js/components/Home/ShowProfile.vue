@@ -26,7 +26,7 @@
         content: none;
     }
     .container{
-        margin-top:50px;
+        margin-top:10px;
     }
 
     .profile-pic {
@@ -60,33 +60,52 @@
         margin-top: 10px;
     }
 
+    .list{    
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li.list-item{
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+    #friendName{
+        margin-left: 5px;
+    }
+
+    .fa-thumbs-up{
+        margin-left: 4px;
+    }
+
+    .fa-thumbs-down{
+        margin-left: 4px;
+    }   
+
 </style>
 <template>
 <div class="content-home">
-    <nav class="navbar navbar-light navbar-expand-sm navbar-template">
-        <a class="navbar-brand" href="/home">Social</a>
-        <div class="d-flex flex-row order-2 order-sm-3">
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-facebook"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-twitter"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-youtube"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-instagram"></i></a></li>
-                <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
-                <li class="nav-item"><a class="nav-link px-2"  @click="Logout" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
-            </ul>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"> <router-link class="nav-link" to="/home">Home</router-link></li>
-                <li class="nav-item"><a class="nav-link" href="#">Features</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-            </ul>
-        </div>
-    </nav>
         <div class="container">
+        <nav class="navbar navbar-light navbar-expand-sm navbar-template">
+            <a class="navbar-brand" href="/home">Social</a>
+            <div class="d-flex flex-row order-2 order-sm-3">
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
+                    <li class="nav-item"><a class="nav-link px-2"  @click='Logout' href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+                </ul>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><router-link class="nav-link" to="/home">Главная</router-link></li>
+                    <li class="nav-item"><router-link class="nav-link" to="/chat">Сообщения</router-link></li>
+                </ul>
+            </div>
+        </nav>
         <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-3">
@@ -95,9 +114,9 @@
                 </div>
 
                 <div class="card">
-                    <button id="wrtite" name="submit" type="submit" class="btn btn-primary"><i class="fas fa-comments"></i> Write</button></hr>
-                    <button id="add_to_friends" name="submit" v-if="!check"  @click.prevent="addFriend(user.id)" type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add to friends</button>
-                    <a v-if="check"  @click.prevent="deleteFriend(user.id)" href="#" style="text-align:center; color: red;"><i class="fas fa-user-times"></i> Delete from friends</a>
+                    <button id="wrtite" name="submit" type="submit" class="btn btn-primary" @click.prevent="Write(user.id)"><i class="fas fa-comments"></i> Написать</button></hr>
+                    <button id="add_to_friends" name="submit" v-if="!check"  @click.prevent="addFriend(user.id)" type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Добавить в друзья</button>
+                    <a v-if="check"  @click.prevent="deleteFriend(user.id)" href="#" style="text-align:center; color: red;"><i class="fas fa-user-times"></i> Удалить с друзей</a>
                 </div>
 
                 <div class="card">
@@ -105,19 +124,19 @@
                         <div class="h5">@{{user.nick}}</div>
                         <div class="h5 text-muted"> {{user.name}}</div>
                         <div class="h7 text-muted">E-mail : {{user.email}}</div>
-                        <div class="h7 text-muted">Phone: : {{user.phone}}</div>
+                        <div class="h7 text-muted">Телефон: {{user.phone}}</div>
                         <hr>
                         <div class="h7">{{user.info}}
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <div class="h6 text-muted">Followers</div>
-                            <div class="h5">5.2342</div>
+                            <div class="h6 text-muted">Подписчиков</div>
+                            <div class="h5">{{count_followers}}</div>
                         </li>
                         <li class="list-group-item">
-                            <div class="h6 text-muted">Following</div>
-                            <div class="h5">6758</div>
+                            <div class="h6 text-muted">Друзей</div>
+                            <div class="h5">{{count_friends}}</div>
                         </li>
                         <li class="list-group-item">Vestibulum at eros</li>
                     </ul>
@@ -147,19 +166,6 @@
                                     <div class="h7 text-muted">{{ post.created_at | moment("calendar") }}</div>
                                 </div>
                             </div>
-                            <div>
-                                <div class="dropdown">
-                                    <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                     </div>
@@ -176,18 +182,13 @@
                         </p>
                         <div>
                             <span class="badge badge-primary">JavaScript</span>
-                            <span class="badge badge-primary">Android</span>
-                            <span class="badge badge-primary">PHP</span>
-                            <span class="badge badge-primary">Node.js</span>
-                            <span class="badge badge-primary">Ruby</span>
-                            <span class="badge badge-primary">Paython</span>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Like</a>
-                        <span>{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Dislike</a>
-                         <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                        <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-thumbs-up"></i></a>
+                        <span>{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fas fa-thumbs-down"></i></a>
+                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <a href="#" class="card-link"><i class="fas fa-bullhorn"></i> Поделиться</a>
                     </div>
                 </div>
 
@@ -205,13 +206,12 @@
                 </div>
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                            card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">{{user.nick}} friends <span>{{count_friends}}</span></h5>
+                        <ul class="list"  v-for="friend in friends">
+                            <a  @click="GoToProfile(friend.id)" href=""><li class="list-item"><img v-bind:src="'http://localhost:8000/' + friend.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ friend.name }} </p><i class="fas fa-comment-alt"></i></li></a>
+                        </ul>
                     </div>
+                    <a href="#" class="card-link" style="text-align:center;">View all</a>
                 </div>
             </div>
         </div>
@@ -228,10 +228,15 @@ export default {
 
 data () {
     return {
-        user_id: '',
+        user_id: 0,
         user: '',
         posts: [],
-        check: true
+        check: true,
+        friends: [],
+        count_friends: 0,
+        count_followers: 0,
+        is_active_add: false,
+        is_active_delete: false
     }
 },
 mounted () {
@@ -239,6 +244,7 @@ mounted () {
     this.checkFriend();
     this.getUser();
     this.getPosts();
+    this.get_friends();
 },
 
     methods:{
@@ -280,7 +286,6 @@ mounted () {
             .then(function (response) {
                 if(response){
                     currentObj.user = response.data.user[0];
-                    console.log(currentObj.user);
                     currentObj.$Progress.finish();
                 }
             })
@@ -299,7 +304,7 @@ mounted () {
         getPosts(){
             let currentObj = this;
             currentObj.$Progress.start();
-            axios.post('/get_posts', {
+            axios.post('/get_friend_posts', {
                 user_id: this.user_id
             },
 
@@ -313,7 +318,6 @@ mounted () {
             .then(function (response) {
                 if(response){
                     currentObj.posts = response.data.posts;
-                    console.log(currentObj.user);
                     currentObj.$Progress.finish();
                 }
             })
@@ -349,7 +353,7 @@ mounted () {
                         // currentObj.success = true;
                         // console.log(response.data);
                         //currentObj.array_likes = response.data;
-                            currentObj.$router.push('home');
+                        //    currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -385,7 +389,7 @@ mounted () {
                     if(response){
                         // currentObj.error = false;
                         // currentObj.success = true;
-                            currentObj.$router.push('home');
+                         //   currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -406,6 +410,7 @@ mounted () {
                 let friend_id = friendId;
                 let currentObj = this;
                 currentObj.$Progress.start();
+                if(!this.is_active_add){
                     axios.post('/add_friend', {
                         friend_id: friend_id
                     },
@@ -426,6 +431,8 @@ mounted () {
                         }
                     }).then(() => {
                         currentObj.checkFriend();
+                    }).then(() => {
+                        currentObj.getPosts();
                     })
                     .catch(function (error) {
                         if(error){
@@ -436,12 +443,15 @@ mounted () {
                             // currentObj.msg = error.response.data.message;
                         }
                     })
-                },
+                    this.is_active_add = true;
+                }
+            },
 
             deleteFriend(friendId) {
                 let friend_id = friendId;
                 let currentObj = this;
                 currentObj.$Progress.start();
+                if(!this.is_active_delete){
                 axios.delete('/delete_friend/'+ friend_id, {
                     },
     
@@ -461,6 +471,8 @@ mounted () {
                         }
                     }).then(() => {
                         currentObj.checkFriend();
+                    }).then(() => {
+                        currentObj.getPosts();
                     })
                     .catch(function (error) {
                         if(error){
@@ -471,7 +483,9 @@ mounted () {
                             // currentObj.msg = error.response.data.message;
                         }
                     })
-                },
+                    this.is_active_delete = true;
+                }    
+            },
                 
             checkFriend() {
                 let friend_id = this.user_id;
@@ -491,16 +505,47 @@ mounted () {
                     .then(function (response) {
                         if(response){
                             // currentObj.error = false;
-                             currentObj.check = false;
+                            // currentObj.check = false;
                              currentObj.check = response.data.check;
-                             console.log(currentObj.check);
                             //    currentObj.$router.push('home');
-                            //currentObj.$Progress.finish();
+                            currentObj.$Progress.finish();
                         }else{
                             currentObj.check = true;
                         }
                     }).then(() => {
                         //currentObj.getPosts();
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+
+            get_friends() {
+                let friend_id = this.user_id;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                    axios.post('/friend_friends', {
+                        friend_id: friend_id
+                    },
+    
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                             currentObj.friends = response.data.friends;
+                             currentObj.count_friends = response.data.count;
+                             currentObj.count_followers = response.data.count_f;
+                        }
                     })
                     .catch(function (error) {
                         if(error){
@@ -512,6 +557,41 @@ mounted () {
                         }
                     })
                 },
+
+                Write(id){
+                    let friend_id = id;
+                    let currentObj = this;
+                    currentObj.$Progress.start();
+                    axios.post('/create_room', {
+                        user_id: friend_id
+                    },
+    
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(function (response) {
+                        if(response){
+                             currentObj.$router.push('/chat');
+                        }
+                    })
+                    .catch(function (error) {
+                        if(error){
+                            currentObj.$Progress.fail();
+                            console.log(error.response.data);
+                            // currentObj.error = true;
+                            // currentObj.success = false;
+                            // currentObj.msg = error.response.data.message;
+                        }
+                    })
+                },
+
+            GoToProfile(id){
+                this.$router.push('/profile/'+id);
+            }
     }
 }
 

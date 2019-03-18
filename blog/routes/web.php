@@ -21,6 +21,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/posts', 'PostController@index');
 
 Route::post('/get_posts', 'PostController@get_posts');
+Route::post('/hide_post', 'PostController@hide_post');
+Route::post('/get_friend_posts', 'FriendController@get_friend_posts');
+
+Route::post('/m/logout', 'LoginController@logout');
 
 Route::post('/add_post', 'PostController@add_post');
 Route::delete('/post_delete/{post_id}', 'PostController@destroy');
@@ -41,23 +45,30 @@ Route::get('/getdata', 'RequestController@getdata');
 Route::post('/add_friend', 'FriendController@add_friend');
 Route::delete('/delete_friend/{friend_id}', 'FriendController@delete_friend');
 Route::post('/check_friend', 'FriendController@check_friend');
+Route::post('/friend_friends', 'FriendController@friend_friends');
 Route::get('/get_all_friends', 'FriendController@get_all_friends');
+
+Route::post('/create_room', 'ChatController@createRoom');
+Route::post('/get_messages', 'ChatController@getMessages');
+Route::post('/send', 'ChatController@sendMessage');
+Route::get('/get_rooms', 'ChatController@getRooms');
+
 
 Route::get('/home', function () {
     return view('home');
-   });
+})->middleware('auth');
 
 Route::get('/settings', function () {
     return view('settings');
-});
+})->middleware('auth');
 
 Route::get('/chat', function () {
     return view('chat');
-});
+})->middleware('auth');
 
 Route::get('/profile/{user_id}', function () {
     return view('profile');
-});
+})->middleware('auth');
 
 Route::get('/redirect', 'SocialAuthFacebookController@redirect');
 Route::get('/callback', 'SocialAuthFacebookController@callback');

@@ -1,65 +1,162 @@
 <style scoped>
-.container{max-width:1170px; margin:auto;}
-img{ max-width:100%;}
-.inbox_people {
-  background: #f8f8f8 none repeat scroll 0 0;
-  float: left;
+.chatperson{
+  display: block;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
   overflow: hidden;
-  width: 40%; border-right:1px solid #c4c4c4;
+  margin-bottom: 15px;
+  padding: 4px;
 }
+.chatperson:hover{
+  text-decoration: none;
+  border-bottom: 1px solid #2ca5e0;
+  background-color: #e2f4ff;
+}
+.namechat {
+    display: inline-block;
+    vertical-align: middle;
+}
+.chatperson .chatimg img{
+  width: 40px;
+  height: 40px;
+  background-image: url('http://i.imgur.com/JqEuJ6t.png');
+}
+.chatperson .pname{
+  font-size: 18px;
+  padding-left: 5px;
+}
+.chatperson .lastmsg{
+  font-size: 12px;
+  padding-left: 5px;
+  color: #ccc;
+}
+
+.col-sm-8 {
+  min-height: 250px;
+}
+
+.search-rooms{
+  margin-bottom: 15px;
+}
+
+.text-msgs{
+  width: 650px;
+  margin-left: 20px;
+}
+
+#send-form{
+  bottom: 0;
+}
+
+.btn-block{
+  bottom: 0;
+  float: right;
+  width: 100px;
+}
+
+.chatbody{
+  height: 400px;
+  overflow-y: auto;
+  width: 650px;
+}
+
+.rooms{
+    height: 500px;
+    overflow-y: auto;
+}
+
+.text-message{
+  max-height: 110px;
+  overflow-y: auto;
+}
+
+.emoji-invoker {
+    position: absolute;
+    bottom: 5px;
+    right: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    }
+    .emoji-invoker:hover {
+    transform: scale(1.1);
+    }
+    .emoji-invoker > svg {
+    fill: #b1c6d0;
+    }
+
+    .emoji-picker {
+    position: absolute;
+    z-index: 9999;
+    font-family: Montserrat;
+    border: 1px solid #ccc;
+    height: 20rem;
+    overflow: scroll;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    background: #fff;
+    box-shadow: 1px 1px 8px #c7dbe6;
+    }
+    .emoji-picker__search {
+    display: flex;
+    }
+    .emoji-picker__search > input {
+    flex: 1;
+    border-radius: 10rem;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    outline: none;
+    }
+    .emoji-picker h5 {
+    margin-bottom: 0;
+    color: #b1b1b1;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    cursor: default;
+    }
+    .emoji-picker .emojis {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    }
+    .emoji-picker .emojis:after {
+    content: "";
+    flex: auto;
+    }
+    .emoji-picker .emojis span {
+    padding: 0.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    }
+    .emoji-picker .emojis span:hover {
+    background: #ececec;
+    cursor: pointer;
+    }
+    .wrapper {
+    position: relative;
+    }
+
+    .regular-input {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    }
+    .dropdown-menu-right > a:hover{
+        background-color: #e0f0ff;
+    }
+
+
+
 .inbox_msg {
   border: 1px solid #c4c4c4;
   clear: both;
   overflow: hidden;
 }
-.top_spac{ margin: 20px 0 0;}
-
-
-.recent_heading {float: left; width:40%;}
-.srch_bar {
-  display: inline-block;
-  text-align: right;
-  width: 60%; padding:
-}
-.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
-
-.recent_heading h4 {
-  color: #05728f;
-  font-size: 21px;
-  margin: auto;
-}
-.srch_bar input{ border:1px solid #cdcdcd; border-width:0 0 1px 0; width:80%; padding:2px 0 4px 6px; background:none;}
-.srch_bar .input-group-addon button {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-  padding: 0;
-  color: #707070;
-  font-size: 18px;
-}
-.srch_bar .input-group-addon { margin: 0 0 0 -27px;}
-
-.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
-.chat_ib h5 span{ font-size:13px; float:right;}
-.chat_ib p{ font-size:14px; color:#989898; margin:auto}
-.chat_img {
-  float: left;
-  width: 11%;
-}
-.chat_ib {
-  float: left;
-  padding: 0 0 0 15px;
-  width: 88%;
-}
-
-.chat_people{ overflow:hidden; clear:both;}
-.chat_list {
-  border-bottom: 1px solid #c4c4c4;
-  margin: 0;
-  padding: 18px 16px 10px;
-}
-.inbox_chat { height: 550px; overflow-y: scroll;}
-
-.active_chat{ background:#ebebeb;}
 
 .incoming_msg_img {
   display: inline-block;
@@ -101,7 +198,7 @@ img{ max-width:100%;}
   padding: 5px 10px 5px 12px;
   width:100%;
 }
-.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
+.outgoing_msg{ overflow:hidden;}
 .sent_msg {
   float: right;
   width: 46%;
@@ -115,185 +212,255 @@ img{ max-width:100%;}
   width: 100%;
 }
 
-.type_msg {border-top: 1px solid #c4c4c4;position: relative;}
-.msg_send_btn {
-  background: #05728f none repeat scroll 0 0;
-  border: medium none;
-  border-radius: 50%;
-  color: #fff;
-  cursor: pointer;
-  font-size: 17px;
-  height: 33px;
-  position: absolute;
-  right: 0;
-  top: 11px;
-  width: 33px;
-  outline: none;
+.choise{
+  width: 295px;
+  text-align: center;
+  background-color: #81aad1;
+  color: white;
+  border-radius: 10px;
 }
-.msg_history {
-  height: 516px;
-  overflow-y: auto;
-}
+
+
 </style>
 <template>
-<div class="container">
-<div class="messaging">
-      <div class="inbox_msg">
-        <div class="inbox_people">
-          <div class="headind_srch">
-            <div class="recent_heading">
-              <h4>Recent</h4>
-            </div>
-            <div class="srch_bar">
-              <div class="stylish-input-group">
-                <input type="text" class="search-bar"  placeholder="Search" >
-                <span class="input-group-addon">
-                <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                </span> </div>
-            </div>
-          </div>
-          <div class="inbox_chat">
-            <div class="chat_list active_chat">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions 
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="content-home">
+    <nav class="navbar navbar-light navbar-expand-sm navbar-template">
+        <a class="navbar-brand" href="/home">Social</a>
+        <div class="d-flex flex-row order-2 order-sm-3">
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
+                <li class="nav-item"><a class="nav-link px-2" @click="Logout"  href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-        <div class="mesgs">
-          <div class="msg_history">
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+        <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><router-link class="nav-link" to="/home">Главная</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" to="/chat">Сообщение</router-link></li>
+            </ul>
+        </div>
+    </nav>
+<div class="container">
+	<div class="row">
+    <div class="rooms col-sm-4">
+    <input class="search-rooms form-control" name="title" placeholder="Поиск..."></input>
+      <a href="javascript:void(0)" class="chatperson" v-for="room in rooms" @click="getMessages(room.room_id)">
+        <div class="namechat">
+            <div class="pname">{{room.room_id}}</div>
+            <div class="lastmsg">{{latest_message.text}}</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-8">
+    <div id="chatbody" class="chatbody">
+    <div class="choise" v-if="!check_msgs">
+      <p>Выберите, кому хотели бы написать</p>
+    </div>
+    <div class="choise" v-if="check">
+      <p>Здесь пока ничего нет...</p>
+    </div>
+      <div v-for="message in messages">
+            <div class="outgoing_msg">
+              <div class="sent_msg">
+                <p>{{message.text}}</p>
+                <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
+              </div>
+            </div>
+
               <div class="received_msg">
                 <div class="received_withd_msg">
                   <p>Test which is a new approach to have all
                     solutions</p>
                   <span class="time_date"> 11:01 AM    |    June 9</span></div>
               </div>
-            </div>
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Test which is a new approach to have all
-                  solutions</p>
-                <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-            </div>
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>Test, which is a new approach to have</p>
-                  <span class="time_date"> 11:01 AM    |    Yesterday</span></div>
-              </div>
-            </div>
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Apollo University, Delhi, India Test</p>
-                <span class="time_date"> 11:01 AM    |    Today</span> </div>
-            </div>
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>We work directly with our designers and suppliers,
-                    and sell direct to you, which means quality, exclusive
-                    products, at a price anyone can afford.</p>
-                  <span class="time_date"> 11:01 AM    |    Today</span></div>
-              </div>
-            </div>
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>We work directly with our designers and suppliers,
-                    and sell direct to you, which means quality, exclusive
-                    products, at a price anyone can afford.</p>
-                  <span class="time_date"> 11:01 AM    |    Today</span></div>
-              </div>
-            </div>
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>We work directly with our designers and suppliers,
-                    and sell direct to you, which means quality, exclusive
-                    products, at a price anyone can afford.</p>
-                  <span class="time_date"> 11:01 AM    |    Today</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
-              <input type="text" class="write_msg" placeholder="Type a message" />
-              <button class="msg_send_btn" type="button"><i class="fas fa-paper-plane"></i></button>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
+
+    <div v-if="check_msgs" class="row" id="send-form">
+      <form>
+      <div class="col-xs-9">
+      <div class="wrapper">
+        <textarea v-on:keyup.page-down="onPageDown(e)"  name="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+        <emoji-picker @emoji="append" :search="search">
+        <div
+            class="emoji-invoker"
+            slot="emoji-invoker"
+            slot-scope="{ events }"
+            v-on="events"
+        >
+            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+            </svg>
+        </div>
+        <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+            <div class="emoji-picker">
+            <div class="emoji-picker__search">
+                <input type="text" v-model="search" v-focus>
+            </div>
+            <div>
+                <div v-for="(emojiGroup, category) in emojis" :key="category">
+                <h5>{{ category }}</h5>
+                <div class="emojis">
+                    <span
+                    v-for="(emoji, emojiName) in emojiGroup"
+                    :key="emojiName"
+                    @click="insert(emoji)"
+                    :title="emojiName"
+                    >{{ emoji }}</span>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </emoji-picker>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <button type="submit" @click="Send" class="btn btn-info btn-block">Отправить</button>
+      </div>
+      </form>
     </div>
+
+    </div>
+</div>
+</div>
+</div>
 </template>
+
+<script>
+import EmojiPicker from 'vue-emoji-picker'
+export default {
+
+  components: {
+    EmojiPicker,
+  },
+
+  data(){
+    return {
+      rooms: [],
+      messages: [],
+      latest_message: [],
+      room_id: '',
+      check: false,
+      check_msgs: false,
+      text: '',
+      search: ''
+    }
+  },
+  mounted(){
+    let currentObj = this;
+    currentObj.$Progress.start();
+    axios.get(`/get_rooms`)
+    .then(function (response) {
+        if(response){
+            currentObj.rooms = response.data.rooms;
+            currentObj.latest_message = response.data.latest_msgs;
+            currentObj.$Progress.finish();
+            
+            if(response.data.success == false){
+                currentObj.$Progress.fail();
+                currentObj.$router.push('/login');
+            }
+        }
+    })
+  },
+
+  methods:{
+    append(emoji) {
+      this.text += emoji
+    },
+    Logout(){
+        let currentObj = this;
+        currentObj.$Progress.start();
+        axios.post('/logout', {
+        })
+        .then(function (response) {
+            if(response){
+                currentObj.$router.push('/login');
+                currentObj.$Progress.finish();
+            }
+        })
+        .catch(function (error) {
+            currentObj.$Progress.fail();
+            console.log(error);
+        });
+    },
+
+    scrollToEnd: function() {    	
+      let container = this.$el.querySelector("#chatbody");
+      container.scrollTop = container.scrollHeight;
+      console.log("END");
+    },
+
+    Send(){
+      let currentObj = this;
+      currentObj.$Progress.start();
+          axios.post('/send', {
+              text: currentObj.text,
+              room_id: currentObj.room_id
+          },
+          {
+              headers: {
+                  'accept': 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest',
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          })
+          .then(function (response) {
+              if(response){
+                  currentObj.$router.push('/chat/'.currentObj.room_id);
+                 // currentObj.messages = response.data.messages;
+                  currentObj.$Progress.finish();
+              }
+          })
+          .catch(function (error) {
+              if(error){
+                  currentObj.$Progress.fail();
+                  console.log(error.response.data);
+              }
+          })
+    },
+
+    getMessages(id){
+      this.check_msgs = true;
+      this.room_id = id;
+      let currentObj = this;
+      currentObj.$Progress.start();
+          axios.post('/get_messages', {
+              room_id: currentObj.room_id
+          },
+          {
+              headers: {
+                  'accept': 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest',
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          })
+          .then(function (response) {
+              if(response){
+                if(response.data.messages == ''){
+                  currentObj.check = true;
+                }else{
+                  currentObj.check = false;
+                }
+                  currentObj.messages = response.data.messages;
+
+                  currentObj.$Progress.finish();
+              }
+          }).then(() => {
+            currentObj.scrollToEnd();
+                })
+          .catch(function (error) {
+              if(error){
+                  currentObj.$Progress.fail();
+                  console.log(error.response.data);
+              }
+          })
+    }
+  }
+}
+</script>

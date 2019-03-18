@@ -1,10 +1,11 @@
 <template>
+  
 <div class="container">
 	<div class="row">
 		<div class="col-md-3 ">
 		     <div class="list-group ">
-              <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-              <a href="#" class="list-group-item list-group-item-action">Settings</a>
+              <a href="#" class="list-group-item list-group-item-action active">Настройки</a>
+              <a href="#" class="list-group-item list-group-item-action">Персональная информация</a>
           </div> 
 		</div>
 		<div class="col-md-9">
@@ -12,7 +13,7 @@
 		        <div class="card-body">
 		            <div class="row">
 		                <div class="col-md-12">
-		                    <h4>Your Profile</h4>
+		                    <h4>Ваш аккаунт</h4>
 		                    <hr>
 		                </div>
 		            </div>
@@ -20,38 +21,38 @@
 		                <div class="col-md-12">
 		                    <form>
                               <div class="form-group row">
-                                <label for="username" class="col-4 col-form-label">Name*</label> 
+                                <label for="username" class="col-4 col-form-label">Имя*</label> 
                                 <div class="col-8">
-                                  <input id="username" v-model="name" placeholder="Username" class="form-control here" required="required" type="text">
+                                  <input id="username" v-model="name" placeholder="Имя" class="form-control here" required="required" type="text">
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label for="text" class="col-4 col-form-label">Nick Name*</label> 
+                                <label for="text" class="col-4 col-form-label">Ник*</label> 
                                 <div class="col-8">
-                                  <input id="text" v-model="nick" placeholder="Nick Name" class="form-control here" required="required" type="text">
+                                  <input id="text" v-model="nick" placeholder="Ник" class="form-control here" required="required" type="text">
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label for="email" class="col-4 col-form-label">Email*</label> 
+                                <label for="email" class="col-4 col-form-label">E-mail*</label> 
                                 <div class="col-8">
-                                  <input id="email" disabled v-model="info.email" placeholder="Email" class="form-control here" required="required" type="text">
+                                  <input id="email" disabled v-model="info.email" placeholder="E-mail" class="form-control here" required="required" type="text">
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label for="publicinfo" class="col-4 col-form-label">Public Info</label> 
+                                <label for="publicinfo" class="col-4 col-form-label">Публичная информация</label> 
                                 <div class="col-8">
                                   <textarea id="publicinfo" v-model="uinfo" cols="40" rows="4" class="form-control"></textarea>
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label for="newpass" class="col-4 col-form-label">New Password</label> 
+                                <label for="newpass" class="col-4 col-form-label">Изменить пароль</label> 
                                 <div class="col-8">
-                                  <input id="newpass" v-model="password" placeholder="New Password" class="form-control here" type="text">
+                                  <input id="newpass" v-model="password" placeholder="Введите новый пароль" class="form-control here" type="text">
                                 </div>
                               </div> 
                               <div class="form-group row">
                                 <div class="offset-4 col-8">
-                                  <button type="submit" @click="updateProfileInfo" class="btn btn-primary">Update My Profile</button>
+                                  <button type="submit" @click="updateProfileInfo" class="btn btn-primary">Сохранить</button>
                                   <p><router-link to="/home">Отмена</router-link> </p>
                                 </div>
                               </div>

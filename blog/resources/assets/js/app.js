@@ -23,6 +23,8 @@ Vue.directive('linkified', linkify);
 
 Vue.use(require('vue-moment'));
 
+Vue.use(require('vue-resource'));
+
 Vue.component('input-tag', InputTag);
 
 Vue.use(VueRouter);
@@ -40,8 +42,7 @@ const Login = Vue.component('loginform', require('./components/Auth/LoginForm.vu
 const Home = Vue.component('datacomponent', require('./components/Home/Home.vue'));
 const ShowProfile = Vue.component('profile', require('./components/Home/ShowProfile.vue'));
 const Settings = Vue.component('settingscomponent', require('./components/Settings/Settings.vue'));
-const ChatRoom = Vue.component('chatcomponent', require('./components/Chatroom/ChatRoom.vue'));
-
+const Chat = Vue.component('chatcomponent', require('./components/Chatroom/ChatRoom.vue'));
 
 const routes = [
   { path: '/', component: Register },
@@ -49,7 +50,7 @@ const routes = [
   { path: '/home', component: Home },
   { path: '/profile/:id', component: ShowProfile },
   { path: '/settings', component: Settings },
-  { path: '/chat', component: ChatRoom }
+  { path: '/chat', component: Chat }
 ]
 
 const router = new VueRouter({

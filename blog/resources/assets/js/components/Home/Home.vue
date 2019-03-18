@@ -26,7 +26,7 @@
         content: none;
     }
     .container{
-        margin-top:50px;
+        margin-top:10px;
     }
 
     .profile-pic {
@@ -73,33 +73,114 @@
     #friendName{
         margin-left: 5px;
     }
+
+    .fa-thumbs-up{
+        margin-left: 4px;
+    }
+
+    .fa-thumbs-down{
+        margin-left: 4px;
+    }   
+
+    .emoji-invoker {
+    position: absolute;
+    bottom: 5px;
+    right: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    }
+    .emoji-invoker:hover {
+    transform: scale(1.1);
+    }
+    .emoji-invoker > svg {
+    fill: #b1c6d0;
+    }
+
+    .emoji-picker {
+    position: absolute;
+    z-index: 9999;
+    font-family: Montserrat;
+    border: 1px solid #ccc;
+    height: 20rem;
+    overflow: scroll;
+    padding: 1rem;
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    background: #fff;
+    box-shadow: 1px 1px 8px #c7dbe6;
+    }
+    .emoji-picker__search {
+    display: flex;
+    }
+    .emoji-picker__search > input {
+    flex: 1;
+    border-radius: 10rem;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    outline: none;
+    }
+    .emoji-picker h5 {
+    margin-bottom: 0;
+    color: #b1b1b1;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    cursor: default;
+    }
+    .emoji-picker .emojis {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    }
+    .emoji-picker .emojis:after {
+    content: "";
+    flex: auto;
+    }
+    .emoji-picker .emojis span {
+    padding: 0.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    }
+    .emoji-picker .emojis span:hover {
+    background: #ececec;
+    cursor: pointer;
+    }
+    .wrapper {
+    position: relative;
+    }
+
+    .regular-input {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    }
+    .dropdown-menu-right > a:hover{
+        background-color: #e0f0ff;
+    }
+
 </style>
 <template>
 <div class="content-home">
-    <nav class="navbar navbar-light navbar-expand-sm navbar-template">
-        <a class="navbar-brand" href="/home">Social</a>
-        <div class="d-flex flex-row order-2 order-sm-3">
-            <ul class="navbar-nav flex-row">
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-facebook"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-twitter"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-youtube"></i></a></li>
-                <li class="nav-item"><a class="nav-link px-2" href="#"><i class="fab fa-instagram"></i></a></li>
-                <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
-                <li class="nav-item"><a class="nav-link px-2"  @click="Logout" href="#"><i class="fas fa-sign-out-alt"></i></a></li>
-            </ul>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><router-link class="nav-link" to="/home">Home</router-link></li>
-                <li class="nav-item"><router-link class="nav-link" to="/chat">Messages</router-link></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-            </ul>
-        </div>
-    </nav>
         <div class="container">
+        <nav class="navbar navbar-light navbar-expand-sm navbar-template">
+            <a class="navbar-brand" href="/home">Social</a>
+            <div class="d-flex flex-row order-2 order-sm-3">
+                <ul class="navbar-nav flex-row">
+                    <li class="nav-item"><router-link class="nav-link px-2" to="/settings"><i class="fas fa-cog"></i></router-link></li>
+                    <li class="nav-item"><a class="nav-link px-2"  @click='Logout' href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+                </ul>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><router-link class="nav-link" to="/home">Главная</router-link></li>
+                    <li class="nav-item"><router-link class="nav-link" to="/chat">Сообщения</router-link></li>
+                </ul>
+            </div>
+        </nav>
         <div class="container-fluid gedf-wrapper">
         <div class="row">
             <div class="col-md-3">
@@ -117,21 +198,21 @@
                         <div class="h5">@{{info.nick}}</div>
                         <div class="h5 text-muted"> {{info.name}}</div>
                         <div class="h7 text-muted">E-mail : {{info.email}}</div>
-                        <div class="h7 text-muted">Phone : {{info.phone}}</div>
+                        <div class="h7 text-muted">Телефон : {{info.phone}}</div>
                         <hr>
                         <div class="h7">{{info.info}}
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <div class="h6 text-muted">Followers</div>
-                            <div class="h5">5.2342</div>
+                            <div class="h6 text-muted">Подписчиков</div>
+                            <div class="h5">{{count_followers}}</div>
                         </li>
                         <li class="list-group-item">
-                            <div class="h6 text-muted">Following</div>
-                            <div class="h5">6758</div>
+                            <div class="h6 text-muted">Друзей</div>
+                            <div class="h5">{{count_friends}}</div>
                         </li>
-                        <li class="list-group-item">Vestibulum at eros</li>
+                        <li class="list-group-item">Develop by Sosial</li>
                     </ul>
                 </div>
             </div>
@@ -142,11 +223,10 @@
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Make
-                                    a publication</a>
+                                <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Сделать публикацию</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">Tags</a>
+                                <a class="nav-link" id="images-tab" data-toggle="tab" role="tab" aria-controls="images" aria-selected="false" href="#images">#Тэги</a>
                             </li>
                         </ul>
                     </div>
@@ -156,11 +236,46 @@
                             <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
                                 <div class="form-group">
                                     <label class="sr-only" for="message">title</label>
-                                    <input class="form-control" id="message" name="title" v-model="title" placeholder="Title"></input>
+                                    <input class="form-control" id="message" name="title" v-model="title" placeholder="Заголовок"></input>
                                 </div>
                                 <div class="form-group">
+                                <div class="wrapper">
                                     <label class="sr-only" for="message">post</label>
-                                    <textarea class="form-control" id="message" name="text" v-model="text" rows="3" placeholder="What are you thinking?"></textarea>
+                                    <textarea class="form-control regular-input" id="message" name="text" v-model="text" rows="3" placeholder="Что нового?"></textarea>
+                                    <emoji-picker @emoji="append" :search="search">
+                                    <div
+                                        class="emoji-invoker"
+                                        slot="emoji-invoker"
+                                        slot-scope="{ events }"
+                                        v-on="events"
+                                    >
+                                        <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                        </svg>
+                                    </div>
+                                    <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+                                        <div class="emoji-picker">
+                                        <div class="emoji-picker__search">
+                                            <input type="text" v-model="search" v-focus>
+                                        </div>
+                                        <div>
+                                            <div v-for="(emojiGroup, category) in emojis" :key="category">
+                                            <h5>{{ category }}</h5>
+                                            <div class="emojis">
+                                                <span
+                                                v-for="(emoji, emojiName) in emojiGroup"
+                                                :key="emojiName"
+                                                @click="insert(emoji)"
+                                                :title="emojiName"
+                                                >{{ emoji }}</span>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </emoji-picker>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
@@ -169,7 +284,7 @@
                                     </div>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="inputGroupFile01" v-on:change="changeImage" aria-describedby="inputGroupFileAddon01"></input>
-                                        <label class="custom-file-label" for="inputGroupFile01"><p>Select photo</p></label>
+                                        <label class="custom-file-label" for="inputGroupFile01"><p>Прикрепить фото</p></label>
                                         <div class="custom-file-label" v-if="image">{{name.name}}</div>
                                     </div>
                                 </div>
@@ -183,17 +298,17 @@
                         </div>
                         <div class="btn-toolbar justify-content-between">
                             <div class="btn-group">
-                                <button type="submit" @click.prevent="addPost" class="btn btn-primary" >share</button>
+                                <button type="submit" @click.prevent="addPost" class="btn btn-primary" >Опубликовать</button>
                             </div>
                             <div class="btn-group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <i class="fa fa-globe"></i> Public
+                                    <i :class="class_name"></i> {{select_name}}
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="#"><i class="fa fa-globe"></i> Public</a>
-                                    <a class="dropdown-item" href="#"><i class="fa fa-users"></i> Friends</a>
-                                    <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Just me</a>
+                                    <a class="dropdown-item" href="#" @click="selectVisible(0)"><i class="fa fa-globe"></i> Для всех</a>
+                                    <a class="dropdown-item" href="#" @click="selectVisible(1)"><i class="fa fa-users"></i> Для друзей</a>
+                                    <a class="dropdown-item" href="#" @click="selectVisible(2)"><i class="fa fa-user"></i> Для меня</a>
                                 </div>
                             </div>
                         </div>
@@ -219,11 +334,10 @@
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                        <div class="h6 dropdown-header">Configuration</div>
-                                        <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
-                                        <a class="dropdown-item" href="#">Report</a>
-                                        <a class="dropdown-item" href="#" @click.prevent="deletePost(post.id)">Delete</a>
+                                        <div class="h6 dropdown-header">Настройки</div>
+                                        <a class="dropdown-item" @click="Hide(post.id)" href="javascript:void(0)">Скрыть</a>
+                                        <a class="dropdown-item" @click="Refresh(true, post.id)" href="#">Изменить</a>
+                                        <a class="dropdown-item" href="javascript:void(0)" @click.prevent="deletePost(post.id)">Удалить</a>
                                     </div>
                                 </div>
                             </div>
@@ -242,40 +356,36 @@
                             {{post.post_body}}
                         </p>
                         <div>
-                            <span class="badge badge-primary">JavaScript</span>
-                            <span class="badge badge-primary">Android</span>
-                            <span class="badge badge-primary">PHP</span>
-                            <span class="badge badge-primary">Node.js</span>
-                            <span class="badge badge-primary">Ruby</span>
-                            <span class="badge badge-primary">Paython</span>
+                            <span v-if="post.is_visible == 0" class="badge badge-success"><i class="fa fa-globe"></i> Для всех</span>
+                            <span v-if="post.is_visible == 1" class="badge badge-info"><i class="fa fa-users"></i> Для друзей</span>
+                            <span v-if="post.is_visible == 2" class="badge badge-primary"><i class="fa fa-user"></i> Для меня</span>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Like</a>
-                        <span>{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fa fa-gittip"></i>Dislike</a>
-                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                        <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                        <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-thumbs-up"></i></a>
+                        <span class="text-muted">{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fas fa-thumbs-down"></i></a>
+                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <a href="#" class="card-link"><i class="fas fa-bullhorn"></i> Поделиться</a>
                     </div>
                 </div>
-
             </div>
             <div class="col-md-3">
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">Find friends!</h5>
+                        <h5 class="card-title">Новые пользователи</h5>
                         <ul class="list"  v-for="user in users">
-                            <a  @click="GoToProfile(user.id)" href="#"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + user.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ user.name }} </p></li></a>
+                            <a  @click="GoToProfile(user.id)" href="#" class="friend-link"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + user.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ user.name }} </p></li></a>
                         </ul>
                     </div>
                 </div>
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">My friends</h5>
+                        <h5 class="card-title">Мои друзья <span>{{count_friends}}</span></h5>
                         <ul class="list"  v-for="friend in friends">
-                            <a  @click="GoToProfile(friend.id)" href="#"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + friend.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ friend.name }} </p><i class="fas fa-comment-alt"></i></li></a>
+                            <a  @click="GoToProfile(friend.id)" href="javascript:void(0)" class="friend-link"><li class="list-item"><img v-bind:src="'http://localhost:8000/' + friend.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ friend.name }} </p><i class="fas fa-comment-alt"></i></li></a>
                         </ul>
                     </div>
-                    <a href="#" class="card-link" style="text-align:center;">View all</a>
+                    <a v-if="count_friends>10" href="#" class="card-link" style="text-align:center;">Показать всех</a>
                 </div>
             </div>
         </div>
@@ -287,24 +397,34 @@
 </template>
 
 <script>
-
+import EmojiPicker from 'vue-emoji-picker'
     export default {
-
+        components: {
+            EmojiPicker,
+        },
 
         data () {
             return {
                 info: [],
                 posts: [],
                 users: [],
+                tags: [],
                 friends: [],
                 title: null,
-                text: null,
+                text: '',
+                search: '',
                 image: '',
                 name: '',
                 likes: '',
                 dislikes: '',
                 prof_image: '',
-                img_name: ''
+                img_name: '',
+                is_visible: 0,
+                count_friends: 0,
+                count_followers: 0,
+                class_name: 'fa fa-globe',
+                select_name: 'Для всех',
+                is_refresh: false
             }
         },
         mounted () {
@@ -322,15 +442,15 @@
                         }
                     }
                 }),
-                axios.get(`/posts`)
+                 axios.get(`/posts`)
                 .then(function (response) {
                     if(response){
-                        currentObj.posts = response.data.posts;
-                        currentObj.$Progress.finish();
+                     currentObj.posts = response.data.posts;
+                     currentObj.$Progress.finish();
                         
-                        if(response.data.success == false){
-                            currentObj.$Progress.fail();
-                            currentObj.$router.push('/login');
+                     if(response.data.success == false){
+                         currentObj.$Progress.fail();
+                         currentObj.$router.push('/login');
                         }
                     }
                 }),
@@ -351,6 +471,8 @@
                 .then(function (response) {
                     if(response){
                         currentObj.friends = response.data.friends;
+                        currentObj.count_friends = response.data.count;
+                        currentObj.count_followers = response.data.count_f;
                         currentObj.$Progress.finish();
                         
                         if(response.data.success == false){
@@ -362,6 +484,9 @@
         },
 
         methods:{
+            append(emoji) {
+                this.text += emoji
+            },
             Logout(){
                 let currentObj = this;
                 currentObj.$Progress.start();
@@ -377,6 +502,66 @@
                     currentObj.$Progress.fail();
                     console.log(error);
                 });
+            },
+
+            Refresh(bool, id){
+                let post_id = id;
+                this.is_refresh = bool;
+                console.log(this.is_refresh);
+            },
+
+            Hide(postId){
+                let post_id = postId;
+                let currentObj = this;
+                currentObj.$Progress.start();
+                axios.post('/hide_post', {
+                    postId: post_id
+                },
+
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        // currentObj.error = false;
+                        // currentObj.success = true;
+                        // console.log(response.data);
+                        //currentObj.array_likes = response.data;
+                        //    currentObj.$router.push('home');
+                        currentObj.$Progress.finish();
+                    }
+                }).then(() => {
+                    currentObj.getPosts();
+                })
+                .catch(function (error) {
+                    if(error){
+                        currentObj.$Progress.fail();
+                        console.log(error.response.data);
+                        // currentObj.error = true;
+                        // currentObj.success = false;
+                        // currentObj.msg = error.response.data.message;
+                    }
+                })
+            },
+
+            selectVisible(e){
+                this.is_visible = e;
+                if(this.is_visible == 0){
+                    this.class_name = "fa fa-globe";
+                    this.select_name = "Для всех";
+                }
+                if(this.is_visible == 1){
+                    this.class_name = "fa fa-users";
+                    this.select_name = "Для друзей";
+                }
+                if(this.is_visible == 2){
+                    this.class_name = "fa fa-user";
+                    this.select_name = "Для меня";
+                }
             },
 
             changeImage(e) {
@@ -512,7 +697,9 @@
                     axios.post('/add_post', {
                         title: this.title,
                         text: this.text,
-                        image: this.image
+                        tags: this.tags,
+                        image: this.image,
+                        is_visible: this.is_visible
                     },
 
                     {
@@ -603,7 +790,7 @@
                         // currentObj.success = true;
                         // console.log(response.data);
                         //currentObj.array_likes = response.data;
-                            currentObj.$router.push('home');
+                        //    currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -639,7 +826,7 @@
                     if(response){
                         // currentObj.error = false;
                         // currentObj.success = true;
-                            currentObj.$router.push('home');
+                         //   currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {

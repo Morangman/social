@@ -78,13 +78,13 @@
         <div class="container">
             <div class="card bg-light">
                 <article class="card-body mx-auto" style="max-width: 400px;">
-                    <h4 class="card-title mt-3 text-center">Login</h4>
-                    <p class="text-center">Log In to your account</p>
+                    <h4 class="card-title mt-3 text-center">Авторизация</h4>
+                    <p class="text-center">Ввойдите в Ваш аккаунт</p>
                     <p>
-                        <a href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
+                        <a href='/redirect' type="submit" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Вход через facebook</a>
                     </p>
                     <p class="divider-text">
-                        <span class="bg-light">OR</span>
+                        <span class="bg-light">или</span>
                     </p>
                         <form>
                             <div class="alert alert-danger" v-if="error">
@@ -97,19 +97,19 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                 </div>
-                                <input name="" class="form-control" placeholder="Email address" type="email" v-model="email"></input>
+                                <input name="" class="form-control" placeholder="Ваш почтовый адресс" type="email" v-model="email"></input>
                             </div>
                             <div class="form-group input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                 </div>
-                                <input class="form-control" placeholder="Password" type="password" v-model="password"></input>
+                                <input class="form-control" placeholder="Пароль" type="password" v-model="password"></input>
                             </div> 
                             <div class="form-group">
-                                <button @click.prevent="formSubmit" type="submit" class="btn btn-primary btn-block"> Log In </button>
+                                <button @click.prevent="formSubmit" type="submit" class="btn btn-primary btn-block"> Войти </button>
                             </div> 
                         </form>
-                    <p class="text-center">First time?<router-link to="/">Register</router-link> </p>
+                    <p class="text-center">Впервые сдесь? <router-link to="/">Регистрация</router-link> </p>
                 </article>
             </div>
         </div>
@@ -128,6 +128,18 @@
                 success: false,
                 msg: null
             };
+        },
+
+        mounted() {
+            if (localStorage.getItem('reloaded')) {
+                localStorage.removeItem('reloaded');
+            } else {
+              localStorage.setItem('reloaded', 'OK');
+               window.location.replace("/login");
+            }
+            //localStorage.removeItem('token');
+            //localStorage.removeItem('expiration');
+           // window.location.replace("/login");
         },
         methods: {
             formSubmit(e) {

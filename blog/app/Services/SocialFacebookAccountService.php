@@ -3,6 +3,8 @@
 namespace App\Services;
 use App\SocialFacebookAccount;
 use App\User;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Contracts\User as ProviderUser;
 
 class SocialFacebookAccountService
@@ -31,7 +33,7 @@ class SocialFacebookAccountService
                     'phone' => '0993116906',
                     'email' => $providerUser->getEmail(),
                     'name' => $providerUser->getName(),
-                    'password' => md5(rand(1,10000)),
+                    'password' => bcrypt(md5(rand(1,10000))),
                 ]);
             }
 
