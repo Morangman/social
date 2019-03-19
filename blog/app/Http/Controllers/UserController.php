@@ -17,7 +17,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class UserController extends Controller
 {
     public function get_users(){
-        $users = User::orderBy('created_at','asc')->take(12)->get();
+        $my_id = \Auth::user()->id;
+        $users = User::orderBy('created_at','asc')->where('id', '!=', $my_id)->take(12)->get();
         return response()->json([
             'success' => true,
             'users' => $users

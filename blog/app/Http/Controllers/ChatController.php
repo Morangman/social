@@ -17,26 +17,29 @@ class ChatController extends Controller
         $friend_id = $request->user_id;
         $my_id = \Auth::user()->id;
         $user = User::where('id', $friend_id)->first();
+        $check = RoomUser::where('user_id', $friend_id)->where('user_id', '!=', $my_id)->get();
 
-        $room = new Room();
-        $room->name = $user['name'];
-        $saved_ok = $room->save();
-
-        $room_user = new RoomUser;
-        $room_user->room_id = $room->id;
-        $room_user->user_id = $my_id;
-        $room_user->save();
-
-        $room_user = new RoomUser;
-        $room_user->room_id = $room->id;
-        $room_user->user_id = $friend_id;
-        $room_user->save();
-        
-        if($saved_ok){
-            return response()->json([
-                'success' => true
-            ]);
+        if(count($check) == 0){
+            $room = new Room();
+            $room->name = $user['name'];
+            $room->save();
+    
+            $room_user = new RoomUser;
+            $room_user->room_id = $room->id;
+            $room_user->user_id = $my_id;
+            $room_user->save();
+    
+            $room_user = new RoomUser;
+            $room_user->room_id = $room->id;
+            $room_user->user_id = $friend_id;
+            $room_user->save();
         }
+
+        return response()->json([
+            'success' => true,
+            'test' => count($check)
+        ]);
+        
     }
 
     public function getRooms(){
@@ -47,16 +50,23 @@ class ChatController extends Controller
             $room_ids []= $room_user[$i]['room_id'];
         }
 
-        $users_ids = RoomUser::select('user_id')->whereIn('room_id', $room_ids)->groupBy('user_id')->get();
-
         $latest_msgs = Message::select('text')->whereIn('room_id', $room_ids)->latest()->first();
+        if(!$latest_msgs){
+            $latest_msgs = '';
+        }
 
+        $users_ids = RoomUser::select('user_id')->whereIn('room_id', $room_ids)->groupBy('user_id')->get();
         $rooms = User::select('name')->whereIn('id', $users_ids)->groupBy('name')->get();
+
+        $all = RoomUser::whereIn('room_id', $room_ids)
+        ->where('user_id', '!=', $my_id)
+        ->join('users', 'users.id', '=', 'room_users.user_id')
+        ->select('room_id', 'name')
+        ->get();
 
         return response()->json([
             'success' => true,
-            'rooms' => $room_user,
-            'latest_msgs' => $latest_msgs
+            'rooms' => $all
         ]);
     }
 
@@ -84,7 +94,27 @@ class ChatController extends Controller
         return response()->json([
             'success' => true,
             'messages' => $msgs,
-            'roomID' => $room_id
+            'myId' => \Auth::user()->id
+        ]);
+    }
+
+    public function searchRooms(Request $request){
+        $my_id = \Auth::user()->id;
+        $room_user = RoomUser::select('room_id')->where('user_id', $my_id)->groupBy('room_id')->get();
+        $room_ids = [];
+        for ($i = 0; $i < count($room_user); $i++){
+            $room_ids []= $room_user[$i]['room_id'];
+        }
+
+        if($request->name == ""){
+            $rooms = '';
+        }else{
+            $rooms = Room::whereIn('id', $room_ids)->groupBy('id')->where('name', 'like', '%' . $request->name . '%')->get();
+        }
+
+        return response()->json([
+            'success' => true,
+            'rooms' => $rooms
         ]);
     }
 }

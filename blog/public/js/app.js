@@ -71745,6 +71745,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -71753,7 +71754,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             uinfo: '',
             name: '',
             nick: '',
-            password: ''
+            password: '',
+            savedOk: false
         };
     },
     mounted: function mounted() {
@@ -71777,7 +71779,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
-        updateProfileInfo: function updateProfileInfo() {
+        updateProfileInfo: function updateProfileInfo(e) {
+            e.preventDefault();
             var currentObj = this;
             currentObj.$Progress.start();
             axios.post('/update_profile_info', {
@@ -71795,11 +71798,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (response) {
                     // currentObj.error = false;
                     // currentObj.success = true;
-                    //currentObj.$router.push('/settings');
+                    currentObj.$router.push('/settings');
+                    currentObj.password = undefined;
+                    currentObj.savedOk = true;
                     currentObj.$Progress.finish();
                 }
             }).then(function () {
-                //currentObj.getInfo();
+                currentObj.getInfo();
             }).catch(function (error) {
                 if (error) {
                     currentObj.$Progress.fail();
@@ -71845,7 +71850,28 @@ var render = function() {
       _c("div", { staticClass: "col-md-9" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-body" }, [
-            _vm._m(1),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-12" }, [
+                _c("h4", [_vm._v("Ваш аккаунт")]),
+                _vm._v(" "),
+                _vm.savedOk
+                  ? _c(
+                      "div",
+                      {
+                        staticStyle: {
+                          "background-color": "green",
+                          color: "white",
+                          "border-radius": "10px",
+                          "text-align": "center"
+                        }
+                      },
+                      [_c("p", [_vm._v("Изменения успешно сохранены")])]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("hr")
+              ])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-md-12" }, [
@@ -72052,7 +72078,12 @@ var render = function() {
                         {
                           staticClass: "btn btn-primary",
                           attrs: { type: "submit" },
-                          on: { click: _vm.updateProfileInfo }
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.updateProfileInfo($event)
+                            }
+                          }
                         },
                         [_vm._v("Сохранить")]
                       ),
@@ -72101,18 +72132,6 @@ var staticRenderFns = [
           },
           [_vm._v("Персональная информация")]
         )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-12" }, [
-        _c("h4", [_vm._v("Ваш аккаунт")]),
-        _vm._v(" "),
-        _c("hr")
       ])
     ])
   }
@@ -72212,7 +72231,7 @@ exports = module.exports = __webpack_require__(5)(false);
 
 
 // module
-exports.push([module.i, "\n.chatperson[data-v-6bebb228]{\r\n  display: block;\r\n  border-bottom: 1px solid #eee;\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\r\n  white-space: nowrap;\r\n  overflow: hidden;\r\n  margin-bottom: 15px;\r\n  padding: 4px;\n}\n.chatperson[data-v-6bebb228]:hover{\r\n  text-decoration: none;\r\n  border-bottom: 1px solid #2ca5e0;\r\n  background-color: #e2f4ff;\n}\n.namechat[data-v-6bebb228] {\r\n    display: inline-block;\r\n    vertical-align: middle;\n}\n.chatperson .chatimg img[data-v-6bebb228]{\r\n  width: 40px;\r\n  height: 40px;\r\n  background-image: url('http://i.imgur.com/JqEuJ6t.png');\n}\n.chatperson .pname[data-v-6bebb228]{\r\n  font-size: 18px;\r\n  padding-left: 5px;\n}\n.chatperson .lastmsg[data-v-6bebb228]{\r\n  font-size: 12px;\r\n  padding-left: 5px;\r\n  color: #ccc;\n}\n.col-sm-8[data-v-6bebb228] {\r\n  min-height: 250px;\n}\n.search-rooms[data-v-6bebb228]{\r\n  margin-bottom: 15px;\n}\n.text-msgs[data-v-6bebb228]{\r\n  width: 650px;\r\n  margin-left: 20px;\n}\n#send-form[data-v-6bebb228]{\r\n  bottom: 0;\n}\n.btn-block[data-v-6bebb228]{\r\n  bottom: 0;\r\n  float: right;\r\n  width: 100px;\n}\n.chatbody[data-v-6bebb228]{\r\n  height: 400px;\r\n  overflow-y: auto;\r\n  width: 650px;\n}\n.rooms[data-v-6bebb228]{\r\n    height: 500px;\r\n    overflow-y: auto;\n}\n.text-message[data-v-6bebb228]{\r\n  max-height: 110px;\r\n  overflow-y: auto;\n}\n.emoji-invoker[data-v-6bebb228] {\r\n    position: absolute;\r\n    bottom: 5px;\r\n    right: 1.5rem;\r\n    width: 1.5rem;\r\n    height: 1.5rem;\r\n    border-radius: 50%;\r\n    cursor: pointer;\r\n    -webkit-transition: all 0.2s;\r\n    transition: all 0.2s;\n}\n.emoji-invoker[data-v-6bebb228]:hover {\r\n    -webkit-transform: scale(1.1);\r\n            transform: scale(1.1);\n}\n.emoji-invoker > svg[data-v-6bebb228] {\r\n    fill: #b1c6d0;\n}\n.emoji-picker[data-v-6bebb228] {\r\n    position: absolute;\r\n    z-index: 9999;\r\n    font-family: Montserrat;\r\n    border: 1px solid #ccc;\r\n    height: 20rem;\r\n    overflow: scroll;\r\n    padding: 1rem;\r\n    -webkit-box-sizing: border-box;\r\n            box-sizing: border-box;\r\n    border-radius: 0.5rem;\r\n    background: #fff;\r\n    -webkit-box-shadow: 1px 1px 8px #c7dbe6;\r\n            box-shadow: 1px 1px 8px #c7dbe6;\n}\n.emoji-picker__search[data-v-6bebb228] {\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\n}\n.emoji-picker__search > input[data-v-6bebb228] {\r\n    -webkit-box-flex: 1;\r\n        -ms-flex: 1;\r\n            flex: 1;\r\n    border-radius: 10rem;\r\n    border: 1px solid #ccc;\r\n    padding: 0.5rem 1rem;\r\n    outline: none;\n}\n.emoji-picker h5[data-v-6bebb228] {\r\n    margin-bottom: 0;\r\n    color: #b1b1b1;\r\n    text-transform: uppercase;\r\n    font-size: 0.8rem;\r\n    cursor: default;\n}\n.emoji-picker .emojis[data-v-6bebb228] {\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\r\n    -ms-flex-wrap: wrap;\r\n        flex-wrap: wrap;\r\n    -webkit-box-pack: justify;\r\n        -ms-flex-pack: justify;\r\n            justify-content: space-between;\n}\n.emoji-picker .emojis[data-v-6bebb228]:after {\r\n    content: \"\";\r\n    -webkit-box-flex: 1;\r\n        -ms-flex: auto;\r\n            flex: auto;\n}\n.emoji-picker .emojis span[data-v-6bebb228] {\r\n    padding: 0.2rem;\r\n    cursor: pointer;\r\n    border-radius: 5px;\n}\n.emoji-picker .emojis span[data-v-6bebb228]:hover {\r\n    background: #ececec;\r\n    cursor: pointer;\n}\n.wrapper[data-v-6bebb228] {\r\n    position: relative;\n}\n.regular-input[data-v-6bebb228] {\r\n    border-radius: 3px;\r\n    border: 1px solid #ccc;\n}\n.dropdown-menu-right > a[data-v-6bebb228]:hover{\r\n        background-color: #e0f0ff;\n}\n.inbox_msg[data-v-6bebb228] {\r\n  border: 1px solid #c4c4c4;\r\n  clear: both;\r\n  overflow: hidden;\n}\n.incoming_msg_img[data-v-6bebb228] {\r\n  display: inline-block;\r\n  width: 6%;\n}\n.received_msg[data-v-6bebb228] {\r\n  display: inline-block;\r\n  padding: 0 0 0 10px;\r\n  vertical-align: top;\r\n  width: 92%;\n}\n.received_withd_msg p[data-v-6bebb228] {\r\n  background: #ebebeb none repeat scroll 0 0;\r\n  border-radius: 3px;\r\n  color: #646464;\r\n  font-size: 14px;\r\n  margin: 0;\r\n  padding: 5px 10px 5px 12px;\r\n  width: 100%;\n}\n.time_date[data-v-6bebb228] {\r\n  color: #747474;\r\n  display: block;\r\n  font-size: 12px;\r\n  margin: 8px 0 0;\n}\n.received_withd_msg[data-v-6bebb228] { width: 57%;\n}\n.mesgs[data-v-6bebb228] {\r\n  float: left;\r\n  padding: 30px 15px 0 25px;\r\n  width: 60%;\n}\n.sent_msg p[data-v-6bebb228] {\r\n  background: #05728f none repeat scroll 0 0;\r\n  border-radius: 3px;\r\n  font-size: 14px;\r\n  margin: 0; color:#fff;\r\n  padding: 5px 10px 5px 12px;\r\n  width:100%;\n}\n.outgoing_msg[data-v-6bebb228]{ overflow:hidden;\n}\n.sent_msg[data-v-6bebb228] {\r\n  float: right;\r\n  width: 46%;\n}\n.input_msg_write input[data-v-6bebb228] {\r\n  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;\r\n  border: medium none;\r\n  color: #4c4c4c;\r\n  font-size: 15px;\r\n  min-height: 48px;\r\n  width: 100%;\n}\n.choise[data-v-6bebb228]{\r\n  width: 295px;\r\n  text-align: center;\r\n  background-color: #81aad1;\r\n  color: white;\r\n  border-radius: 10px;\n}\r\n\r\n\r\n", ""]);
+exports.push([module.i, "\n.chatperson[data-v-6bebb228]{\r\n  display: block;\r\n  border-bottom: 1px solid #eee;\r\n  width: 100%;\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex;\r\n  -webkit-box-align: center;\r\n      -ms-flex-align: center;\r\n          align-items: center;\r\n  white-space: nowrap;\r\n  overflow: hidden;\r\n  margin-bottom: 15px;\r\n  padding: 4px;\n}\n.chatperson[data-v-6bebb228]:hover{\r\n  text-decoration: none;\r\n  border-bottom: 1px solid #2ca5e0;\r\n  background-color: #e2f4ff;\n}\n.namechat[data-v-6bebb228] {\r\n    display: inline-block;\r\n    vertical-align: middle;\n}\n.chatperson .chatimg img[data-v-6bebb228]{\r\n  width: 40px;\r\n  height: 40px;\r\n  background-image: url('http://i.imgur.com/JqEuJ6t.png');\n}\n.chatperson .pname[data-v-6bebb228]{\r\n  font-size: 18px;\r\n  padding-left: 5px;\n}\n.chatperson .lastmsg[data-v-6bebb228]{\r\n  font-size: 12px;\r\n  padding-left: 5px;\r\n  color: #ccc;\n}\n.col-sm-8[data-v-6bebb228] {\r\n  min-height: 250px;\n}\n.search-rooms[data-v-6bebb228]{\r\n  margin-bottom: 15px;\n}\n.text-msgs[data-v-6bebb228]{\r\n  width: 650px;\r\n  margin-left: 20px;\n}\n#send-form[data-v-6bebb228]{\r\n  bottom: 0;\n}\n.btn-block[data-v-6bebb228]{\r\n  bottom: 0;\r\n  float: right;\r\n  width: 100px;\n}\n.chatbody[data-v-6bebb228]{\r\n  height: 400px;\r\n  overflow-y: auto;\r\n  width: 650px;\n}\n.rooms[data-v-6bebb228]{\r\n    height: 500px;\r\n    overflow-y: auto;\n}\n.text-message[data-v-6bebb228]{\r\n  max-height: 110px;\r\n  overflow-y: auto;\n}\n.emoji-invoker[data-v-6bebb228] {\r\n    position: absolute;\r\n    bottom: 5px;\r\n    right: 1.5rem;\r\n    width: 1.5rem;\r\n    height: 1.5rem;\r\n    border-radius: 50%;\r\n    cursor: pointer;\r\n    -webkit-transition: all 0.2s;\r\n    transition: all 0.2s;\n}\n.emoji-invoker[data-v-6bebb228]:hover {\r\n    -webkit-transform: scale(1.1);\r\n            transform: scale(1.1);\n}\n.emoji-invoker > svg[data-v-6bebb228] {\r\n    fill: #b1c6d0;\n}\n.emoji-picker[data-v-6bebb228] {\r\n    position: absolute;\r\n    z-index: 9999;\r\n    font-family: Montserrat;\r\n    border: 1px solid #ccc;\r\n    height: 13rem;\r\n    right: -12rem;\r\n    top: -60px;\r\n    width: 191px;\r\n    overflow-y: auto;\r\n    padding: 1rem;\r\n    -webkit-box-sizing: border-box;\r\n            box-sizing: border-box;\r\n    border-radius: 0.5rem;\r\n    background: #fff;\r\n    -webkit-box-shadow: 1px 1px 8px #c7dbe6;\r\n            box-shadow: 1px 1px 8px #c7dbe6;\n}\n.emoji-picker__search[data-v-6bebb228] {\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\n}\n.emoji-picker__search > input[data-v-6bebb228] {\r\n    -webkit-box-flex: 1;\r\n        -ms-flex: 1;\r\n            flex: 1;\r\n    width: 100px;\r\n    border-radius: 10rem;\r\n    border: 1px solid #ccc;\r\n    padding: 0.5rem 1rem;\r\n    outline: none;\n}\n.emoji-picker h5[data-v-6bebb228] {\r\n    margin-bottom: 0;\r\n    color: #b1b1b1;\r\n    text-transform: uppercase;\r\n    font-size: 0.8rem;\r\n    cursor: default;\n}\n.emoji-picker .emojis[data-v-6bebb228] {\r\n    display: -webkit-box;\r\n    display: -ms-flexbox;\r\n    display: flex;\r\n    -ms-flex-wrap: wrap;\r\n        flex-wrap: wrap;\r\n    -webkit-box-pack: justify;\r\n        -ms-flex-pack: justify;\r\n            justify-content: space-between;\n}\n.emoji-picker .emojis[data-v-6bebb228]:after {\r\n    content: \"\";\r\n    -webkit-box-flex: 1;\r\n        -ms-flex: auto;\r\n            flex: auto;\n}\n.emoji-picker .emojis span[data-v-6bebb228] {\r\n    padding: 0.2rem;\r\n    cursor: pointer;\r\n    border-radius: 5px;\n}\n.emoji-picker .emojis span[data-v-6bebb228]:hover {\r\n    background: #ececec;\r\n    cursor: pointer;\n}\n.wrapper[data-v-6bebb228] {\r\n    position: relative;\n}\n.regular-input[data-v-6bebb228] {\r\n    border-radius: 3px;\r\n    border: 1px solid #ccc;\n}\n.dropdown-menu-right > a[data-v-6bebb228]:hover{\r\n        background-color: #e0f0ff;\n}\n.inbox_msg[data-v-6bebb228] {\r\n  border: 1px solid #c4c4c4;\r\n  clear: both;\r\n  overflow: hidden;\n}\n.incoming_msg_img[data-v-6bebb228] {\r\n  display: inline-block;\r\n  width: 6%;\n}\n.received_msg[data-v-6bebb228] {\r\n  display: inline-block;\r\n  padding: 0 0 0 10px;\r\n  vertical-align: top;\r\n  width: 92%;\n}\n.received_withd_msg p[data-v-6bebb228] {\r\n  background: #ebebeb none repeat scroll 0 0;\r\n  border-radius: 3px;\r\n  color: #646464;\r\n  font-size: 14px;\r\n  margin: 0;\r\n  padding: 5px 10px 5px 12px;\r\n  width: 100%;\n}\n.time_date[data-v-6bebb228] {\r\n  color: #747474;\r\n  display: block;\r\n  font-size: 12px;\r\n  margin: 0 0 6px;\n}\n.received_withd_msg[data-v-6bebb228] { width: 57%;\n}\n.mesgs[data-v-6bebb228] {\r\n  float: left;\r\n  padding: 30px 15px 0 25px;\r\n  width: 60%;\n}\n.sent_msg p[data-v-6bebb228] {\r\n  background: #05728f none repeat scroll 0 0;\r\n  border-radius: 3px;\r\n  font-size: 14px;\r\n  margin: 0; color:#fff;\r\n  padding: 5px 10px 5px 12px;\r\n  width:100%;\n}\n.outgoing_msg[data-v-6bebb228]{ overflow:hidden;\n}\n.sent_msg[data-v-6bebb228] {\r\n  float: right;\r\n  width: 46%;\n}\n.input_msg_write input[data-v-6bebb228] {\r\n  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;\r\n  border: medium none;\r\n  color: #4c4c4c;\r\n  font-size: 15px;\r\n  min-height: 48px;\r\n  width: 100%;\n}\n.choise[data-v-6bebb228]{\r\n  width: 295px;\r\n  text-align: center;\r\n  background-color: #81aad1;\r\n  color: white;\r\n  border-radius: 10px;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -72225,6 +72244,19 @@ exports.push([module.i, "\n.chatperson[data-v-6bebb228]{\r\n  display: block;\r\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_emoji_picker__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_emoji_picker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_emoji_picker__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -72575,9 +72607,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             check: false,
             check_msgs: false,
             text: '',
-            search: ''
+            search: '',
+            keywords: null,
+            results: [],
+            myId: null
         };
     },
+
+
+    watch: {
+        keywords: function keywords(after, before) {
+            this.SearchRoom();
+        }
+    },
+
     mounted: function mounted() {
         var currentObj = this;
         currentObj.$Progress.start();
@@ -72613,15 +72656,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
+        SearchRoom: function SearchRoom() {
+            var currentObj = this;
+            axios.post('/search', {
+                name: currentObj.keywords
+            }, {
+                headers: {
+                    'accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            }).then(function (response) {
+                if (response) {
+                    //currentObj.$router.push('/chat');
+                    // currentObj.messages = response.data.messages;
+                    currentObj.results = response.data.rooms;
+                }
+            }).catch(function (error) {
+                if (error) {
+                    currentObj.$Progress.fail();
+                    console.log(error.response.data);
+                }
+            });
+        },
 
 
         scrollToEnd: function scrollToEnd() {
             var container = this.$el.querySelector("#chatbody");
             container.scrollTop = container.scrollHeight;
-            console.log("END");
         },
 
-        Send: function Send() {
+        Send: function Send(e) {
+            e.preventDefault();
             var currentObj = this;
             currentObj.$Progress.start();
             axios.post('/send', {
@@ -72635,7 +72701,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }).then(function (response) {
                 if (response) {
-                    currentObj.$router.push('/chat/'.currentObj.room_id);
+                    currentObj.$router.push('/chat');
                     // currentObj.messages = response.data.messages;
                     currentObj.$Progress.finish();
                 }
@@ -72667,6 +72733,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         currentObj.check = false;
                     }
                     currentObj.messages = response.data.messages;
+                    currentObj.myId = response.data.myId;
 
                     currentObj.$Progress.finish();
                 }
@@ -72771,43 +72838,91 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
-        _c(
-          "div",
-          { staticClass: "rooms col-sm-4" },
-          [
-            _c("input", {
-              staticClass: "search-rooms form-control",
-              attrs: { name: "title", placeholder: "Поиск..." }
-            }),
-            _vm._v(" "),
-            _vm._l(_vm.rooms, function(room) {
-              return _c(
-                "a",
-                {
-                  staticClass: "chatperson",
-                  attrs: { href: "javascript:void(0)" },
-                  on: {
-                    click: function($event) {
-                      _vm.getMessages(room.room_id)
-                    }
-                  }
-                },
-                [
-                  _c("div", { staticClass: "namechat" }, [
-                    _c("div", { staticClass: "pname" }, [
-                      _vm._v(_vm._s(room.room_id))
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "lastmsg" }, [
-                      _vm._v(_vm._s(_vm.latest_message.text))
-                    ])
-                  ])
-                ]
+        _c("div", { staticClass: "rooms col-sm-4" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.keywords,
+                expression: "keywords"
+              }
+            ],
+            staticClass: "search-rooms form-control",
+            attrs: { name: "title", placeholder: "Поиск..." },
+            domProps: { value: _vm.keywords },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.keywords = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          !_vm.keywords
+            ? _c(
+                "div",
+                _vm._l(_vm.rooms, function(room) {
+                  return _c(
+                    "a",
+                    {
+                      staticClass: "chatperson",
+                      attrs: { href: "javascript:void(0)" },
+                      on: {
+                        click: function($event) {
+                          _vm.getMessages(room.room_id)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "namechat" }, [
+                        _c("div", { staticClass: "pname" }, [
+                          _vm._v(_vm._s(room.name))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "lastmsg" }, [
+                          _vm._v("Последнее сообщение")
+                        ])
+                      ])
+                    ]
+                  )
+                })
               )
-            })
-          ],
-          2
-        ),
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.keywords
+            ? _c(
+                "div",
+                _vm._l(_vm.results, function(result) {
+                  return _c(
+                    "a",
+                    {
+                      staticClass: "chatperson",
+                      attrs: { href: "javascript:void(0)" },
+                      on: {
+                        click: function($event) {
+                          _vm.getMessages(result.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "namechat" }, [
+                        _c("div", { staticClass: "pname" }, [
+                          _vm._v(_vm._s(result.name))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "lastmsg" }, [
+                          _vm._v("Последнее сообщение")
+                        ])
+                      ])
+                    ]
+                  )
+                })
+              )
+            : _vm._e()
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-8" }, [
           _c(
@@ -72842,7 +72957,21 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(1, true)
+                  message.user_id != _vm.myId
+                    ? _c("div", { staticClass: "received_msg" }, [
+                        _c("div", { staticClass: "received_withd_msg" }, [
+                          _c("p", [_vm._v(_vm._s(message.text))]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "time_date" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm._f("moment")(message.created_at, "calendar")
+                              )
+                            )
+                          ])
+                        ])
+                      ])
+                    : _vm._e()
                 ])
               })
             ],
@@ -72869,7 +72998,7 @@ var render = function() {
                           staticClass:
                             "text-msgs form-control text-message regular-input",
                           attrs: {
-                            name: "text",
+                            sname: "text",
                             rows: "4",
                             type: "text",
                             placeholder: "Сообщение"
@@ -73035,7 +73164,12 @@ var render = function() {
                       {
                         staticClass: "btn btn-info btn-block",
                         attrs: { type: "submit" },
-                        on: { click: _vm.Send }
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.Send($event)
+                          }
+                        }
                       },
                       [_vm._v("Отправить")]
                     )
@@ -73065,24 +73199,6 @@ var staticRenderFns = [
       },
       [_c("span", { staticClass: "navbar-toggler-icon" })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "received_msg" }, [
-      _c("div", { staticClass: "received_withd_msg" }, [
-        _c("p", [
-          _vm._v(
-            "Test which is a new approach to have all\r\n                    solutions"
-          )
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "time_date" }, [
-          _vm._v(" 11:01 AM    |    June 9")
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true

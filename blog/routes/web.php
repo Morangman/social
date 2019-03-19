@@ -52,6 +52,7 @@ Route::post('/create_room', 'ChatController@createRoom');
 Route::post('/get_messages', 'ChatController@getMessages');
 Route::post('/send', 'ChatController@sendMessage');
 Route::get('/get_rooms', 'ChatController@getRooms');
+Route::post('/search', 'ChatController@searchRooms');
 
 
 Route::get('/home', function () {

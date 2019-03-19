@@ -95,8 +95,11 @@
     z-index: 9999;
     font-family: Montserrat;
     border: 1px solid #ccc;
-    height: 20rem;
-    overflow: scroll;
+    height: 13rem;
+    right: -12rem;
+    top: -60px;
+    width: 191px;
+    overflow-y: auto;
     padding: 1rem;
     box-sizing: border-box;
     border-radius: 0.5rem;
@@ -108,6 +111,7 @@
     }
     .emoji-picker__search > input {
     flex: 1;
+    width: 100px;
     border-radius: 10rem;
     border: 1px solid #ccc;
     padding: 0.5rem 1rem;
@@ -181,7 +185,7 @@
   color: #747474;
   display: block;
   font-size: 12px;
-  margin: 8px 0 0;
+  margin: 0 0 6px;
 }
 .received_withd_msg { width: 57%;}
 .mesgs {
@@ -245,13 +249,25 @@
 <div class="container">
 	<div class="row">
     <div class="rooms col-sm-4">
-    <input class="search-rooms form-control" name="title" placeholder="Поиск..."></input>
-      <a href="javascript:void(0)" class="chatperson" v-for="room in rooms" @click="getMessages(room.room_id)">
+
+    <input class="search-rooms form-control" name="title" placeholder="Поиск..."  v-model="keywords"></input>
+    <div v-if="!keywords">
+      <a href="javascript:void(0)" class="chatperson" v-for="room in rooms"  @click="getMessages(room.room_id)">
         <div class="namechat">
-            <div class="pname">{{room.room_id}}</div>
-            <div class="lastmsg">{{latest_message.text}}</div>
+            <div class="pname">{{room.name}}</div>
+            <div class="lastmsg">Последнее сообщение</div>
         </div>
       </a>
+    </div>
+    <div v-if="keywords">
+      <a href="javascript:void(0)" class="chatperson" v-for="result in results"  @click="getMessages(result.id)">
+          <div class="namechat">
+              <div class="pname">{{result.name}}</div>
+              <div class="lastmsg">Последнее сообщение</div>
+          </div>
+      </a>
+    </div>
+
     </div>
     <div class="col-sm-8">
     <div id="chatbody" class="chatbody">
@@ -262,69 +278,66 @@
       <p>Здесь пока ничего нет...</p>
     </div>
       <div v-for="message in messages">
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>{{message.text}}</p>
-                <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
-              </div>
-            </div>
-
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>Test which is a new approach to have all
-                    solutions</p>
-                  <span class="time_date"> 11:01 AM    |    June 9</span></div>
-              </div>
-
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>{{message.text}}</p>
+            <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
+          </div>
+        </div>
+        <div v-if="message.user_id != myId" class="received_msg">
+          <div class="received_withd_msg">
+            <p>{{message.text}}</p>
+            <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
+          </div>
+        </div>
       </div>
     </div>
 
     <div v-if="check_msgs" class="row" id="send-form">
       <form>
-      <div class="col-xs-9">
-      <div class="wrapper">
-        <textarea v-on:keyup.page-down="onPageDown(e)"  name="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
-        <emoji-picker @emoji="append" :search="search">
-        <div
-            class="emoji-invoker"
-            slot="emoji-invoker"
-            slot-scope="{ events }"
-            v-on="events"
-        >
-            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-            </svg>
-        </div>
-        <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
-            <div class="emoji-picker">
-            <div class="emoji-picker__search">
-                <input type="text" v-model="search" v-focus>
+        <div class="col-xs-9">
+          <div class="wrapper">
+            <textarea v-on:keyup.page-down="onPageDown(e)" sname="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+            <emoji-picker @emoji="append" :search="search">
+            <div
+                class="emoji-invoker"
+                slot="emoji-invoker"
+                slot-scope="{ events }"
+                v-on="events"
+            >
+                <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                </svg>
             </div>
-            <div>
-                <div v-for="(emojiGroup, category) in emojis" :key="category">
-                <h5>{{ category }}</h5>
-                <div class="emojis">
-                    <span
-                    v-for="(emoji, emojiName) in emojiGroup"
-                    :key="emojiName"
-                    @click="insert(emoji)"
-                    :title="emojiName"
-                    >{{ emoji }}</span>
+            <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
+                <div class="emoji-picker">
+                <div class="emoji-picker__search">
+                    <input type="text" v-model="search" v-focus>
+                </div>
+                <div>
+                    <div v-for="(emojiGroup, category) in emojis" :key="category">
+                    <h5>{{ category }}</h5>
+                    <div class="emojis">
+                        <span
+                        v-for="(emoji, emojiName) in emojiGroup"
+                        :key="emojiName"
+                        @click="insert(emoji)"
+                        :title="emojiName"
+                        >{{ emoji }}</span>
+                    </div>
+                    </div>
                 </div>
                 </div>
             </div>
+            </emoji-picker>
             </div>
+          </div>
+        <div class="col-xs-3">
+          <button type="submit" @click.prevent="Send" class="btn btn-info btn-block">Отправить</button>
         </div>
-        </emoji-picker>
-        </div>
-      </div>
-      <div class="col-xs-3">
-        <button type="submit" @click="Send" class="btn btn-info btn-block">Отправить</button>
-      </div>
       </form>
     </div>
-
     </div>
 </div>
 </div>
@@ -348,9 +361,19 @@ export default {
       check: false,
       check_msgs: false,
       text: '',
-      search: ''
+      search: '',
+      keywords: null,
+      results: [],
+      myId: null
     }
   },
+
+  watch: {
+      keywords(after, before) {
+          this.SearchRoom();
+      }
+  },
+
   mounted(){
     let currentObj = this;
     currentObj.$Progress.start();
@@ -390,13 +413,40 @@ export default {
         });
     },
 
+    SearchRoom(){
+      let currentObj = this;
+          axios.post('/search', {
+              name: currentObj.keywords
+          },
+          {
+              headers: {
+                  'accept': 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest',
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          })
+          .then(function (response) {
+              if(response){
+                  //currentObj.$router.push('/chat');
+                 // currentObj.messages = response.data.messages;
+                 currentObj.results = response.data.rooms;
+              }
+          })
+          .catch(function (error) {
+              if(error){
+                  currentObj.$Progress.fail();
+                  console.log(error.response.data);
+              }
+          })
+    },
+
     scrollToEnd: function() {    	
       let container = this.$el.querySelector("#chatbody");
       container.scrollTop = container.scrollHeight;
-      console.log("END");
     },
 
-    Send(){
+    Send(e){
+      e.preventDefault();
       let currentObj = this;
       currentObj.$Progress.start();
           axios.post('/send', {
@@ -412,7 +462,7 @@ export default {
           })
           .then(function (response) {
               if(response){
-                  currentObj.$router.push('/chat/'.currentObj.room_id);
+                  currentObj.$router.push('/chat');
                  // currentObj.messages = response.data.messages;
                   currentObj.$Progress.finish();
               }
@@ -448,6 +498,7 @@ export default {
                   currentObj.check = false;
                 }
                   currentObj.messages = response.data.messages;
+                  currentObj.myId = response.data.myId;
 
                   currentObj.$Progress.finish();
               }
