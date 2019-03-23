@@ -7,10 +7,16 @@ use App\User;
 use App\Room;
 use App\RoomUser;
 use App\Message;
+use App\Events\MessageSentEvent;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     
     public function createRoom(Request $request){
 
@@ -81,9 +87,16 @@ class ChatController extends Controller
         $message->room_id = $room_id;
         $message->save();
 
-        return response()->json([
-            'success' => true
-        ]);
+        //$msgs = Message::where('room_id', $room_id)->get();
+
+        broadcast(new MessageSentEvent("Test"));
+
+        //\App\Events\MessageSentEvent::dispatch("ok");
+        
+        // return response()->json([
+        //     'success' => 'true',
+        //    'messages' => $msgs
+        // ]);
     }
 
     public function getMessages(Request $request){

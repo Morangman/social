@@ -160,6 +160,7 @@
     }
 
 </style>
+
 <template>
 <div class="content-home">
         <div class="container">
@@ -507,7 +508,6 @@ import EmojiPicker from 'vue-emoji-picker'
             Refresh(bool, id){
                 let post_id = id;
                 this.is_refresh = bool;
-                console.log(this.is_refresh);
             },
 
             Hide(postId){

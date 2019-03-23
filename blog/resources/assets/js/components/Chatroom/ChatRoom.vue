@@ -224,6 +224,24 @@
   border-radius: 10px;
 }
 
+.typing{
+  color: #747474;
+  background-color: mintcream;
+  border-radius: 10px;
+  display: block;
+  font-size: 12px;
+  width: 60px;
+  height: 22px;
+  text-align: center;
+  position: absolute;
+  bottom: 150px;
+  left: 20px;
+  z-index: 999999;
+}
+
+.typing > p{
+  width: 60px;
+}
 
 </style>
 <template>
@@ -250,7 +268,7 @@
 	<div class="row">
     <div class="rooms col-sm-4">
 
-    <input class="search-rooms form-control" name="title" placeholder="Поиск..."  v-model="keywords"></input>
+    <input class="search-rooms form-control" autocomplete="off" name="title" placeholder="Поиск..."  v-model="keywords"></input>
     <div v-if="!keywords">
       <a href="javascript:void(0)" class="chatperson" v-for="room in rooms"  @click="getMessages(room.room_id)">
         <div class="namechat">
@@ -278,7 +296,7 @@
       <p>Здесь пока ничего нет...</p>
     </div>
       <div v-for="message in messages">
-        <div class="outgoing_msg">
+        <div v-if="message.user_id == myId" class="outgoing_msg">
           <div class="sent_msg">
             <p>{{message.text}}</p>
             <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
@@ -292,12 +310,13 @@
         </div>
       </div>
     </div>
-
+    
     <div v-if="check_msgs" class="row" id="send-form">
+    <div class="typing"><p>Печатает...</p></div>
       <form>
         <div class="col-xs-9">
           <div class="wrapper">
-            <textarea v-on:keyup.page-down="onPageDown(e)" sname="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+            <textarea v-on:keyup.page-down="onPageDown(e)" name="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
             <emoji-picker @emoji="append" :search="search">
             <div
                 class="emoji-invoker"
@@ -392,6 +411,13 @@ export default {
     })
   },
 
+  created(){
+    Echo.channel('pchat')
+    .listen('MessageSentEvent', (e) => {
+      console.log(e);
+  })
+  },
+
   methods:{
     append(emoji) {
       this.text += emoji
@@ -427,8 +453,6 @@ export default {
           })
           .then(function (response) {
               if(response){
-                  //currentObj.$router.push('/chat');
-                 // currentObj.messages = response.data.messages;
                  currentObj.results = response.data.rooms;
               }
           })
@@ -448,7 +472,7 @@ export default {
     Send(e){
       e.preventDefault();
       let currentObj = this;
-      currentObj.$Progress.start();
+      if(this.text != '')
           axios.post('/send', {
               text: currentObj.text,
               room_id: currentObj.room_id
@@ -463,13 +487,14 @@ export default {
           .then(function (response) {
               if(response){
                   currentObj.$router.push('/chat');
-                 // currentObj.messages = response.data.messages;
-                  currentObj.$Progress.finish();
+                  currentObj.messages = response.data.messages;
               }
+          }).then(() => {
+            currentObj.scrollToEnd();
+            currentObj.text = undefined;
           })
           .catch(function (error) {
               if(error){
-                  currentObj.$Progress.fail();
                   console.log(error.response.data);
               }
           })
@@ -479,7 +504,6 @@ export default {
       this.check_msgs = true;
       this.room_id = id;
       let currentObj = this;
-      currentObj.$Progress.start();
           axios.post('/get_messages', {
               room_id: currentObj.room_id
           },
@@ -499,15 +523,13 @@ export default {
                 }
                   currentObj.messages = response.data.messages;
                   currentObj.myId = response.data.myId;
-
-                  currentObj.$Progress.finish();
               }
           }).then(() => {
+            currentObj.keywords = undefined;
             currentObj.scrollToEnd();
-                })
+          })
           .catch(function (error) {
               if(error){
-                  currentObj.$Progress.fail();
                   console.log(error.response.data);
               }
           })

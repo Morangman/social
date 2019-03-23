@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
@@ -45,5 +46,10 @@ class User extends Authenticatable
     public function rooms()
     {
         return $this->belongsToMany(Room::class);
+    }
+
+    public function message()
+    {
+        return $this->hasMany(Message::class);
     }
 }

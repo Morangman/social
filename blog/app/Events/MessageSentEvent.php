@@ -6,15 +6,18 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class MessageSentEvent implements ShouldBroadcast
 {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
     
     public $message;
+ 
     /**
      * Create a new event instance.
      *
@@ -24,6 +27,7 @@ class MessageSentEvent implements ShouldBroadcast
     {
         $this->message = $message;
     }
+    
     /**
      * Get the channels the event should broadcast on.
      *
@@ -31,6 +35,6 @@ class MessageSentEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');
+        return new PrivateChannel('pchat'.$message->user->id);
     }
 }

@@ -11,6 +11,6 @@
 |
 */
 
-Broadcast::channel('chat', function ($user) {
-   return Auth::user();
+Broadcast::channel('pchat', function ($user) {
+   return $user->id;
 });
