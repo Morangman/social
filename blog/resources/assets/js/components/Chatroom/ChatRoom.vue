@@ -154,7 +154,11 @@
         background-color: #e0f0ff;
     }
 
-
+.emoji-trigger{
+      position: absolute;
+      right: 14px;
+      top: 15px;
+}
 
 .inbox_msg {
   border: 1px solid #c4c4c4;
@@ -236,13 +240,33 @@
   position: absolute;
   bottom: 150px;
   left: 20px;
-  z-index: 999999;
 }
 
 .typing > p{
   width: 60px;
 }
 
+.add_file{
+  position: absolute;
+  right: 114px;
+  margin-top: 5px;
+  font-size: 23px;
+  opacity: 0.5;
+  color: black;
+}
+
+.preview{
+  position: absolute;
+  left: 20px;
+  margin-top: 7px;
+}
+
+.info{
+display: inline-flex;
+opacity: 0.5;
+color: black;
+max-width: 400px;
+}
 </style>
 <template>
 <div class="content-home">
@@ -298,13 +322,15 @@
       <div v-for="message in messages">
         <div v-if="message.user_id == myId" class="outgoing_msg">
           <div class="sent_msg">
-            <p>{{message.text}}</p>
+            <img v-img:group v-if="message.file" width="100%" style="border-radius: 5px;" v-bind:src="'http://localhost:8000/' + message.file" alt="">
+            <p v-if="message.text">{{message.text}}</p>
             <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
           </div>
         </div>
         <div v-if="message.user_id != myId" class="received_msg">
           <div class="received_withd_msg">
-            <p>{{message.text}}</p>
+            <img v-img v-if="message.file" width="100%" style="border-radius: 5px;" v-bind:src="'http://localhost:8000/' + message.file" alt="">
+            <p v-if="message.text">{{message.text}}</p>
             <span class="time_date">{{ message.created_at | moment("calendar") }}</span> 
           </div>
         </div>
@@ -313,43 +339,38 @@
     
     <div v-if="check_msgs" class="row" id="send-form">
     <div class="typing"><p>Печатает...</p></div>
-      <form>
+      <form method="post" enctype="multipart/form-data">
         <div class="col-xs-9">
           <div class="wrapper">
             <textarea v-on:keyup.page-down="onPageDown(e)" name="text" v-model="text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
-            <emoji-picker @emoji="append" :search="search">
-            <div
-                class="emoji-invoker"
-                slot="emoji-invoker"
-                slot-scope="{ events }"
-                v-on="events"
-            >
-                <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none"/>
-                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
-                </svg>
-            </div>
-            <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
-                <div class="emoji-picker">
-                <div class="emoji-picker__search">
-                    <input type="text" v-model="search" v-focus>
-                </div>
-                <div>
-                    <div v-for="(emojiGroup, category) in emojis" :key="category">
-                    <h5>{{ category }}</h5>
-                    <div class="emojis">
-                        <span
-                        v-for="(emoji, emojiName) in emojiGroup"
-                        :key="emojiName"
-                        @click="insert(emoji)"
-                        :title="emojiName"
-                        >{{ emoji }}</span>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </emoji-picker>
+            <picker 
+              v-show="showEmojiPicker"
+                  set="apple"
+                  title="Pick your emoji…" 
+                  emoji="point_up"
+                  :style="{ position: 'absolute', bottom: '111px', right: '-143px' }"
+                  @select="addEmoji"
+                  >
+            </picker>
+              <span
+              class="emoji-trigger"
+              :class="{ 'triggered': showEmojiPicker }"
+              @mousedown.prevent="toggleEmojiPicker"
+              >
+              <svg
+                style="width:20px;height:20px"
+                viewBox="0 0 24 24"
+              >
+                <path fill="#888888" d="M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5M17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23Z" />
+              </svg>
+              </span>
+              <div class="preview" v-if="file">
+                <a href="javascript:void(0)" @click="hideFile" style="color: red;"><i class="fas fa-trash-alt"></i></a>
+                <img style=" height: 38px;" v-if="isImage" :src="file" />
+                <span v-if="isArchive"><i class="fas fa-file-archive"></i></span> <p class="info">{{ name.name }} {{ fileInfo }}</p>
+              </div>
+              <input type="file" id="file" ref="file" name="file" hidden  v-on:change="addFile"></input>
+              <a href="javascript:void(0)"  @click="$refs.file.click()" class="add_file"><i class="fas fa-paperclip"></i></a>
             </div>
           </div>
         <div class="col-xs-3">
@@ -364,12 +385,10 @@
 </template>
 
 <script>
-import EmojiPicker from 'vue-emoji-picker'
-export default {
 
-  components: {
-    EmojiPicker,
-  },
+import Pusher from "pusher-js"
+
+export default {
 
   data(){
     return {
@@ -383,7 +402,13 @@ export default {
       search: '',
       keywords: null,
       results: [],
-      myId: null
+      myId: null,
+      showEmojiPicker: false,
+      file: '',
+      fileInfo: '',
+      name: '',
+      isImage: false,
+      isArchive: false
     }
   },
 
@@ -394,6 +419,20 @@ export default {
   },
 
   mounted(){
+    let pusher = new Pusher('cd88d35360765f9ff6e7', {
+      cluster: 'eu',
+      forceTLS: true
+    });
+    
+    let channel = pusher.subscribe('test');
+        channel.bind('pusher:subscription_succeeded', function(members) {}),
+    channel.bind('MessageSentEvent', function(e) {
+      console.log(e);
+    })
+    //window.Echo.channel("test").listen("MessageSentEvent", e => {
+    //  alert(e);
+    //});
+
     let currentObj = this;
     currentObj.$Progress.start();
     axios.get(`/get_rooms`)
@@ -411,16 +450,46 @@ export default {
     })
   },
 
-  created(){
-    Echo.channel('pchat')
-    .listen('MessageSentEvent', (e) => {
-      console.log(e);
-  })
-  },
-
   methods:{
-    append(emoji) {
-      this.text += emoji
+    toggleEmojiPicker () {
+      this.showEmojiPicker = !this.showEmojiPicker
+    },
+    addEmoji (emoji) {
+      this.text += emoji.native
+    },
+    hideFile(){
+      this.file = undefined;
+      this.image = undefined;
+      this.name = undefined;
+    },
+    getFileInfo(file){
+      this.fileInfo = Math.round(file.size/1024) +'KB' + ' ' + file.type;
+    },
+    addFile(e) {
+      this.name = e.target.files[0];
+      let files = e.target.files || e.dataTransfer.files;
+      if(files[0]['type']==='image/jpg' || files[0]['type']==='image/png'|| files[0]['type']==='image/gif'|| files[0]['type']==='image/jpeg'){
+        this.isImage = true;
+        this.isArchive = false;
+      }
+      if(files[0]['type']==='application/zip' || files[0]['type']===''){
+        this.isArchive = true;
+        this.isImage = false;
+      }
+
+      if (!files.length){
+          return;
+      }
+      this.createFile(files[0]);
+    },
+    createFile(file) {
+        this.getFileInfo(file);
+        let reader = new FileReader();
+        let vm = this;
+        reader.onload = (e) => {
+            vm.file = e.target.result;
+        };
+        reader.readAsDataURL(file);
     },
     Logout(){
         let currentObj = this;
@@ -472,10 +541,12 @@ export default {
     Send(e){
       e.preventDefault();
       let currentObj = this;
-      if(this.text != '')
+      if(this.text || this.file)
           axios.post('/send', {
               text: currentObj.text,
-              room_id: currentObj.room_id
+              room_id: currentObj.room_id,
+              file: currentObj.file,
+              image: currentObj.image
           },
           {
               headers: {
@@ -486,8 +557,8 @@ export default {
           })
           .then(function (response) {
               if(response){
-                  currentObj.$router.push('/chat');
                   currentObj.messages = response.data.messages;
+                  currentObj.hideFile();
               }
           }).then(() => {
             currentObj.scrollToEnd();
@@ -534,6 +605,14 @@ export default {
               }
           })
     }
+  },
+
+  directives: {
+    focus: {
+      inserted(el) {
+        el.focus()
+      },
+    },
   }
 }
 </script>

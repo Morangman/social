@@ -21,7 +21,6 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('post_body');
             $table->integer('likes_cnt')->default(0);
-            $table->integer('dislikes')->default(0);
             $table->string('src')->nullable();
             $table->timestamps();
         });

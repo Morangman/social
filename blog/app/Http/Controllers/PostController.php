@@ -135,101 +135,33 @@ class PostController extends Controller
         ]);
    }
 //ToDO: Невозможно удалить лайки/дизлайки
-   private function postLikeDislikePost(Request $request, bool $is_like)
-   {
-       $post_id = $request['postId'];
-       $post = Post::find($post_id);
-       if (!$post) {
-               return json_encode([
-                   'status' => 'error',
-                   'msg' => 'Post not found'
-               ]);
-       }
-       $user = \Auth::user();
-       $like_record = $user->likes()
-               ->where('post_id', $post_id)
-               ->where('like', (($is_like)? 1:0))
-               ->first();
-       if ($like_record) {
-           if(!$like_record->delete()){
-               return json_encode([
-                   'status' => 'error',
-                   'msg' => 'Fail to delete'
-               ]);
-
-               if($post){
-                    $post->likes_cnt = $post->likes->sum('like');
-                    $post->dislikes = $post->likes->where('like',0)->count();
-                    $post->update();
-                }
-           } else {
-               return json_encode([
-                   'status' => 'ok',
-                   'post_id' => $post_id,
-                   'msg' => (($is_like)? "Лайк":"Дизлайк").' удален',
-                   'likes' => $post->likes->sum('like'),
-                   'dislikes' => $post->likes->where('like',0)->count()
-               ]);
-
-               if($post){
-                    $post->likes_cnt = $post->likes->sum('like');
-                    $post->dislikes = $post->likes->where('like',0)->count();
-                    $post->update();
-            }
-           }
-       } else {
-           $not_like = $user->likes()
-                   ->where('post_id', $post_id)
-                   ->where('like', (($is_like)? 0:1))
-                   ->first();
-           if ($not_like){
-               $not_like->like = (($is_like)? 1:0);
-               $not_like->update();
-
-               if($post){
-                $post->likes_cnt = $post->likes->sum('like');
-                $post->dislikes = $post->likes->where('like',0)->count();
-                $post->update();
-            }
-           } else {
-               $new_like = new Like();
-               $new_like->like = (($is_like)? 1:0);
-               $new_like->user_id = $user->id;
-               $new_like->post_id = $post->id;
-               $new_like->save();
-
-               //ToDO: не сохраняет лайки и дизы
-                if($post){
-                    $post->likes_cnt = $post->likes->sum('like');
-                    $post->dislikes = $post->likes->where('like',0)->count();
-                    $post->update();
-                }
-           }
-
-           return json_encode([
-               'status' => 'ok',
-               'post_id' => $post_id,
-               'msg' => (($is_like)? "Лайк":"Дизлайк").' учтен',
-               'likes' => $post->likes->sum('like'),
-               'dislikes' => $post->likes->where('like',0)->count()
-           ]);
-
-           if($post){
-            $post->likes_cnt = $post->likes->sum('like');
-            $post->dislikes = $post->likes->where('like',0)->count();
-            $post->update();
-        }
-       } 
-
-   }
-   
    public function postLikePost(Request $request)
    {
-       return $this->postLikeDislikePost($request, true);
-   }
+       $post_id = $request['postId'];
+       $user = \Auth::user();
 
-   public function postDislikePost(Request $request)
-   {
-       return $this->postLikeDislikePost($request, false);
+       $like = Like::where('user_id',  $user->id)->first();
+
+       if($like){
+        $like->delete();
+       }else{
+        $like = new Like();
+        $like->user_id = $user->id;
+        $like->post_id = $post_id;
+        $like->like = 1;
+        $like->save();
+       }
+
+       $post = Post::find($post_id);
+       if (!$post) {
+            return json_encode([
+                'status' => 'error',
+                'msg' => 'Post not found'
+            ]);
+       }else{
+        $post->likes_cnt = $like->sum('like');
+        $post->save();
+       }
    }
+   
 }

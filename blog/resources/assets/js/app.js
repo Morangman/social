@@ -5,6 +5,8 @@ import Lightbox from 'vue-pure-lightbox'
 import VueImg from 'v-img';
 import linkify from 'vue-linkify'
 import InputTag from 'vue-input-tag'
+import VueMoment from 'vue-moment'
+import SocialSharing from 'vue-social-sharing'
 
 
 /**
@@ -21,13 +23,21 @@ Vue.use(VueImg);
 
 Vue.directive('linkified', linkify);
 
-Vue.use(require('vue-moment'));
+const moment = require('moment')
+require('moment/locale/ru')
+Vue.use(VueMoment, {
+  moment
+})
 
 Vue.use(require('vue-resource'));
 
 Vue.component('input-tag', InputTag);
 
 Vue.use(VueRouter);
+
+Vue.use(SocialSharing);
+
+
 
 Vue.use(VueProgressBar, {
   color: 'green',

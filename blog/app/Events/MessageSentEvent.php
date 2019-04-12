@@ -35,6 +35,6 @@ class MessageSentEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('pchat'.$message->user->id);
+        return new PrivateChannel('test');
     }
 }

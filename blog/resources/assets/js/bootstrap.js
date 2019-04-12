@@ -43,21 +43,24 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
- import Echo from 'laravel-echo'
-
- 
+import Echo from "laravel-echo"
 
  window.Pusher = require('pusher-js');
  window.Echo = new Echo({
     broadcaster: 'pusher',
     key: 'cd88d35360765f9ff6e7',
     cluster: 'eu',
+    encrypted: true,
     auth: {
         headers: {
             Authorization: 'Bearer ' + token
         },
     },
 });
+
+Pusher.log = function (message) {
+    window.console.log(message);
+};
 
 
  //window.io = require('socket.io-client');

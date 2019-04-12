@@ -159,6 +159,111 @@
         background-color: #e0f0ff;
     }
 
+    .emoji-trigger{
+        position: absolute;
+        right: 14px;
+        top: 15px;
+    }
+
+    .emoji-mart{
+        z-index: 999;
+    }
+
+    .social_icons{
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+    }
+
+    #crd_footer{
+        display: inline-flex;
+    }
+
+    #crd_footer > .dropdown > button{
+        padding: 0;
+        margin-left: 10px;
+    }
+
+    .popup-comments{
+        background-color: whitesmoke;
+        z-index: 3;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 1000px;
+        margin-left: -500px;
+        margin-top: -280px;
+    }
+
+    .popup-post{
+        float: left;
+        width: 50%;
+    }
+
+    .comments-block{
+        float: right;
+        width: 50%;
+        height: 500px;
+        overflow-y: scroll;
+    }
+
+    .comments{
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+    }
+
+    .comment-header{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    .comment-header > .comment-author-photo{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+    }
+
+    .comment-author-name{
+            padding-left: 10px;
+            padding-top: 5px;
+    }
+
+    .comment-body{
+        width: 100%;
+        height: 100%;
+        background-color: antiquewhite;
+        word-break: break-word;
+    }
+
+    .comment-author-text{
+        padding-left: 10px;
+    }
+
+    .comment_publication_date{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+    }
+
+    .popup-close{
+        position: absolute;
+        right: 29px;
+        font-size: 25px;
+        color: lightcoral;
+    }
+
+    .popup-post-image{
+        max-width: 485px;
+        max-height: 310px;
+    }
+
+    .popup-card{
+        height: 500px;
+    }
+
 </style>
 
 <template>
@@ -243,47 +348,38 @@
                                 <div class="wrapper">
                                     <label class="sr-only" for="message">post</label>
                                     <textarea class="form-control regular-input" id="message" name="text" v-model="text" rows="3" placeholder="Что нового?"></textarea>
-                                    <emoji-picker @emoji="append" :search="search">
-                                    <div
-                                        class="emoji-invoker"
-                                        slot="emoji-invoker"
-                                        slot-scope="{ events }"
-                                        v-on="events"
-                                    >
-                                        <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                    <picker 
+                                        v-show="showEmojiPicker"
+                                            set="apple"
+                                            title="Pick your emoji…" 
+                                            emoji="point_up"
+                                            :style="{ position: 'absolute', bottom: '-331px', right: '-355px'}"
+                                            @select="addEmoji"
+                                            >
+                                        </picker>
+
+                                        <span
+                                        class="emoji-trigger"
+                                        :class="{ 'triggered': showEmojiPicker }"
+                                        @mousedown.prevent="toggleEmojiPicker"
+                                        >
+                                        <svg
+                                            style="width:20px;height:20px"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path fill="#888888" d="M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5M17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23Z" />
                                         </svg>
-                                    </div>
-                                    <div slot="emoji-picker" slot-scope="{ emojis, insert, display }">
-                                        <div class="emoji-picker">
-                                        <div class="emoji-picker__search">
-                                            <input type="text" v-model="search" v-focus>
-                                        </div>
-                                        <div>
-                                            <div v-for="(emojiGroup, category) in emojis" :key="category">
-                                            <h5>{{ category }}</h5>
-                                            <div class="emojis">
-                                                <span
-                                                v-for="(emoji, emojiName) in emojiGroup"
-                                                :key="emojiName"
-                                                @click="insert(emoji)"
-                                                :title="emojiName"
-                                                >{{ emoji }}</span>
-                                            </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </emoji-picker>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="input-group">
+                                    <a v-if="image" href="javascript:void(0)" @click="hideFile" style="color: red; z-index: 2; padding-right: 10px;"><i class="fas fa-trash-alt"></i></a>
                                     <div id="preview">
                                             <img style=" height: 38px;" v-if="image" :src="image" />
                                     </div>
                                     <div class="custom-file">
+                                    
                                         <input type="file" class="custom-file-input" id="inputGroupFile01" v-on:change="changeImage" aria-describedby="inputGroupFileAddon01"></input>
                                         <label class="custom-file-label" for="inputGroupFile01"><p>Прикрепить фото</p></label>
                                         <div class="custom-file-label" v-if="image">{{name.name}}</div>
@@ -343,14 +439,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="card-body">
-                        <a class="card-link" href="#">
+                        <a class="card-link" @click="openComments(post.id)" :href="'#' + 'post' + post.id" :name="'post' + post.id">
                             <h5 class="card-title"> {{post.title}}</h5>
                         </a>
                         <div class="card" v-if="post.src">
-                            <img v-img class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
+                            <img v-img:group class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
                         </div>
                         <hr>
                         <p class="card-text" >
@@ -362,14 +457,80 @@
                             <span v-if="post.is_visible == 2" class="badge badge-primary"><i class="fa fa-user"></i> Для меня</span>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-thumbs-up"></i></a>
-                        <span class="text-muted">{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fas fa-thumbs-down"></i></a>
-                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
-                        <a href="#" class="card-link"><i class="fas fa-bullhorn"></i> Поделиться</a>
+                    <div class="card-footer" id="crd_footer">
+                        <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
+                        <a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bullhorn"></i> Поделиться
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                <social-sharing url="https://vuejs.org/" inline-template>
+                                <div class="social_icons">
+                                    <a href="javascript:void(0)"><network network="facebook">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="googleplus">
+                                    <i class="fab fa-google-plus-square"></i> Google +
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="linkedin">
+                                    <i class="fab fa-linkedin"></i> LinkedIn
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="twitter">
+                                    <i class="fab fa-twitter-square"></i> Twitter
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="vk">
+                                    <i class="fab fa-vk"></i> VKontakte
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="whatsapp">
+                                    <i class="fab fa-whatsapp-square"></i> Whatsapp
+                                    </network></a>
+                                </div>
+                                </social-sharing>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="popup-comments" v-show="open_popup">
+            <a class="popup-close" href="javascript:void(0)" @click="closePopup"><span><i class="fas fa-times"></i></span></a>
+            <div class="popup-post">
+                <div class="card popup-card">
+                    <div class="card-body">
+                        <a class="card-link"href="#">
+                            <h5 class="card-title">{{post.title}}</h5>
+                        </a>
+                        <div class="card">
+                            <img v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap" class="popup-post-image"></img>
+                        </div>
+                        <hr>
+                        <p class="card-text" >
+                        {{post.post_body}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+                <div class="comments-block" id="commentbody">
+                    <div class="comments" v-for="comment in comments">
+                        <div class="comment">
+                            <div class="comment-header">
+                                <img v-bind:src="'http://localhost:8000/' + comment.photo" class="comment-author-photo"></img>
+                                <p class="comment-author-name">{{comment.name}}</p>
+                                <p class="comment_publication_date">{{ comment.created_at | moment("calendar") }}</p>
+                            </div>
+                            <div class="comment-body">
+                                <p class="comment-author-text">{{comment.text}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-comment">
+                        <form>
+                            <textarea name="text" v-model="comment_text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+                            <button type="submit" @click.prevent="sendComment" class="btn btn-info btn-block">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
             <div class="col-md-3">
                 <div class="card gedf-card">
                     <div class="card-body">
@@ -398,12 +559,7 @@
 </template>
 
 <script>
-import EmojiPicker from 'vue-emoji-picker'
     export default {
-        components: {
-            EmojiPicker,
-        },
-
         data () {
             return {
                 info: [],
@@ -425,7 +581,13 @@ import EmojiPicker from 'vue-emoji-picker'
                 count_followers: 0,
                 class_name: 'fa fa-globe',
                 select_name: 'Для всех',
-                is_refresh: false
+                is_refresh: false,
+                showEmojiPicker: false,
+                open_popup: false,
+                comment_text: '',
+                comment_postId: 0,
+                comments: [],
+                post: []
             }
         },
         mounted () {
@@ -485,8 +647,11 @@ import EmojiPicker from 'vue-emoji-picker'
         },
 
         methods:{
-            append(emoji) {
-                this.text += emoji
+            toggleEmojiPicker () {
+                this.showEmojiPicker = !this.showEmojiPicker
+            },
+            addEmoji (emoji) {
+                this.text += emoji.native
             },
             Logout(){
                 let currentObj = this;
@@ -508,6 +673,84 @@ import EmojiPicker from 'vue-emoji-picker'
             Refresh(bool, id){
                 let post_id = id;
                 this.is_refresh = bool;
+            },
+
+            openComments(e){
+
+                this.open_popup = !this.open_popup;
+                this.comment_postId = e;
+
+                let currentObj = this;
+                axios.post('/get_post_info', {
+                    post_id: currentObj.comment_postId
+                },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        currentObj.comments = response.data.comments;
+                        currentObj.post = response.data.post;
+                    }
+                }).then(() => {
+                    currentObj.scrollToEnd();
+                    currentObj.comment_text = undefined;
+                })
+                .catch(function (error) {
+                    if(error){
+                        console.log(error.response.data);
+                    }
+                }) 
+            },
+
+            closePopup(){
+                this.open_popup = !this.open_popup;
+                this.clearParam();
+            },
+
+            clearParam(){
+                this.comments = '';
+                this.post = '';
+            },
+
+            sendComment(e){
+            e.preventDefault();
+            let currentObj = this;
+            if(this.comment_text || this.comment_postId)
+                axios.post('/send_comment', {
+                    text: currentObj.comment_text,
+                    post_id: currentObj.comment_postId
+                },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        currentObj.comments = response.data.comments;
+                        console.log(currentObj.comments);
+                    }
+                }).then(() => {
+                    currentObj.scrollToEnd();
+                    currentObj.comment_text = undefined;
+                })
+                .catch(function (error) {
+                    if(error){
+                        console.log(error.response.data);
+                    }
+                })     
+            },
+
+            scrollToEnd: function() {    	
+                let container = this.$el.querySelector("#commentbody");
+                container.scrollTop = container.scrollHeight;
             },
 
             Hide(postId){
@@ -734,6 +977,10 @@ import EmojiPicker from 'vue-emoji-picker'
                 }
             },
 
+            hideFile(){
+                this.image = undefined;
+            },
+
             deletePost(id) {
                 let currentObj = this;
                 currentObj.$Progress.start();
@@ -791,42 +1038,6 @@ import EmojiPicker from 'vue-emoji-picker'
                         // console.log(response.data);
                         //currentObj.array_likes = response.data;
                         //    currentObj.$router.push('home');
-                        currentObj.$Progress.finish();
-                    }
-                }).then(() => {
-                    currentObj.getPosts();
-                })
-                .catch(function (error) {
-                    if(error){
-                        currentObj.$Progress.fail();
-                        console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
-                    }
-                })
-            },
-
-            addDislike(postId) {
-            let post_id = postId;
-            let currentObj = this;
-            currentObj.$Progress.start();
-                axios.post('/dislike', {
-                    postId: post_id
-                },
-
-                {
-                    headers: {
-                        'accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                })
-                .then(function (response) {
-                    if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                         //   currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {

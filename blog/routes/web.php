@@ -31,8 +31,8 @@ Route::delete('/post_delete/{post_id}', 'PostController@destroy');
 
 Route::post('/update_image', 'UserController@update_image');
 
-Route::post('/like', [ 'uses' => 'PostController@postLikePost', 'as' => 'like']);
-Route::post('/dislike', [ 'uses' => 'PostController@postDislikePost', 'as' => 'dislike']);
+
+Route::post('/like', 'PostController@postLikePost');
 
 Route::get('/get_users', 'UserController@get_users');
 Route::post('/get_user', 'UserController@get_user');
@@ -53,6 +53,9 @@ Route::post('/get_messages', 'ChatController@getMessages');
 Route::post('/send', 'ChatController@sendMessage');
 Route::get('/get_rooms', 'ChatController@getRooms');
 Route::post('/search', 'ChatController@searchRooms');
+
+Route::post('/send_comment', 'CommentController@sendComment');
+Route::post('/get_post_info', 'CommentController@getPostComments');
 
 
 Route::get('/home', function () {

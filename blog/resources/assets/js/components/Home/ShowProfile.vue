@@ -84,6 +84,101 @@
         margin-left: 4px;
     }   
 
+    .social_icons{
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+    }
+
+    #crd_footer{
+        display: inline-flex;
+    }
+
+    #crd_footer > .dropdown > button{
+        padding: 0;
+        margin-left: 10px;
+    }
+
+.popup-comments{
+        background-color: whitesmoke;
+        z-index: 3;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 1000px;
+        margin-left: -500px;
+        margin-top: -280px;
+    }
+
+    .popup-post{
+        float: left;
+        width: 50%;
+    }
+
+    .comments-block{
+        float: right;
+        width: 50%;
+        height: 500px;
+        overflow-y: scroll;
+    }
+
+    .comments{
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+    }
+
+    .comment-header{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    .comment-header > .comment-author-photo{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+    }
+
+    .comment-author-name{
+            padding-left: 10px;
+            padding-top: 5px;
+    }
+
+    .comment-body{
+        width: 100%;
+        height: 100%;
+        background-color: antiquewhite;
+        word-break: break-word;
+    }
+
+    .comment-author-text{
+        padding-left: 10px;
+    }
+
+    .comment_publication_date{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+    }
+
+    .popup-close{
+        position: absolute;
+        right: 29px;
+        font-size: 25px;
+        color: lightcoral;
+    }
+
+    .popup-post-image{
+        max-width: 485px;
+        max-height: 310px;
+    }
+
+    .popup-card{
+        height: 500px;
+    }
+
 </style>
 <template>
 <div class="content-home">
@@ -170,7 +265,7 @@
 
                     </div>
                     <div class="card-body">
-                        <a class="card-link" href="#">
+                        <a class="card-link"  @click="openComments(post.id)" :href="'#' + 'post' + post.id" :name="'post' + post.id">
                             <h5 class="card-title"> {{post.title}}</h5>
                         </a>
                         <div class="card" v-if="post.src">
@@ -184,15 +279,80 @@
                             <span class="badge badge-primary">JavaScript</span>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-thumbs-up"></i></a>
-                        <span>{{post.dislikes}}</span><a href="#" @click.prevent="addDislike(post.id)" class="card-link"><i class="fas fa-thumbs-down"></i></a>
-                        <a href="#" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
-                        <a href="#" class="card-link"><i class="fas fa-bullhorn"></i> Поделиться</a>
+                    <div class="card-footer"  id="crd_footer">
+                        <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
+                        <a  @click="openComments(post.id)" :href="'#' + 'post' + post.id" :name="'post' + post.id" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bullhorn"></i> Поделиться
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                <social-sharing url="https://vuejs.org/" inline-template>
+                                <div class="social_icons">
+                                    <a href="javascript:void(0)"><network network="facebook">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="googleplus">
+                                    <i class="fab fa-google-plus-square"></i> Google +
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="linkedin">
+                                    <i class="fab fa-linkedin"></i> LinkedIn
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="twitter">
+                                    <i class="fab fa-twitter-square"></i> Twitter
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="vk">
+                                    <i class="fab fa-vk"></i> VKontakte
+                                    </network></a>
+                                    <a href="javascript:void(0)"><network network="whatsapp">
+                                    <i class="fab fa-whatsapp-square"></i> Whatsapp
+                                    </network></a>
+                                </div>
+                                </social-sharing>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
+            <div class="popup-comments" v-show="open_popup">
+            <a class="popup-close" href="javascript:void(0)" @click="closePopup"><span><i class="fas fa-times"></i></span></a>
+            <div class="popup-post">
+                <div class="card popup-card">
+                    <div class="card-body">
+                        <a class="card-link"href="#">
+                            <h5 class="card-title">{{post.title}}</h5>
+                        </a>
+                        <div class="card">
+                            <img v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap" class="popup-post-image"></img>
+                        </div>
+                        <hr>
+                        <p class="card-text" >
+                        {{post.post_body}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+                <div class="comments-block" id="commentbody">
+                    <div class="comments" v-for="comment in comments">
+                        <div class="comment">
+                            <div class="comment-header">
+                                <img v-bind:src="'http://localhost:8000/' + comment.photo" class="comment-author-photo"></img>
+                                <p class="comment-author-name">{{comment.name}}</p>
+                                <p class="comment_publication_date">{{ comment.created_at | moment("calendar") }}</p>
+                            </div>
+                            <div class="comment-body">
+                                <p class="comment-author-text">{{comment.text}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-comment">
+                        <form>
+                            <textarea name="text" v-model="comment_text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+                            <button type="submit" @click.prevent="sendComment" class="btn btn-info btn-block">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
             <div class="col-md-3">
                 <div class="card gedf-card">
                     <div class="card-body">
@@ -236,7 +396,12 @@ data () {
         count_friends: 0,
         count_followers: 0,
         is_active_add: false,
-        is_active_delete: false
+        is_active_delete: false,
+        open_popup: false,
+        comment_text: '',
+        comment_postId: 0,
+        comments: [],
+        post: []
     }
 },
 mounted () {
@@ -267,6 +432,84 @@ mounted () {
         Start(){
             this.$Progress.start();
             this.user_id = this.$route.params.id;
+        },
+
+        openComments(e){
+
+        this.open_popup = !this.open_popup;
+        this.comment_postId = e;
+
+        let currentObj = this;
+        axios.post('/get_post_info', {
+            post_id: currentObj.comment_postId
+        },
+        {
+            headers: {
+                'accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(function (response) {
+            if(response){
+                currentObj.comments = response.data.comments;
+                currentObj.post = response.data.post;
+            }
+        }).then(() => {
+            currentObj.scrollToEnd();
+            currentObj.comment_text = undefined;
+        })
+        .catch(function (error) {
+            if(error){
+                console.log(error.response.data);
+            }
+        }) 
+        },
+
+        closePopup(){
+        this.open_popup = !this.open_popup;
+        this.clearParam();
+        },
+
+        clearParam(){
+        this.comments = '';
+        this.post = '';
+        },
+
+        sendComment(e){
+        e.preventDefault();
+        let currentObj = this;
+        if(this.comment_text || this.comment_postId)
+        axios.post('/send_comment', {
+            text: currentObj.comment_text,
+            post_id: currentObj.comment_postId
+        },
+        {
+            headers: {
+                'accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(function (response) {
+            if(response){
+                currentObj.comments = response.data.comments;
+                console.log(currentObj.comments);
+            }
+        }).then(() => {
+            currentObj.scrollToEnd();
+            currentObj.comment_text = undefined;
+        })
+        .catch(function (error) {
+            if(error){
+                console.log(error.response.data);
+            }
+        })     
+        },
+
+        scrollToEnd: function() {    	
+        let container = this.$el.querySelector("#commentbody");
+        container.scrollTop = container.scrollHeight;
         },
 
         getUser(){
@@ -354,42 +597,6 @@ mounted () {
                         // console.log(response.data);
                         //currentObj.array_likes = response.data;
                         //    currentObj.$router.push('home');
-                        currentObj.$Progress.finish();
-                    }
-                }).then(() => {
-                    currentObj.getPosts();
-                })
-                .catch(function (error) {
-                    if(error){
-                        currentObj.$Progress.fail();
-                        console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
-                    }
-                })
-            },
-
-        addDislike(postId) {
-            let post_id = postId;
-            let currentObj = this;
-            currentObj.$Progress.start();
-                axios.post('/dislike', {
-                    postId: post_id
-                },
-
-                {
-                    headers: {
-                        'accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                })
-                .then(function (response) {
-                    if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                         //   currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {

@@ -9,6 +9,7 @@ use App\RoomUser;
 use App\Message;
 use App\Events\MessageSentEvent;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\UploadFile;
 
 class ChatController extends Controller
 {
@@ -82,21 +83,29 @@ class ChatController extends Controller
         $room_id = $request->room_id;
 
         $message = new Message();
+
+        if($request->get('file'))
+        {
+            $file = $request->get('file');
+            $name = time().'.' . explode('/', explode(':', substr($file, 0, strpos($file, ';')))[1])[1];
+            \Image::make($request->get('file'))->save(public_path('files/').$name, 60);
+            $message->file = 'files/'.$name;
+        }
         $message->text = $text;
         $message->user_id = $my_id;
         $message->room_id = $room_id;
         $message->save();
 
-        //$msgs = Message::where('room_id', $room_id)->get();
+        $msgs = Message::where('room_id', $room_id)->get();
 
-        broadcast(new MessageSentEvent("Test"));
+        broadcast(new MessageSentEvent($msgs))->toOthers();
 
         //\App\Events\MessageSentEvent::dispatch("ok");
         
-        // return response()->json([
-        //     'success' => 'true',
-        //    'messages' => $msgs
-        // ]);
+         return response()->json([
+            'success' => 'true',
+            'messages' => $msgs
+         ]);
     }
 
     public function getMessages(Request $request){
