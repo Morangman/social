@@ -21,7 +21,16 @@ class CommentController extends Controller
             $comment->text = $text;
             $comment->save();
 
-            $comments = Comment::where('post_id', $post_id)->join('users', 'users.id', '=', 'comments.user_id')->get();
+            $comment_cnt = Comment::where('post_id', $post_id)->get();
+
+            $post = Post::find($post_id);
+            $post->comments_cnt = $comment_cnt->count('text');
+            $post->save();
+
+            $comments = Comment::where('post_id', $post_id)
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->groupBy("comments.id")
+            ->get();
             
             return response()->json([
                 'success' => true,
@@ -34,7 +43,11 @@ class CommentController extends Controller
         if($request){
             $post_id = $request->post_id;
 
-            $comments = Comment::where('post_id', $post_id)->join('users', 'users.id', '=', 'comments.user_id')->get();
+            $comments = Comment::where('post_id', $post_id)
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->groupBy("comments.id")
+            ->get();
+
             $post = Post::where('id', $post_id)->first();
             
             return response()->json([

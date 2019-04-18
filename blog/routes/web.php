@@ -21,6 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/posts', 'PostController@index');
 
 Route::post('/get_posts', 'PostController@get_posts');
+Route::post('/get_post_refresh_info', 'PostController@get_post');
 Route::post('/hide_post', 'PostController@hide_post');
 Route::post('/get_friend_posts', 'FriendController@get_friend_posts');
 

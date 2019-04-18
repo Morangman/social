@@ -98,7 +98,7 @@ class ChatController extends Controller
 
         $msgs = Message::where('room_id', $room_id)->get();
 
-        broadcast(new MessageSentEvent($msgs))->toOthers();
+        broadcast(new MessageSentEvent($msgs));//->toOthers();
 
         //\App\Events\MessageSentEvent::dispatch("ok");
         

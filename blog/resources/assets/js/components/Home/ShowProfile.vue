@@ -119,13 +119,13 @@
         float: right;
         width: 50%;
         height: 500px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .comments{
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px;
     }
 
     .comment-header{
@@ -150,6 +150,7 @@
         height: 100%;
         background-color: antiquewhite;
         word-break: break-word;
+        border-radius: 10px;
     }
 
     .comment-author-text{
@@ -175,10 +176,33 @@
         max-height: 310px;
     }
 
-    .popup-card{
-        height: 500px;
+    .comments_cnt{
+        margin-left: 10px;
     }
 
+    .comment_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey; 
+    }
+
+    .popup-post-created-at{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+        float: right;
+    }
+
+    .popup-card{
+        height: 500px;
+        overflow-y: auto;
+    }
+
+    .dropdown{
+        display: inline;
+    }
 </style>
 <template>
 <div class="content-home">
@@ -281,7 +305,7 @@
                     </div>
                     <div class="card-footer"  id="crd_footer">
                         <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
-                        <a  @click="openComments(post.id)" :href="'#' + 'post' + post.id" :name="'post' + post.id" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a  @click="openComments(post.id)" :href="'#' + 'post' + post.id" :name="'post' + post.id" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bullhorn"></i> Поделиться
@@ -291,9 +315,6 @@
                                 <div class="social_icons">
                                     <a href="javascript:void(0)"><network network="facebook">
                                     <i class="fab fa-facebook"></i> Facebook
-                                    </network></a>
-                                    <a href="javascript:void(0)"><network network="googleplus">
-                                    <i class="fab fa-google-plus-square"></i> Google +
                                     </network></a>
                                     <a href="javascript:void(0)"><network network="linkedin">
                                     <i class="fab fa-linkedin"></i> LinkedIn
@@ -322,8 +343,39 @@
                         <a class="card-link"href="#">
                             <h5 class="card-title">{{post.title}}</h5>
                         </a>
-                        <div class="card">
+                        <div class="card" v-if="post.src">
                             <img v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap" class="popup-post-image"></img>
+                        </div>
+                        <div class="popup-post-info">
+                            <p class="popup-post-created-at">{{post.created_at | moment("calendar")}}</p>
+                            <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
+                            <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                            <div class="dropdown">
+                                <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bullhorn"></i> Поделиться
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                    <social-sharing url="https://vuejs.org/" inline-template>
+                                    <div class="social_icons">
+                                        <a href="javascript:void(0)"><network network="facebook">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="linkedin">
+                                        <i class="fab fa-linkedin"></i> LinkedIn
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="twitter">
+                                        <i class="fab fa-twitter-square"></i> Twitter
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="vk">
+                                        <i class="fab fa-vk"></i> VKontakte
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="whatsapp">
+                                        <i class="fab fa-whatsapp-square"></i> Whatsapp
+                                        </network></a>
+                                    </div>
+                                    </social-sharing>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <p class="card-text" >
@@ -339,6 +391,7 @@
                                 <img v-bind:src="'http://localhost:8000/' + comment.photo" class="comment-author-photo"></img>
                                 <p class="comment-author-name">{{comment.name}}</p>
                                 <p class="comment_publication_date">{{ comment.created_at | moment("calendar") }}</p>
+                                <a href="javascript:void(0)" class="comment_reply" @click="Reply(comment.name)">Ответить</a>
                             </div>
                             <div class="comment-body">
                                 <p class="comment-author-text">{{comment.text}}</p>
@@ -347,7 +400,7 @@
                     </div>
                     <div class="add-comment">
                         <form>
-                            <textarea name="text" v-model="comment_text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+                            <textarea name="text" v-model="comment_text" rows="3" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
                             <button type="submit" @click.prevent="sendComment" class="btn btn-info btn-block">Отправить</button>
                         </form>
                     </div>
@@ -384,8 +437,6 @@
 
 <script>
 export default {
-
-
 data () {
     return {
         user_id: 0,
@@ -401,7 +452,8 @@ data () {
         comment_text: '',
         comment_postId: 0,
         comments: [],
-        post: []
+        post: [],
+        reply_name: ''
     }
 },
 mounted () {
@@ -467,13 +519,21 @@ mounted () {
         },
 
         closePopup(){
-        this.open_popup = !this.open_popup;
-        this.clearParam();
+            this.open_popup = !this.open_popup;
+            this.clearParam();
         },
 
         clearParam(){
-        this.comments = '';
-        this.post = '';
+            this.comments = '';
+            this.post = '';
+        },
+
+        
+        Reply(user_name){
+            this.comment_text = '';
+            this.reply_name = user_name;
+            this.comment_text += '@'+ this.reply_name + ', ';
+            this.scrollToEnd();
         },
 
         sendComment(e){
@@ -541,7 +601,6 @@ mounted () {
                     // currentObj.msg = error.response.data.message;
                 }
             })
-        
         },
 
         getPosts(){

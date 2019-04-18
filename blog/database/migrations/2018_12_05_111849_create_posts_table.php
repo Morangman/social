@@ -19,8 +19,9 @@ class CreatePostsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('is_visible')->default(0);
             $table->string('title');
-            $table->text('post_body');
+            $table->longText('post_body');
             $table->integer('likes_cnt')->default(0);
+            $table->integer('comments_cnt')->default(0);
             $table->string('src')->nullable();
             $table->timestamps();
         });

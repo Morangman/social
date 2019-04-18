@@ -7,6 +7,11 @@ import linkify from 'vue-linkify'
 import InputTag from 'vue-input-tag'
 import VueMoment from 'vue-moment'
 import SocialSharing from 'vue-social-sharing'
+//import {Picker, Emoji} from 'emoji-mart-vue'
+import wysiwyg from "vue-wysiwyg";
+
+import "vue-wysiwyg/dist/vueWysiwyg.css"
+ 
 
 
 /**
@@ -28,16 +33,28 @@ require('moment/locale/ru')
 Vue.use(VueMoment, {
   moment
 })
-
 Vue.use(require('vue-resource'));
 
 Vue.component('input-tag', InputTag);
 
-Vue.use(VueRouter);
-
 Vue.use(SocialSharing);
 
+Vue.use(wysiwyg, { 
+  hideModules: { 
+    "code":true, 
+    "unorderedList":true, 
+    "underline":true,
+    "justifyLeft":true,
+    "justifyRight":true, 
+    "justifyCenter":true
+  },
+  maxHeight: "500px"
+}); // config is optional. more below
 
+Vue.use(VueRouter);
+
+//Vue.component('picker', Picker)
+//Vue.component('emoji', Emoji)
 
 Vue.use(VueProgressBar, {
   color: 'green',

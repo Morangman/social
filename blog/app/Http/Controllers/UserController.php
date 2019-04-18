@@ -69,6 +69,10 @@ class UserController extends Controller
                 $user->name = $request->input('name');
             }
 
+            if($request->input('phone')){
+                $user->phone = $request->input('phone');
+            }
+
             if($request->input('nick')){
                 $user->nick = $request->input('nick');
             }

@@ -21,43 +21,49 @@
 		            <div class="row">
 		                <div class="col-md-12">
                       <form>
-                            <div class="form-group row">
-                              <label for="username" class="col-4 col-form-label">Имя*</label> 
-                              <div class="col-8">
-                                <input id="username" v-model="name" placeholder="Имя" class="form-control here" required="required" type="text">
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="text" class="col-4 col-form-label">Ник*</label> 
-                              <div class="col-8">
-                                <input id="text" v-model="nick" placeholder="Ник" class="form-control here" required="required" type="text">
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="email" class="col-4 col-form-label">E-mail*</label> 
-                              <div class="col-8">
-                                <input id="email" disabled v-model="info.email" placeholder="E-mail" class="form-control here" required="required" type="text">
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="publicinfo" class="col-4 col-form-label">Публичная информация</label> 
-                              <div class="col-8">
-                                <textarea id="publicinfo" v-model="uinfo" cols="40" rows="4" class="form-control"></textarea>
-                              </div>
-                            </div>
-                            <div class="form-group row">
-                              <label for="newpass" class="col-4 col-form-label">Изменить пароль</label> 
-                              <div class="col-8">
-                                <input id="newpass" v-model="password" placeholder="Введите новый пароль" class="form-control here" type="text">
-                              </div>
-                            </div> 
-                            <div class="form-group row">
-                              <div class="offset-4 col-8">
-                                <button type="submit" @click.prevent="updateProfileInfo" class="btn btn-primary">Сохранить</button>
-                                <p><router-link to="/home">Отмена</router-link> </p>
-                              </div>
-                            </div>
-                          </form>
+                        <div class="form-group row">
+                          <label for="username" class="col-4 col-form-label">Имя*</label> 
+                          <div class="col-8">
+                            <input id="username" v-model="name" placeholder="Имя" class="form-control here" required="required" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="text" class="col-4 col-form-label">Ник*</label> 
+                          <div class="col-8">
+                            <input id="text" v-model="nick" placeholder="Ник" class="form-control here" required="required" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="email" class="col-4 col-form-label">E-mail*</label> 
+                          <div class="col-8">
+                            <input id="email" disabled v-model="info.email" placeholder="E-mail" class="form-control here" required="required" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="phone" class="col-4 col-form-label">Телефон*</label> 
+                          <div class="col-8">
+                            <input id="phone" v-model="phone" placeholder="Phone" class="form-control here" required="required" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="publicinfo" class="col-4 col-form-label">Публичная информация</label> 
+                          <div class="col-8">
+                            <textarea id="publicinfo" v-model="uinfo" cols="40" rows="4" class="form-control"></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="newpass" class="col-4 col-form-label">Изменить пароль</label> 
+                          <div class="col-8">
+                            <input id="newpass" v-model="password" placeholder="Введите новый пароль" class="form-control here" type="text">
+                          </div>
+                        </div> 
+                        <div class="form-group row">
+                          <div class="offset-4 col-8">
+                            <button type="submit" @click.prevent="updateProfileInfo" class="btn btn-primary">Сохранить</button>
+                            <p><router-link to="/home">Отмена</router-link> </p>
+                          </div>
+                        </div>
+                      </form>
 		                </div>
 		            </div>
 		            
@@ -76,29 +82,31 @@ export default{
       uinfo : '',
       name : '',
       nick : '',
+      phone: '',
       password : '',
       savedOk: false
     }
   },
 
   mounted () {
-      let currentObj = this;
-      currentObj.$Progress.start();
-      axios.get(`/get_user_info`)
-          .then(function (response) {
-              if(response){
-                  currentObj.info = response.data.info;
-                  currentObj.name = response.data.info.name;
-                  currentObj.nick = response.data.info.nick;
-                  currentObj.uinfo = response.data.info.info;
-                  currentObj.$Progress.finish();
-                  
-                  if(response.data.success == false){
-                      currentObj.$Progress.fail();
-                      currentObj.$router.push('/login');
-                  }
-              }
-          })
+    let currentObj = this;
+    currentObj.$Progress.start();
+    axios.get(`/get_user_info`)
+    .then(function (response) {
+        if(response){
+            currentObj.info = response.data.info;
+            currentObj.name = response.data.info.name;
+            currentObj.nick = response.data.info.nick;
+            currentObj.phone = response.data.info.phone;
+            currentObj.uinfo = response.data.info.info;
+            currentObj.$Progress.finish();
+            
+            if(response.data.success == false){
+                currentObj.$Progress.fail();
+                currentObj.$router.push('/login');
+            }
+        }
+    })
   },
 
   methods: {
@@ -111,6 +119,7 @@ export default{
         info: this.uinfo,
         nick: this.nick,
         name: this.name,
+        phone: this.phone,
         password: this.password,
       },
 

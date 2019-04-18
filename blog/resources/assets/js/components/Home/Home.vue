@@ -204,13 +204,13 @@
         float: right;
         width: 50%;
         height: 500px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .comments{
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 10px;
     }
 
     .comment-header{
@@ -235,6 +235,7 @@
         height: 100%;
         background-color: antiquewhite;
         word-break: break-word;
+        border-radius: 10px;
     }
 
     .comment-author-text{
@@ -246,6 +247,13 @@
         font-size: 12px;
         margin-top: 10px;
         color: darkgrey;
+    }
+
+    .comment_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey; 
     }
 
     .popup-close{
@@ -260,10 +268,27 @@
         max-height: 310px;
     }
 
-    .popup-card{
-        height: 500px;
+    .popup-post-created-at{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+        float: right;
     }
 
+    .popup-card{
+        height: 500px;
+        overflow-y: auto;
+    }
+
+    .comments_cnt{
+        margin-left: 10px;
+    }
+
+    .dropdown{
+        display: inline;
+    }
+    
 </style>
 
 <template>
@@ -347,13 +372,13 @@
                                 <div class="form-group">
                                 <div class="wrapper">
                                     <label class="sr-only" for="message">post</label>
-                                    <textarea class="form-control regular-input" id="message" name="text" v-model="text" rows="3" placeholder="Что нового?"></textarea>
+                                    <wysiwyg class="form-control regular-input" id="message" name="text" v-model="text" rows="3" placeholder="Что нового?"/>
                                     <picker 
                                         v-show="showEmojiPicker"
                                             set="apple"
                                             title="Pick your emoji…" 
                                             emoji="point_up"
-                                            :style="{ position: 'absolute', bottom: '-331px', right: '-355px'}"
+                                            :style="{ position: 'absolute', bottom: '-225px', right: '-355px'}"
                                             @select="addEmoji"
                                             >
                                         </picker>
@@ -433,7 +458,7 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                         <div class="h6 dropdown-header">Настройки</div>
                                         <a class="dropdown-item" @click="Hide(post.id)" href="javascript:void(0)">Скрыть</a>
-                                        <a class="dropdown-item" @click="Refresh(true, post.id)" href="#">Изменить</a>
+                                        <a class="dropdown-item" @click="Refresh(post.id)" href="#">Изменить</a>
                                         <a class="dropdown-item" href="javascript:void(0)" @click.prevent="deletePost(post.id)">Удалить</a>
                                     </div>
                                 </div>
@@ -448,9 +473,7 @@
                             <img v-img:group class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
                         </div>
                         <hr>
-                        <p class="card-text" >
-                            {{post.post_body}}
-                        </p>
+                        <div class="post_body" v-html="post.post_body"></div>
                         <div>
                             <span v-if="post.is_visible == 0" class="badge badge-success"><i class="fa fa-globe"></i> Для всех</span>
                             <span v-if="post.is_visible == 1" class="badge badge-info"><i class="fa fa-users"></i> Для друзей</span>
@@ -459,7 +482,7 @@
                     </div>
                     <div class="card-footer" id="crd_footer">
                         <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
-                        <a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                        <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
                         <div class="dropdown">
                             <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bullhorn"></i> Поделиться
@@ -469,9 +492,6 @@
                                 <div class="social_icons">
                                     <a href="javascript:void(0)"><network network="facebook">
                                     <i class="fab fa-facebook"></i> Facebook
-                                    </network></a>
-                                    <a href="javascript:void(0)"><network network="googleplus">
-                                    <i class="fab fa-google-plus-square"></i> Google +
                                     </network></a>
                                     <a href="javascript:void(0)"><network network="linkedin">
                                     <i class="fab fa-linkedin"></i> LinkedIn
@@ -500,13 +520,42 @@
                         <a class="card-link"href="#">
                             <h5 class="card-title">{{post.title}}</h5>
                         </a>
-                        <div class="card">
+                        <div class="card" v-if="post.src">
                             <img v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap" class="popup-post-image"></img>
                         </div>
+                        <div class="popup-post-info">
+                            <p class="popup-post-created-at">{{post.created_at | moment("calendar")}}</p>
+                            <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
+                            <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                            <div class="dropdown">
+                                <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bullhorn"></i> Поделиться
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                    <social-sharing url="https://vuejs.org/" inline-template>
+                                    <div class="social_icons">
+                                        <a href="javascript:void(0)"><network network="facebook">
+                                        <i class="fab fa-facebook"></i> Facebook
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="linkedin">
+                                        <i class="fab fa-linkedin"></i> LinkedIn
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="twitter">
+                                        <i class="fab fa-twitter-square"></i> Twitter
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="vk">
+                                        <i class="fab fa-vk"></i> VKontakte
+                                        </network></a>
+                                        <a href="javascript:void(0)"><network network="whatsapp">
+                                        <i class="fab fa-whatsapp-square"></i> Whatsapp
+                                        </network></a>
+                                    </div>
+                                    </social-sharing>
+                                </div>
+                            </div>
+                        </div>
                         <hr>
-                        <p class="card-text" >
-                        {{post.post_body}}
-                        </p>
+                        <p class="card-text post_body" v-html="post.post_body"></p>
                     </div>
                 </div>
             </div>
@@ -517,6 +566,7 @@
                                 <img v-bind:src="'http://localhost:8000/' + comment.photo" class="comment-author-photo"></img>
                                 <p class="comment-author-name">{{comment.name}}</p>
                                 <p class="comment_publication_date">{{ comment.created_at | moment("calendar") }}</p>
+                                <a href="javascript:void(0)" class="comment_reply" @click="Reply(comment.name)">Ответить</a>
                             </div>
                             <div class="comment-body">
                                 <p class="comment-author-text">{{comment.text}}</p>
@@ -525,7 +575,7 @@
                     </div>
                     <div class="add-comment">
                         <form>
-                            <textarea name="text" v-model="comment_text" rows="4" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
+                            <textarea name="text" v-model="comment_text" rows="3" type="text" placeholder="Сообщение" class="text-msgs form-control text-message regular-input"></textarea>
                             <button type="submit" @click.prevent="sendComment" class="btn btn-info btn-block">Отправить</button>
                         </form>
                     </div>
@@ -573,7 +623,6 @@
                 image: '',
                 name: '',
                 likes: '',
-                dislikes: '',
                 prof_image: '',
                 img_name: '',
                 is_visible: 0,
@@ -584,10 +633,12 @@
                 is_refresh: false,
                 showEmojiPicker: false,
                 open_popup: false,
+                open_refresh_popup: false,
                 comment_text: '',
                 comment_postId: 0,
                 comments: [],
-                post: []
+                post: [],
+                reply_name: ''
             }
         },
         mounted () {
@@ -605,45 +656,45 @@
                         }
                     }
                 }),
-                 axios.get(`/posts`)
-                .then(function (response) {
-                    if(response){
-                     currentObj.posts = response.data.posts;
-                     currentObj.$Progress.finish();
-                        
-                     if(response.data.success == false){
-                         currentObj.$Progress.fail();
-                         currentObj.$router.push('/login');
-                        }
+            axios.get(`/posts`)
+            .then(function (response) {
+                if(response){
+                    currentObj.posts = response.data.posts;
+                    currentObj.$Progress.finish();
+                    
+                    if(response.data.success == false){
+                        currentObj.$Progress.fail();
+                        currentObj.$router.push('/login');
                     }
-                }),
-                axios.get(`/get_users`)
-                .then(function (response) {
-                    if(response){
-                        currentObj.users = response.data.users;
-                        currentObj.$Progress.finish();
-                        
-                        if(response.data.success == false){
-                            currentObj.$Progress.fail();
-                            currentObj.$router.push('/login');
-                        }
+                }
+            }),
+            axios.get(`/get_users`)
+            .then(function (response) {
+                if(response){
+                    currentObj.users = response.data.users;
+                    currentObj.$Progress.finish();
+                    
+                    if(response.data.success == false){
+                        currentObj.$Progress.fail();
+                        currentObj.$router.push('/login');
                     }
-                }),
+                }
+            }),
 
-                axios.get(`/get_all_friends`)
-                .then(function (response) {
-                    if(response){
-                        currentObj.friends = response.data.friends;
-                        currentObj.count_friends = response.data.count;
-                        currentObj.count_followers = response.data.count_f;
-                        currentObj.$Progress.finish();
-                        
-                        if(response.data.success == false){
-                            currentObj.$Progress.fail();
-                            currentObj.$router.push('/login');
-                        }
+            axios.get(`/get_all_friends`)
+            .then(function (response) {
+                if(response){
+                    currentObj.friends = response.data.friends;
+                    currentObj.count_friends = response.data.count;
+                    currentObj.count_followers = response.data.count_f;
+                    currentObj.$Progress.finish();
+                    
+                    if(response.data.success == false){
+                        currentObj.$Progress.fail();
+                        currentObj.$router.push('/login');
                     }
-                })
+                }
+            })
         },
 
         methods:{
@@ -652,6 +703,13 @@
             },
             addEmoji (emoji) {
                 this.text += emoji.native
+            },
+
+            Reply(user_name){
+                this.comment_text = '';
+                this.reply_name = user_name;
+                this.comment_text += '@'+ this.reply_name + ', ';
+                this.scrollToEnd();
             },
             Logout(){
                 let currentObj = this;
@@ -670,9 +728,31 @@
                 });
             },
 
-            Refresh(bool, id){
-                let post_id = id;
-                this.is_refresh = bool;
+            Refresh(id){
+                this.open_refresh_popup = !this.open_refresh_popup;
+
+                let currentObj = this;
+                axios.post('/get_post_refresh_info', {
+                    post_id: id
+                },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        currentObj.title =  response.data.post.title;
+                        currentObj.text =  response.data.post.post_body;
+                    }
+                })
+                .catch(function (error) {
+                    if(error){
+                        console.log(error.response.data);
+                    }
+                }) 
             },
 
             openComments(e){
@@ -712,6 +792,10 @@
                 this.clearParam();
             },
 
+            closeRefreshPopup(){
+                this.open_refresh_popup = !this.open_refresh_popup;
+            },
+
             clearParam(){
                 this.comments = '';
                 this.post = '';
@@ -735,7 +819,6 @@
                 .then(function (response) {
                     if(response){
                         currentObj.comments = response.data.comments;
-                        console.log(currentObj.comments);
                     }
                 }).then(() => {
                     currentObj.scrollToEnd();
@@ -770,11 +853,6 @@
                 })
                 .then(function (response) {
                     if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                        // console.log(response.data);
-                        //currentObj.array_likes = response.data;
-                        //    currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -784,9 +862,6 @@
                     if(error){
                         currentObj.$Progress.fail();
                         console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
                     }
                 })
             },
@@ -857,8 +932,6 @@
                 })
                 .then(function (response) {
                     if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
                         currentObj.$router.push('/home');
                         currentObj.$Progress.finish();
                     }
@@ -871,9 +944,6 @@
                     if(error){
                         currentObj.$Progress.fail();
                         console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
                     }
                 })
             
@@ -954,8 +1024,6 @@
                     })
                     .then(function (response) {
                         if(response){
-                            // currentObj.error = false;
-                            // currentObj.success = true;
                             currentObj.$router.push('/home');
                             currentObj.$Progress.finish();
                             currentObj.title = undefined;
@@ -969,9 +1037,6 @@
                         if(error){
                             currentObj.$Progress.fail();
                             console.log(error.response.data);
-                            // currentObj.error = true;
-                            // currentObj.success = false;
-                            // currentObj.msg = error.response.data.message;
                         }
                     })
                 }
@@ -997,9 +1062,7 @@
                 })
                 .then(function (response) {
                     if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                            currentObj.$router.push('home');
+                        currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -1009,9 +1072,6 @@
                     if(error){
                         currentObj.$Progress.fail();
                         console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
                     }
                 })
             },
@@ -1033,11 +1093,6 @@
                 })
                 .then(function (response) {
                     if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                        // console.log(response.data);
-                        //currentObj.array_likes = response.data;
-                        //    currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -1047,9 +1102,6 @@
                     if(error){
                         currentObj.$Progress.fail();
                         console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
                     }
                 })
             },
@@ -1069,9 +1121,7 @@
                 })
                 .then(function (response) {
                     if(response){
-                        // currentObj.error = false;
-                        // currentObj.success = true;
-                            currentObj.$router.push('home');
+                        currentObj.$router.push('home');
                         currentObj.$Progress.finish();
                     }
                 }).then(() => {
@@ -1081,9 +1131,6 @@
                     if(error){
                         currentObj.$Progress.fail();
                         console.log(error.response.data);
-                        // currentObj.error = true;
-                        // currentObj.success = false;
-                        // currentObj.msg = error.response.data.message;
                     }
                 })
             },

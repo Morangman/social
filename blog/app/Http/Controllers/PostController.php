@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\User;
 use App\Like;
+use App\Comment;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
@@ -21,7 +22,8 @@ class PostController extends Controller
         if(Auth::check()){
             $user_id = Auth::user()->id;
             $posts = Post::orderBy('created_at', 'desc')
-            ->where('user_id',$user_id)->get();
+            ->where('user_id',$user_id)
+            ->get();
 
             return response()->json([
                 'error' => null,
@@ -44,6 +46,18 @@ class PostController extends Controller
                 'posts' => $posts
             ]);
     }
+
+    public function get_post(Request $request){
+        $post_id = $request->post_id;
+
+        $post = Post::where('id',$post_id)->first();
+
+        return response()->json([
+            'error' => null,
+            'success' => true,
+            'post' => $post
+        ]);
+}
 
     public function hide_post(Request $request){
         $post_id = $request->postId;
@@ -130,6 +144,9 @@ class PostController extends Controller
         $like = Like::where('post_id', $id);
         $like->delete();
 
+        $comment = Comment::where('post_id', $id);
+        $comment->delete();
+
         return response()->json([
             'success' => true
         ]);
@@ -138,15 +155,15 @@ class PostController extends Controller
    public function postLikePost(Request $request)
    {
        $post_id = $request['postId'];
-       $user = \Auth::user();
+       $user_id = \Auth::user()->id;
 
-       $like = Like::where('user_id',  $user->id)->first();
+       $like = Like::where('user_id',  $user_id)->first();
 
        if($like){
         $like->delete();
        }else{
         $like = new Like();
-        $like->user_id = $user->id;
+        $like->user_id = $user_id;
         $like->post_id = $post_id;
         $like->like = 1;
         $like->save();

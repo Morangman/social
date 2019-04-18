@@ -74,85 +74,85 @@
 }
 
 .emoji-invoker {
-    position: absolute;
-    bottom: 5px;
-    right: 1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s;
-    }
-    .emoji-invoker:hover {
-    transform: scale(1.1);
-    }
-    .emoji-invoker > svg {
-    fill: #b1c6d0;
-    }
+  position: absolute;
+  bottom: 5px;
+  right: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  }
+  .emoji-invoker:hover {
+  transform: scale(1.1);
+  }
+  .emoji-invoker > svg {
+  fill: #b1c6d0;
+  }
 
-    .emoji-picker {
-    position: absolute;
-    z-index: 9999;
-    font-family: Montserrat;
-    border: 1px solid #ccc;
-    height: 13rem;
-    right: -12rem;
-    top: -60px;
-    width: 191px;
-    overflow-y: auto;
-    padding: 1rem;
-    box-sizing: border-box;
-    border-radius: 0.5rem;
-    background: #fff;
-    box-shadow: 1px 1px 8px #c7dbe6;
-    }
-    .emoji-picker__search {
-    display: flex;
-    }
-    .emoji-picker__search > input {
-    flex: 1;
-    width: 100px;
-    border-radius: 10rem;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    outline: none;
-    }
-    .emoji-picker h5 {
-    margin-bottom: 0;
-    color: #b1b1b1;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    cursor: default;
-    }
-    .emoji-picker .emojis {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    }
-    .emoji-picker .emojis:after {
-    content: "";
-    flex: auto;
-    }
-    .emoji-picker .emojis span {
-    padding: 0.2rem;
-    cursor: pointer;
-    border-radius: 5px;
-    }
-    .emoji-picker .emojis span:hover {
-    background: #ececec;
-    cursor: pointer;
-    }
-    .wrapper {
-    position: relative;
-    }
+  .emoji-picker {
+  position: absolute;
+  z-index: 9999;
+  font-family: Montserrat;
+  border: 1px solid #ccc;
+  height: 13rem;
+  right: -12rem;
+  top: -60px;
+  width: 191px;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 1px 1px 8px #c7dbe6;
+  }
+  .emoji-picker__search {
+  display: flex;
+  }
+  .emoji-picker__search > input {
+  flex: 1;
+  width: 100px;
+  border-radius: 10rem;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  outline: none;
+  }
+  .emoji-picker h5 {
+  margin-bottom: 0;
+  color: #b1b1b1;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  cursor: default;
+  }
+  .emoji-picker .emojis {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  }
+  .emoji-picker .emojis:after {
+  content: "";
+  flex: auto;
+  }
+  .emoji-picker .emojis span {
+  padding: 0.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  }
+  .emoji-picker .emojis span:hover {
+  background: #ececec;
+  cursor: pointer;
+  }
+  .wrapper {
+  position: relative;
+  }
 
-    .regular-input {
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    }
-    .dropdown-menu-right > a:hover{
-        background-color: #e0f0ff;
-    }
+  .regular-input {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  }
+  .dropdown-menu-right > a:hover{
+      background-color: #e0f0ff;
+  }
 
 .emoji-trigger{
       position: absolute;
@@ -424,14 +424,12 @@ export default {
       forceTLS: true
     });
     
-    let channel = pusher.subscribe('test');
-        channel.bind('pusher:subscription_succeeded', function(members) {}),
-    channel.bind('MessageSentEvent', function(e) {
-      console.log(e);
-    })
-    //window.Echo.channel("test").listen("MessageSentEvent", e => {
-    //  alert(e);
-    //});
+
+    window.Echo.channel('test')
+    .listen('MessageSentEvent', (e) => {
+         console.log('here');
+         console.log(e);
+    });
 
     let currentObj = this;
     currentObj.$Progress.start();
@@ -510,27 +508,27 @@ export default {
 
     SearchRoom(){
       let currentObj = this;
-          axios.post('/search', {
-              name: currentObj.keywords
-          },
-          {
-              headers: {
-                  'accept': 'application/json',
-                  'X-Requested-With': 'XMLHttpRequest',
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          })
-          .then(function (response) {
-              if(response){
-                 currentObj.results = response.data.rooms;
-              }
-          })
-          .catch(function (error) {
-              if(error){
-                  currentObj.$Progress.fail();
-                  console.log(error.response.data);
-              }
-          })
+      axios.post('/search', {
+          name: currentObj.keywords
+      },
+      {
+          headers: {
+              'accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      })
+      .then(function (response) {
+          if(response){
+              currentObj.results = response.data.rooms;
+          }
+      })
+      .catch(function (error) {
+          if(error){
+              currentObj.$Progress.fail();
+              console.log(error.response.data);
+          }
+      })
     },
 
     scrollToEnd: function() {    	
@@ -542,68 +540,68 @@ export default {
       e.preventDefault();
       let currentObj = this;
       if(this.text || this.file)
-          axios.post('/send', {
-              text: currentObj.text,
-              room_id: currentObj.room_id,
-              file: currentObj.file,
-              image: currentObj.image
-          },
-          {
-              headers: {
-                  'accept': 'application/json',
-                  'X-Requested-With': 'XMLHttpRequest',
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          })
-          .then(function (response) {
-              if(response){
-                  currentObj.messages = response.data.messages;
-                  currentObj.hideFile();
-              }
-          }).then(() => {
-            currentObj.scrollToEnd();
-            currentObj.text = undefined;
-          })
-          .catch(function (error) {
-              if(error){
-                  console.log(error.response.data);
-              }
-          })
+      axios.post('/send', {
+          text: currentObj.text,
+          room_id: currentObj.room_id,
+          file: currentObj.file,
+          image: currentObj.image
+      },
+      {
+          headers: {
+              'accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      })
+      .then(function (response) {
+          if(response){
+              currentObj.messages = response.data.messages;
+              currentObj.hideFile();
+          }
+      }).then(() => {
+        currentObj.scrollToEnd();
+        currentObj.text = undefined;
+      })
+      .catch(function (error) {
+          if(error){
+              console.log(error.response.data);
+          }
+      })
     },
 
     getMessages(id){
       this.check_msgs = true;
       this.room_id = id;
       let currentObj = this;
-          axios.post('/get_messages', {
-              room_id: currentObj.room_id
-          },
-          {
-              headers: {
-                  'accept': 'application/json',
-                  'X-Requested-With': 'XMLHttpRequest',
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          })
-          .then(function (response) {
-              if(response){
-                if(response.data.messages == ''){
-                  currentObj.check = true;
-                }else{
-                  currentObj.check = false;
-                }
-                  currentObj.messages = response.data.messages;
-                  currentObj.myId = response.data.myId;
-              }
-          }).then(() => {
-            currentObj.keywords = undefined;
-            currentObj.scrollToEnd();
-          })
-          .catch(function (error) {
-              if(error){
-                  console.log(error.response.data);
-              }
-          })
+      axios.post('/get_messages', {
+          room_id: currentObj.room_id
+      },
+      {
+          headers: {
+              'accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      })
+      .then(function (response) {
+          if(response){
+            if(response.data.messages == ''){
+              currentObj.check = true;
+            }else{
+              currentObj.check = false;
+            }
+              currentObj.messages = response.data.messages;
+              currentObj.myId = response.data.myId;
+          }
+      }).then(() => {
+        currentObj.keywords = undefined;
+        currentObj.scrollToEnd();
+      })
+      .catch(function (error) {
+          if(error){
+              console.log(error.response.data);
+          }
+      })
     }
   },
 
