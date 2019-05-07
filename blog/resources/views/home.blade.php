@@ -15,6 +15,7 @@
         <!------ Include the above in your HEAD tag ---------->
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+        <link href="https://i.stack.imgur.com/qQAjS.png" rel="icon" type="image/x-icon">
 
         </head>
         <body>

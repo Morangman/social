@@ -25,6 +25,18 @@ class UserController extends Controller
         ]);
     }
 
+    public function get_all_users(){
+        $my_id = \Auth::user()->id;
+        $users = User::orderBy('created_at','asc')->where('id', '!=', $my_id)->get();
+       // $check = Friends::where('user_id', $my_id)
+        //->where('friend_id', $friend_id)
+        //->first();
+        return response()->json([
+            'success' => true,
+            'users' => $users
+        ]);
+    }
+
     public function get_user(Request $request){
         $user_id = $request->user_id;
         $user = User::where('id', $user_id)->get();

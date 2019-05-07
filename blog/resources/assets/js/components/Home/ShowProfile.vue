@@ -1,211 +1,5 @@
-<style scoped>
-    body {
-        background-color: #eeeeee;
-    }
-
-    .h7 {
-        font-size: 0.8rem;
-    }
-
-    .gedf-wrapper {
-        margin-top: 0.97rem;
-    }
-
-    @media (min-width: 992px) {
-        .gedf-main {
-            padding-left: 4rem;
-            padding-right: 4rem;
-        }
-        .gedf-card {
-            margin-bottom: 2.77rem;
-        }
-    }
-
-    /**Reset Bootstrap*/
-    .dropdown-toggle::after {
-        content: none;
-    }
-    .container{
-        margin-top:10px;
-    }
-
-    .profile-pic {
-        height: 270px;
-        background-size: cover;
-        background-position: center;
-        background-blend-mode: multiply;
-        vertical-align: middle;
-        text-align: center;
-        color: transparent;
-        transition: all .3s ease;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    .profile-pic:hover {
-        background-color: rgba(0,0,0,.5);
-        z-index: 10000;
-        color: #fff;
-        transition: all .3s ease;
-        text-decoration: none;
-    }
-
-    .profile-pic span {
-        display: inline-block;
-        padding-top: 8em;
-        padding-bottom: 4.5em;
-    }
-
-    #add_to_friends{
-        margin-top: 10px;
-    }
-
-    .list{    
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    li.list-item{
-        margin: 0;
-        padding: 0;
-        display: flex;
-    }
-
-    #friendName{
-        margin-left: 5px;
-    }
-
-    .fa-thumbs-up{
-        margin-left: 4px;
-    }
-
-    .fa-thumbs-down{
-        margin-left: 4px;
-    }   
-
-    .social_icons{
-        display: flex;
-        flex-direction: column;
-        margin-left: 20px;
-    }
-
-    #crd_footer{
-        display: inline-flex;
-    }
-
-    #crd_footer > .dropdown > button{
-        padding: 0;
-        margin-left: 10px;
-    }
-
-.popup-comments{
-        background-color: whitesmoke;
-        z-index: 3;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 1000px;
-        margin-left: -500px;
-        margin-top: -280px;
-    }
-
-    .popup-post{
-        float: left;
-        width: 50%;
-    }
-
-    .comments-block{
-        float: right;
-        width: 50%;
-        height: 500px;
-        overflow-y: auto;
-    }
-
-    .comments{
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-    }
-
-    .comment-header{
-        display: flex;
-        width: 100%;
-        height: 100%;
-    }
-
-    .comment-header > .comment-author-photo{
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-    }
-
-    .comment-author-name{
-            padding-left: 10px;
-            padding-top: 5px;
-    }
-
-    .comment-body{
-        width: 100%;
-        height: 100%;
-        background-color: antiquewhite;
-        word-break: break-word;
-        border-radius: 10px;
-    }
-
-    .comment-author-text{
-        padding-left: 10px;
-    }
-
-    .comment_publication_date{
-        margin-left: 10px;
-        font-size: 12px;
-        margin-top: 10px;
-        color: darkgrey;
-    }
-
-    .popup-close{
-        position: absolute;
-        right: 29px;
-        font-size: 25px;
-        color: lightcoral;
-    }
-
-    .popup-post-image{
-        max-width: 485px;
-        max-height: 310px;
-    }
-
-    .comments_cnt{
-        margin-left: 10px;
-    }
-
-    .comment_reply{
-        margin-left: 10px;
-        font-size: 12px;
-        margin-top: 10px;
-        color: darkgrey; 
-    }
-
-    .popup-post-created-at{
-        margin-left: 10px;
-        font-size: 12px;
-        margin-top: 10px;
-        color: darkgrey;
-        float: right;
-    }
-
-    .popup-card{
-        height: 500px;
-        overflow-y: auto;
-    }
-
-    .dropdown{
-        display: inline;
-    }
-</style>
 <template>
-<div class="content-home">
+<div class="content-home" id="content-home">
         <div class="container">
         <nav class="navbar navbar-light navbar-expand-sm navbar-template">
             <a class="navbar-brand" href="/home">Social</a>
@@ -221,13 +15,15 @@
             <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><router-link class="nav-link" to="/home">Главная</router-link></li>
+                    <li class="nav-item"><router-link class="nav-link" to="/news">Новости</router-link></li>
+                    <li class="nav-item"><router-link class="nav-link" to="/friends">Найти друзей</router-link></li>
                     <li class="nav-item"><router-link class="nav-link" to="/chat">Сообщения</router-link></li>
                 </ul>
             </div>
         </nav>
         <div class="container-fluid gedf-wrapper">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3" id="card">
                 <div class="card">
                     <img v-img class="card-img-top" v-bind:src="'http://localhost:8000/' + user.photo" alt="Card image cap"></img>
                 </div>
@@ -257,11 +53,11 @@
                             <div class="h6 text-muted">Друзей</div>
                             <div class="h5">{{count_friends}}</div>
                         </li>
-                        <li class="list-group-item">Vestibulum at eros</li>
+                        <li class="list-group-item">Develop by Dmitry S.</li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6 gedf-main">
+            <div class="col-md-6 gedf-main" id="gedf-main">
 
                 <!--- \\\\\\\Post-->
                 <div class="card gedf-card">
@@ -296,12 +92,7 @@
                             <img v-img class="card-img-top" v-bind:src="'http://localhost:8000/' + post.src" alt="Card image cap"></img>
                         </div>
                         <hr>
-                        <p class="card-text" >
-                            {{post.post_body}}
-                        </p>
-                        <div>
-                            <span class="badge badge-primary">JavaScript</span>
-                        </div>
+                        <div class="post_body" v-html="post.post_body"></div>
                     </div>
                     <div class="card-footer"  id="crd_footer">
                         <span>{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
@@ -335,12 +126,13 @@
                     </div>
                 </div>
             </div>
+            <transition name="fade">
             <div class="popup-comments" v-show="open_popup">
             <a class="popup-close" href="javascript:void(0)" @click="closePopup"><span><i class="fas fa-times"></i></span></a>
             <div class="popup-post">
                 <div class="card popup-card">
                     <div class="card-body">
-                        <a class="card-link"href="#">
+                        <a class="card-link"href="javascript:void(0)">
                             <h5 class="card-title">{{post.title}}</h5>
                         </a>
                         <div class="card" v-if="post.src">
@@ -349,7 +141,7 @@
                         <div class="popup-post-info">
                             <p class="popup-post-created-at">{{post.created_at | moment("calendar")}}</p>
                             <span class="text-muted">{{post.likes_cnt}}</span><a href="#" @click.prevent="addLike(post.id)" class="card-link"><i class="fas fa-heart"></i></a>
-                            <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="openComments(post.id)" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
+                            <span class="comments_cnt text-muted">{{post.comments_cnt}}</span><a :href="'#' + 'post' + post.id" :name="'post' + post.id" @click="closePopup" class="card-link"><i class="fa fa-comment"></i> Комментарии</a>
                             <div class="dropdown">
                                 <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-bullhorn"></i> Поделиться
@@ -378,13 +170,14 @@
                             </div>
                         </div>
                         <hr>
-                        <p class="card-text" >
-                        {{post.post_body}}
-                        </p>
+                        <p class="card-text post_body" v-html="post.post_body"></p>
                     </div>
                 </div>
             </div>
-                <div class="comments-block" id="commentbody">
+                <div class="comments-block">
+                <div class="lds-spinner" v-if="showPreloader"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <div class="scroll-comments" id="commentbody">
+                    <div class="comments_existance" v-if="exist"><p>Нет комментариев</p></div>
                     <div class="comments" v-for="comment in comments">
                         <div class="comment">
                             <div class="comment-header">
@@ -394,9 +187,10 @@
                                 <a href="javascript:void(0)" class="comment_reply" @click="Reply(comment.name)">Ответить</a>
                             </div>
                             <div class="comment-body">
-                                <p class="comment-author-text">{{comment.text}}</p>
+                                <p class="comment-author-text" v-html="comment.text"></p>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="add-comment">
                         <form>
@@ -406,10 +200,11 @@
                     </div>
                 </div>
             </div> 
-            <div class="col-md-3">
+            </transition>
+            <div class="col-md-3" id="col-md">
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">Find friends!</h5>
+                        <h5 class="card-title">Галерея</h5>
                         <div class="container">
                             <div class="row">
                             //
@@ -419,17 +214,20 @@
                 </div>
                 <div class="card gedf-card">
                     <div class="card-body">
-                        <h5 class="card-title">{{user.nick}} friends <span>{{count_friends}}</span></h5>
+                        <h5 class="card-title">Друзья <span>{{count_friends}}</span></h5>
                         <ul class="list"  v-for="friend in friends">
                             <a  @click="GoToProfile(friend.id)" href=""><li class="list-item"><img v-bind:src="'http://localhost:8000/' + friend.photo" style="width: 20px; height: 20px;"></img> <p id="friendName">{{ friend.name }} </p><i class="fas fa-comment-alt"></i></li></a>
                         </ul>
                     </div>
-                    <a href="#" class="card-link" style="text-align:center;">View all</a>
+                    <a v-if="count_friends>10" href="#" class="card-link" style="text-align:center;">Показать всех</a>
                 </div>
             </div>
         </div>
     </div>
-            </div>
+    </div>
+    <back-to-top bottom="50px" right="50px">
+    <button type="button" class="btn btn-info btn-to-top"><i class="fa fa-chevron-up"></i></button>
+    </back-to-top>
     </div>
 </div>
 
@@ -453,7 +251,10 @@ data () {
         comment_postId: 0,
         comments: [],
         post: [],
-        reply_name: ''
+        reply_name: '',
+        likes_cnt: 0,
+        showPreloader: false,
+        exist: false
     }
 },
 mounted () {
@@ -487,9 +288,15 @@ mounted () {
         },
 
         openComments(e){
-
+        document.documentElement.style.overflow = 'hidden';
+        document.querySelector('#content-home').style.background = 'rgba(0,0,0,.8)';
+        document.querySelector('#gedf-main').style.zIndex = '-1';
+        document.querySelector('#card').style.zIndex = '-1';
+        document.querySelector('#col-md').style.zIndex = '-1';
+        document.querySelector('.vue-back-to-top').style.zIndex = '-1';
         this.open_popup = !this.open_popup;
         this.comment_postId = e;
+        this.showPreloader = true;
 
         let currentObj = this;
         axios.post('/get_post_info', {
@@ -505,9 +312,15 @@ mounted () {
         .then(function (response) {
             if(response){
                 currentObj.comments = response.data.comments;
+                if(currentObj.comments.length == 0){
+                    currentObj.exist = true;
+                }else{
+                    currentObj.exist = false;
+                }
                 currentObj.post = response.data.post;
             }
         }).then(() => {
+            currentObj.showPreloader = false;
             currentObj.scrollToEnd();
             currentObj.comment_text = undefined;
         })
@@ -519,6 +332,12 @@ mounted () {
         },
 
         closePopup(){
+            document.documentElement.style.overflow = 'auto';
+            document.querySelector('#content-home').style.background = '';
+            document.querySelector('#gedf-main').style.zIndex = 'auto';
+            document.querySelector('#card').style.zIndex = 'auto';
+            document.querySelector('#col-md').style.zIndex = 'auto';
+            document.querySelector('.vue-back-to-top').style.zIndex = 'auto';
             this.open_popup = !this.open_popup;
             this.clearParam();
         },
@@ -554,7 +373,11 @@ mounted () {
         .then(function (response) {
             if(response){
                 currentObj.comments = response.data.comments;
-                console.log(currentObj.comments);
+                if(currentObj.comments.length == 0){
+                    currentObj.exist = true;
+                }else{
+                    currentObj.exist = false;
+                }
             }
         }).then(() => {
             currentObj.scrollToEnd();
@@ -590,6 +413,7 @@ mounted () {
                 if(response){
                     currentObj.user = response.data.user[0];
                     currentObj.$Progress.finish();
+                    currentObj.likes_cnt += 1;
                 }
             })
             .catch(function (error) {
@@ -670,6 +494,31 @@ mounted () {
                         // currentObj.msg = error.response.data.message;
                     }
                 })
+
+                axios.post('/get_post_info', {
+                    post_id: currentObj.comment_postId
+                },
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                })
+                .then(function (response) {
+                    if(response){
+                        currentObj.comments = response.data.comments;
+                        currentObj.post = response.data.post;
+                    }
+                }).then(() => {
+                    currentObj.scrollToEnd();
+                    currentObj.comment_text = undefined;
+                })
+                .catch(function (error) {
+                    if(error){
+                        console.log(error.response.data);
+                    }
+                }) 
             },
 
             addFriend(friendId) {
@@ -862,3 +711,322 @@ mounted () {
 }
 
 </script>
+
+<style scoped>
+    body {
+        background-color: #eeeeee;
+    }
+
+    .h7 {
+        font-size: 0.8rem;
+    }
+
+    .gedf-wrapper {
+        margin-top: 0.97rem;
+    }
+
+    @media (min-width: 992px) {
+        .gedf-main {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
+        .gedf-card {
+            margin-bottom: 2.77rem;
+        }
+    }
+
+    /**Reset Bootstrap*/
+    .dropdown-toggle::after {
+        content: none;
+    }
+    .container{
+        margin-top:10px;
+    }
+
+    .comments_existance{
+        text-align: center;
+        background-color: #81aad1;
+        color: white;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    .profile-pic {
+        height: 270px;
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        vertical-align: middle;
+        text-align: center;
+        color: transparent;
+        transition: all .3s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .profile-pic:hover {
+        background-color: rgba(0,0,0,.5);
+        z-index: 10000;
+        color: #fff;
+        transition: all .3s ease;
+        text-decoration: none;
+    }
+
+    .profile-pic span {
+        display: inline-block;
+        padding-top: 8em;
+        padding-bottom: 4.5em;
+    }
+
+    #add_to_friends{
+        margin-top: 10px;
+    }
+
+    .list{    
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li.list-item{
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+    #friendName{
+        margin-left: 5px;
+    }
+
+    .fa-thumbs-up{
+        margin-left: 4px;
+    }
+
+    .fa-thumbs-down{
+        margin-left: 4px;
+    }   
+
+    .social_icons{
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+    }
+
+    #crd_footer{
+        display: inline-flex;
+    }
+
+    #crd_footer > .dropdown > button{
+        padding: 0;
+        margin-left: 10px;
+    }
+
+    .popup-comments{
+        background-color: whitesmoke;
+        z-index: 3;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 1000px;
+        margin-left: -500px;
+        margin-top: -280px;
+        border-radius: 5px;
+    }
+
+    .popup-post{
+        float: left;
+        width: 50%;
+    }
+
+    .comments-block{
+        float: right;
+        width: 50%;
+        height: 500px;
+    }
+
+    .scroll-comments{
+        height: 375px;
+        overflow-y: hidden;
+    }
+
+    .scroll-comments:hover{
+        overflow-y: scroll;
+    }
+
+    .comments{
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+    }
+
+    .comment-header{
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+
+    .comment-header > .comment-author-photo{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+    }
+
+    .comment-author-name{
+            padding-left: 10px;
+            padding-top: 5px;
+    }
+
+    .comment-body{
+        width: 100%;
+        height: 100%;
+        background-color: antiquewhite;
+        word-break: break-word;
+        border-radius: 10px;
+    }
+
+    .comment-author-text{
+        padding-left: 10px;
+    }
+
+    .comment_publication_date{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+    }
+
+    .popup-close{
+        position: absolute;
+        right: -25px;
+        top: -10px;
+        font-size: 25px;
+        color: lightcoral;
+    }
+
+    .popup-post-image{
+        max-width: 485px;
+        max-height: 310px;
+    }
+
+    .comments_cnt{
+        margin-left: 10px;
+    }
+
+    .comment_reply{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey; 
+    }
+
+    .popup-post-created-at{
+        margin-left: 10px;
+        font-size: 12px;
+        margin-top: 10px;
+        color: darkgrey;
+        float: right;
+    }
+
+    .popup-card{
+        height: 500px;
+        overflow-y: auto;
+    }
+
+    .comments_cnt{
+        margin-left: 10px;
+    }
+
+    .dropdown{
+        display: inline;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+    opacity: 0;
+    }
+
+.lds-spinner {
+  color: official;
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  position: absolute;
+    top: 30%;
+    left: 72%;
+}
+.lds-spinner div {
+  transform-origin: 32px 32px;
+  animation: lds-spinner 1.2s linear infinite;
+}
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 29px;
+  width: 5px;
+  height: 14px;
+  border-radius: 20%;
+  background: black;
+}
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+@keyframes lds-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+    
+</style>

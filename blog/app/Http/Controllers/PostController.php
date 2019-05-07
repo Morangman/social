@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\Quotation;
 use Illuminate\Http\Request;
 use App\Post;
 use App\User;
 use App\Like;
 use App\Comment;
+use App\Friends;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Input;
@@ -32,6 +35,26 @@ class PostController extends Controller
             ]);
         }
 
+    }
+
+    public function news(){
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $posts = DB::table('friends')
+            ->join('users', 'users.id', '=', 'friends.friend_id')
+            ->join('posts', 'posts.user_id', '=', 'users.id')
+            // ->orderBy('posts.created_at', 'desc')
+            ->where('friends.user_id', $user_id)
+            ->whereIn('posts.is_visible', [0, 1])
+            ->orderBy('posts.created_at', 'desc')
+            ->get();
+
+            return response()->json([
+                'error' => null,
+                'success' => true,
+                'posts' => $posts
+            ]);
+        }
     }
 
     public function get_posts(Request $request){

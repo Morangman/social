@@ -1,275 +1,6 @@
-<style scoped>
-.chatperson{
-  display: block;
-  border-bottom: 1px solid #eee;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  margin-bottom: 15px;
-  padding: 4px;
-}
-.chatperson:hover{
-  text-decoration: none;
-  border-bottom: 1px solid #2ca5e0;
-  background-color: #e2f4ff;
-}
-.namechat {
-    display: inline-block;
-    vertical-align: middle;
-}
-.chatperson .chatimg img{
-  width: 40px;
-  height: 40px;
-  background-image: url('http://i.imgur.com/JqEuJ6t.png');
-}
-.chatperson .pname{
-  font-size: 18px;
-  padding-left: 5px;
-}
-.chatperson .lastmsg{
-  font-size: 12px;
-  padding-left: 5px;
-  color: #ccc;
-}
-
-.col-sm-8 {
-  min-height: 250px;
-}
-
-.search-rooms{
-  margin-bottom: 15px;
-}
-
-.text-msgs{
-  width: 650px;
-  margin-left: 20px;
-}
-
-#send-form{
-  bottom: 0;
-}
-
-.btn-block{
-  bottom: 0;
-  float: right;
-  width: 100px;
-}
-
-.chatbody{
-  height: 400px;
-  overflow-y: auto;
-  width: 650px;
-}
-
-.rooms{
-    height: 500px;
-    overflow-y: auto;
-}
-
-.text-message{
-  max-height: 110px;
-  overflow-y: auto;
-}
-
-.emoji-invoker {
-  position: absolute;
-  bottom: 5px;
-  right: 1.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s;
-  }
-  .emoji-invoker:hover {
-  transform: scale(1.1);
-  }
-  .emoji-invoker > svg {
-  fill: #b1c6d0;
-  }
-
-  .emoji-picker {
-  position: absolute;
-  z-index: 9999;
-  font-family: Montserrat;
-  border: 1px solid #ccc;
-  height: 13rem;
-  right: -12rem;
-  top: -60px;
-  width: 191px;
-  overflow-y: auto;
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 0.5rem;
-  background: #fff;
-  box-shadow: 1px 1px 8px #c7dbe6;
-  }
-  .emoji-picker__search {
-  display: flex;
-  }
-  .emoji-picker__search > input {
-  flex: 1;
-  width: 100px;
-  border-radius: 10rem;
-  border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  outline: none;
-  }
-  .emoji-picker h5 {
-  margin-bottom: 0;
-  color: #b1b1b1;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  cursor: default;
-  }
-  .emoji-picker .emojis {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  }
-  .emoji-picker .emojis:after {
-  content: "";
-  flex: auto;
-  }
-  .emoji-picker .emojis span {
-  padding: 0.2rem;
-  cursor: pointer;
-  border-radius: 5px;
-  }
-  .emoji-picker .emojis span:hover {
-  background: #ececec;
-  cursor: pointer;
-  }
-  .wrapper {
-  position: relative;
-  }
-
-  .regular-input {
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  }
-  .dropdown-menu-right > a:hover{
-      background-color: #e0f0ff;
-  }
-
-.emoji-trigger{
-      position: absolute;
-      right: 14px;
-      top: 15px;
-}
-
-.inbox_msg {
-  border: 1px solid #c4c4c4;
-  clear: both;
-  overflow: hidden;
-}
-
-.incoming_msg_img {
-  display: inline-block;
-  width: 6%;
-}
-.received_msg {
-  display: inline-block;
-  padding: 0 0 0 10px;
-  vertical-align: top;
-  width: 92%;
- }
- .received_withd_msg p {
-  background: #ebebeb none repeat scroll 0 0;
-  border-radius: 3px;
-  color: #646464;
-  font-size: 14px;
-  margin: 0;
-  padding: 5px 10px 5px 12px;
-  width: 100%;
-}
-.time_date {
-  color: #747474;
-  display: block;
-  font-size: 12px;
-  margin: 0 0 6px;
-}
-.received_withd_msg { width: 57%;}
-.mesgs {
-  float: left;
-  padding: 30px 15px 0 25px;
-  width: 60%;
-}
-
- .sent_msg p {
-  background: #05728f none repeat scroll 0 0;
-  border-radius: 3px;
-  font-size: 14px;
-  margin: 0; color:#fff;
-  padding: 5px 10px 5px 12px;
-  width:100%;
-}
-.outgoing_msg{ overflow:hidden;}
-.sent_msg {
-  float: right;
-  width: 46%;
-}
-.input_msg_write input {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-  color: #4c4c4c;
-  font-size: 15px;
-  min-height: 48px;
-  width: 100%;
-}
-
-.choise{
-  width: 295px;
-  text-align: center;
-  background-color: #81aad1;
-  color: white;
-  border-radius: 10px;
-}
-
-.typing{
-  color: #747474;
-  background-color: mintcream;
-  border-radius: 10px;
-  display: block;
-  font-size: 12px;
-  width: 60px;
-  height: 22px;
-  text-align: center;
-  position: absolute;
-  bottom: 150px;
-  left: 20px;
-}
-
-.typing > p{
-  width: 60px;
-}
-
-.add_file{
-  position: absolute;
-  right: 114px;
-  margin-top: 5px;
-  font-size: 23px;
-  opacity: 0.5;
-  color: black;
-}
-
-.preview{
-  position: absolute;
-  left: 20px;
-  margin-top: 7px;
-}
-
-.info{
-display: inline-flex;
-opacity: 0.5;
-color: black;
-max-width: 400px;
-}
-</style>
 <template>
 <div class="content-home">
+<div class="container">
     <nav class="navbar navbar-light navbar-expand-sm navbar-template">
         <a class="navbar-brand" href="/home">Social</a>
         <div class="d-flex flex-row order-2 order-sm-3">
@@ -284,10 +15,13 @@ max-width: 400px;
         <div class="collapse navbar-collapse order-3 order-sm-2" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><router-link class="nav-link" to="/home">Главная</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" to="/news">Новости</router-link></li>
+                <li class="nav-item"><router-link class="nav-link" to="/friends">Найти друзей</router-link></li>
                 <li class="nav-item"><router-link class="nav-link" to="/chat">Сообщение</router-link></li>
             </ul>
         </div>
     </nav>
+    </div>
 <div class="container">
 	<div class="row">
     <div class="rooms col-sm-4">
@@ -614,3 +348,274 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.chatperson{
+  display: block;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 15px;
+  padding: 4px;
+}
+.chatperson:hover{
+  text-decoration: none;
+  border-bottom: 1px solid #2ca5e0;
+  background-color: #e2f4ff;
+}
+.namechat {
+    display: inline-block;
+    vertical-align: middle;
+}
+.chatperson .chatimg img{
+  width: 40px;
+  height: 40px;
+  background-image: url('http://i.imgur.com/JqEuJ6t.png');
+}
+.chatperson .pname{
+  font-size: 18px;
+  padding-left: 5px;
+}
+.chatperson .lastmsg{
+  font-size: 12px;
+  padding-left: 5px;
+  color: #ccc;
+}
+
+.col-sm-8 {
+  min-height: 250px;
+}
+
+.search-rooms{
+  margin-bottom: 15px;
+}
+
+.text-msgs{
+  width: 650px;
+  margin-left: 20px;
+}
+
+#send-form{
+  bottom: 0;
+}
+
+.btn-block{
+  bottom: 0;
+  float: right;
+  width: 100px;
+}
+
+.chatbody{
+  height: 400px;
+  overflow-y: auto;
+  width: 650px;
+}
+
+.rooms{
+    height: 500px;
+    overflow-y: auto;
+}
+
+.text-message{
+  max-height: 110px;
+  overflow-y: auto;
+}
+
+.emoji-invoker {
+  position: absolute;
+  bottom: 5px;
+  right: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  }
+  .emoji-invoker:hover {
+  transform: scale(1.1);
+  }
+  .emoji-invoker > svg {
+  fill: #b1c6d0;
+  }
+
+  .emoji-picker {
+  position: absolute;
+  z-index: 9999;
+  font-family: Montserrat;
+  border: 1px solid #ccc;
+  height: 13rem;
+  right: -12rem;
+  top: -60px;
+  width: 191px;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  background: #fff;
+  box-shadow: 1px 1px 8px #c7dbe6;
+  }
+  .emoji-picker__search {
+  display: flex;
+  }
+  .emoji-picker__search > input {
+  flex: 1;
+  width: 100px;
+  border-radius: 10rem;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  outline: none;
+  }
+  .emoji-picker h5 {
+  margin-bottom: 0;
+  color: #b1b1b1;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  cursor: default;
+  }
+  .emoji-picker .emojis {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  }
+  .emoji-picker .emojis:after {
+  content: "";
+  flex: auto;
+  }
+  .emoji-picker .emojis span {
+  padding: 0.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+  }
+  .emoji-picker .emojis span:hover {
+  background: #ececec;
+  cursor: pointer;
+  }
+  .wrapper {
+  position: relative;
+  }
+
+  .regular-input {
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  }
+  .dropdown-menu-right > a:hover{
+      background-color: #e0f0ff;
+  }
+
+.emoji-trigger{
+      position: absolute;
+      right: 14px;
+      top: 15px;
+}
+
+.inbox_msg {
+  border: 1px solid #c4c4c4;
+  clear: both;
+  overflow: hidden;
+}
+
+.incoming_msg_img {
+  display: inline-block;
+  width: 6%;
+}
+.received_msg {
+  display: inline-block;
+  padding: 0 0 0 10px;
+  vertical-align: top;
+  width: 92%;
+ }
+ .received_withd_msg p {
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 3px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px 5px 12px;
+  width: 100%;
+}
+.time_date {
+  color: #747474;
+  display: block;
+  font-size: 12px;
+  margin: 0 0 6px;
+}
+.received_withd_msg { width: 57%;}
+.mesgs {
+  float: left;
+  padding: 30px 15px 0 25px;
+  width: 60%;
+}
+
+ .sent_msg p {
+  background: #05728f none repeat scroll 0 0;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0; color:#fff;
+  padding: 5px 10px 5px 12px;
+  width:100%;
+}
+.outgoing_msg{ overflow:hidden;}
+.sent_msg {
+  float: right;
+  width: 46%;
+}
+.input_msg_write input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 100%;
+}
+
+.choise{
+  width: 295px;
+  text-align: center;
+  background-color: #81aad1;
+  color: white;
+  border-radius: 10px;
+}
+
+.typing{
+  color: #747474;
+  background-color: mintcream;
+  border-radius: 10px;
+  display: block;
+  font-size: 12px;
+  width: 60px;
+  height: 22px;
+  text-align: center;
+  position: absolute;
+  bottom: 150px;
+  left: 20px;
+}
+
+.typing > p{
+  width: 60px;
+}
+
+.add_file{
+  position: absolute;
+  right: 114px;
+  margin-top: 5px;
+  font-size: 23px;
+  opacity: 0.5;
+  color: black;
+}
+
+.preview{
+  position: absolute;
+  left: 20px;
+  margin-top: 7px;
+}
+
+.info{
+display: inline-flex;
+opacity: 0.5;
+color: black;
+max-width: 400px;
+}
+</style>

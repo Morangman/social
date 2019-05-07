@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Friends;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
+use App\User;
 
 class FriendController extends Controller
 {
@@ -34,6 +35,15 @@ class FriendController extends Controller
             'error' => null,
             'success' => true,
             'posts' => $posts
+        ]);
+    }
+
+    public function searchFriend(Request $request){
+        $result = User::where('name', 'like', '%' . $request->search . '%')->get();
+        return response()->json([
+            'error' => null,
+            'success' => true,
+            'result_search' => $result
         ]);
     }
 

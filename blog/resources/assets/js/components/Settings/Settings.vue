@@ -1,5 +1,16 @@
+<style scoped>
+#defaultCheck1{
+  width: 20px;
+  margin-top: 12px;
+}
+
+.private{
+  display: flex;
+  flex-direction: row;
+}
+</style>
+
 <template>
-  
 <div class="container">
 	<div class="row">
 		<div class="col-md-3 ">
@@ -58,6 +69,14 @@
                           </div>
                         </div> 
                         <div class="form-group row">
+                          <label for="newpass" class="col-4 col-form-label">Приватность</label> 
+                          <div class="col-8 private">
+                            <input class="form-control here" type="checkbox" v-model="is_private" value="" id="defaultCheck1">
+                            <p v-if="!is_private" style="margin-top: 5px;"> Открытый</p>
+                            <p v-if="is_private" style="margin-top: 5px;"> Закрытый</p>
+                          </div>
+                        </div> 
+                        <div class="form-group row">
                           <div class="offset-4 col-8">
                             <button type="submit" @click.prevent="updateProfileInfo" class="btn btn-primary">Сохранить</button>
                             <p><router-link to="/home">Отмена</router-link> </p>
@@ -84,7 +103,8 @@ export default{
       nick : '',
       phone: '',
       password : '',
-      savedOk: false
+      savedOk: false,
+      is_private: false
     }
   },
 

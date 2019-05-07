@@ -9,6 +9,7 @@ import VueMoment from 'vue-moment'
 import SocialSharing from 'vue-social-sharing'
 //import {Picker, Emoji} from 'emoji-mart-vue'
 import wysiwyg from "vue-wysiwyg";
+import BackToTop from 'vue-backtotop'
 
 import "vue-wysiwyg/dist/vueWysiwyg.css"
  
@@ -39,14 +40,16 @@ Vue.component('input-tag', InputTag);
 
 Vue.use(SocialSharing);
 
+Vue.use(BackToTop);
+
 Vue.use(wysiwyg, { 
   hideModules: { 
     "code":true, 
     "unorderedList":true, 
-    "underline":true,
     "justifyLeft":true,
     "justifyRight":true, 
-    "justifyCenter":true
+    "justifyCenter":true,
+    "table": true
   },
   maxHeight: "500px"
 }); // config is optional. more below
@@ -70,6 +73,8 @@ const Home = Vue.component('datacomponent', require('./components/Home/Home.vue'
 const ShowProfile = Vue.component('profile', require('./components/Home/ShowProfile.vue'));
 const Settings = Vue.component('settingscomponent', require('./components/Settings/Settings.vue'));
 const Chat = Vue.component('chatcomponent', require('./components/Chatroom/ChatRoom.vue'));
+const News = Vue.component('news', require('./components/News/News.vue'));
+const Friends = Vue.component('friends', require('./components/Home/FindFriends.vue'));
 
 const routes = [
   { path: '/', component: Register },
@@ -77,7 +82,9 @@ const routes = [
   { path: '/home', component: Home },
   { path: '/profile/:id', component: ShowProfile },
   { path: '/settings', component: Settings },
-  { path: '/chat', component: Chat }
+  { path: '/chat', component: Chat },
+  { path: '/news', component: News },
+  { path: '/friends', component: Friends }
 ]
 
 const router = new VueRouter({
