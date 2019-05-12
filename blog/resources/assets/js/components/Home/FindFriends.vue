@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-        <div class="pagination">
+        <div class="pagination" v-if="count_result">
             <button 
                 :disabled="pageNumber === 0" 
                 @click="prevPage" class="previous">
@@ -86,31 +86,27 @@ export default {
         return {
             users: [],
             paginate_users: [],
-            search: '',
+            search: null,
             opened: true,
             result_search: [],
             pageNumber: 0,
             page_count: 0,
-            size: 5
+            size: 5,
+            count_result: true
         }
     },
-    mounted(){
-        let currentObj = this;
-        axios.get(`/get_all_users`)
-        .then(function (response) {
-            if(response){
-                currentObj.users = response.data.users;
-                currentObj.$Progress.finish();
-                
-                if(response.data.success == false){
-                    currentObj.$Progress.fail();
-                    currentObj.$router.push('/login');
-                }
+
+    watch: {
+        search(after, before) {
+            if(!this.search){
+                this.opened = true;
+                this.count_result = true;
             }
-        }).then(() =>{
-            this.pageCount();
-            this.paginatedData();
-        })
+        }
+    },
+
+    mounted(){
+        this.getAll();
     },
 
     methods:{
@@ -131,6 +127,25 @@ export default {
             });
         },
 
+        getAll(){
+            let currentObj = this;
+            axios.get(`/get_all_users`)
+            .then(function (response) {
+                if(response){
+                    currentObj.users = response.data.users;
+                    currentObj.$Progress.finish();
+                    
+                    if(response.data.success == false){
+                        currentObj.$Progress.fail();
+                        currentObj.$router.push('/login');
+                    }
+                }
+            }).then(() =>{
+                this.pageCount();
+                this.paginatedData();
+            })
+        },
+
         pageCount(){
         let l = this.users.length,
             s = this.size;
@@ -144,9 +159,9 @@ export default {
         },
 
         nextPage(){
-         this.pageNumber++;
-         this.pageCount();
-         this.paginatedData();
+            this.pageNumber++;
+            this.pageCount();
+            this.paginatedData();
         },
         prevPage(){
             this.pageNumber--;
@@ -215,6 +230,11 @@ export default {
                     // currentObj.success = true;
                     //    currentObj.$router.push('home');
                     currentObj.result_search = response.data.result_search;
+                    if(currentObj.result_search.length <= 5){
+                        currentObj.count_result = false;
+                    }else{
+                        currentObj.count_result = true;
+                    }
                     currentObj.$Progress.finish();
                 }
             }).then(() =>{
@@ -276,20 +296,20 @@ export default {
     }
 
     .previous {
-    color: #fff!important;
-    background-color: #000!important;
-    width: 50px;
-    margin-right: 10px;
-    text-align: center;
-    height: 26px;
+        color: #fff!important;
+        background-color: #000!important;
+        width: 50px;
+        margin-right: 10px;
+        text-align: center;
+        border: 0;
     }
 
     .next {
-    color: #fff!important;
-    background-color: #000!important;
-    width: 50px;
-    text-align: center;
-    height: 26px;
+        color: #fff!important;
+        background-color: #000!important;
+        width: 50px;
+        text-align: center;
+        border: 0;
     }
 
     .profile-pic {

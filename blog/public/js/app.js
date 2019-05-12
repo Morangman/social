@@ -87788,21 +87788,23 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group capcha" },
-                  [
-                    _c("vue-recaptcha", {
-                      ref: "recaptcha",
-                      attrs: { sitekey: _vm.sitekey },
-                      on: {
-                        verify: _vm.recapcha,
-                        expired: _vm.onCaptchaExpired
-                      }
-                    })
-                  ],
-                  1
-                ),
+                _vm.capcha
+                  ? _c(
+                      "div",
+                      { staticClass: "form-group capcha" },
+                      [
+                        _c("vue-recaptcha", {
+                          ref: "recaptcha",
+                          attrs: { sitekey: _vm.sitekey },
+                          on: {
+                            verify: _vm.recapcha,
+                            expired: _vm.onCaptchaExpired
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  : _vm._e(),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
                   _c(
@@ -95516,7 +95518,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\nbody[data-v-2944c083] {\n    background-color: #eeeeee;\n}\n.h7[data-v-2944c083] {\n    font-size: 0.8rem;\n}\n.gedf-wrapper[data-v-2944c083] {\n    margin-top: 0.97rem;\n}\n@media (min-width: 992px) {\n.gedf-main[data-v-2944c083] {\n        padding-left: 4rem;\n        padding-right: 4rem;\n}\n.gedf-card[data-v-2944c083] {\n        margin-bottom: 2.77rem;\n}\n}\n\n/**Reset Bootstrap*/\n.dropdown-toggle[data-v-2944c083]::after {\n    content: none;\n}\n.container[data-v-2944c083]{\n    margin-top:10px;\n}\n.pagination[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.previous[data-v-2944c083] {\ncolor: #fff!important;\nbackground-color: #000!important;\nwidth: 50px;\nmargin-right: 10px;\ntext-align: center;\nheight: 26px;\n}\n.next[data-v-2944c083] {\ncolor: #fff!important;\nbackground-color: #000!important;\nwidth: 50px;\ntext-align: center;\nheight: 26px;\n}\n.profile-pic[data-v-2944c083] {\n    height: 270px;\n    background-size: cover;\n    background-position: center;\n    background-blend-mode: multiply;\n    vertical-align: middle;\n    text-align: center;\n    color: transparent;\n    -webkit-transition: all .3s ease;\n    transition: all .3s ease;\n    text-decoration: none;\n}\n.profile-pic[data-v-2944c083]:hover {\n    background-color: rgba(0,0,0,.5);\n    z-index: 10000;\n    color: #fff;\n    -webkit-transition: all .3s ease;\n    transition: all .3s ease;\n    text-decoration: none;\n}\n.profile-pic span[data-v-2944c083] {\n    display: inline-block;\n    padding-top: 8em;\n    padding-bottom: 4.5em;\n}\n.fa-camera[data-v-2944c083] { -webkit-transform: scale(2,2); transform: scale(2,2); cursor: pointer;\n}\n.fa-trash[data-v-2944c083] { -webkit-transform: scale(2,2); transform: scale(2,2); cursor: pointer;\n}\n.list[data-v-2944c083]{    \n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\nli.list-item[data-v-2944c083]{\n    margin: 0;\n    padding: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n#friendName[data-v-2944c083]{\n    margin-left: 5px;\n}\n.fa-thumbs-up[data-v-2944c083]{\n    margin-left: 4px;\n}\n.fa-thumbs-down[data-v-2944c083]{\n    margin-left: 4px;\n}\n.friend-card[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    height: 80px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n.friend-photo[data-v-2944c083]{\n    width: 100px;\n    height: auto;\n}\n.search-block[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    height: 80px;\n}\n.golge[data-v-2944c083]{\n-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),\n0 6px 20px 0 rgba(0, 0, 0, 0.19);\n        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),\n0 6px 20px 0 rgba(0, 0, 0, 0.19);\n}\n.isteColor[data-v-2944c083]{\ncolor: #cd2147;\n}\n.isteColor[data-v-2944c083]:hover{\ncolor: #353A40;\n}\n.img-deneyim[data-v-2944c083] {\n-o-object-fit: cover;\n   object-fit: cover;\nborder-radius:50%;\nwidth: 90px;\nheight: 90px;\nborder-style: solid;\n}\n.img-arkadas[data-v-2944c083] {\n-o-object-fit: cover;\n   object-fit: cover;\nborder-radius:50%;\nwidth: 40px;\nheight: 40px;\nborder-style: solid;\n}\n.list-group-item[data-v-2944c083]{\n    width: 500px;\n}\n.friends-cards[data-v-2944c083]{\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-2944c083] {\n    background-color: #eeeeee;\n}\n.h7[data-v-2944c083] {\n    font-size: 0.8rem;\n}\n.gedf-wrapper[data-v-2944c083] {\n    margin-top: 0.97rem;\n}\n@media (min-width: 992px) {\n.gedf-main[data-v-2944c083] {\n        padding-left: 4rem;\n        padding-right: 4rem;\n}\n.gedf-card[data-v-2944c083] {\n        margin-bottom: 2.77rem;\n}\n}\n\n/**Reset Bootstrap*/\n.dropdown-toggle[data-v-2944c083]::after {\n    content: none;\n}\n.container[data-v-2944c083]{\n    margin-top:10px;\n}\n.pagination[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    -webkit-box-pack: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n.previous[data-v-2944c083] {\n    color: #fff!important;\n    background-color: #000!important;\n    width: 50px;\n    margin-right: 10px;\n    text-align: center;\n    border: 0;\n}\n.next[data-v-2944c083] {\n    color: #fff!important;\n    background-color: #000!important;\n    width: 50px;\n    text-align: center;\n    border: 0;\n}\n.profile-pic[data-v-2944c083] {\n    height: 270px;\n    background-size: cover;\n    background-position: center;\n    background-blend-mode: multiply;\n    vertical-align: middle;\n    text-align: center;\n    color: transparent;\n    -webkit-transition: all .3s ease;\n    transition: all .3s ease;\n    text-decoration: none;\n}\n.profile-pic[data-v-2944c083]:hover {\n    background-color: rgba(0,0,0,.5);\n    z-index: 10000;\n    color: #fff;\n    -webkit-transition: all .3s ease;\n    transition: all .3s ease;\n    text-decoration: none;\n}\n.profile-pic span[data-v-2944c083] {\n    display: inline-block;\n    padding-top: 8em;\n    padding-bottom: 4.5em;\n}\n.fa-camera[data-v-2944c083] { -webkit-transform: scale(2,2); transform: scale(2,2); cursor: pointer;\n}\n.fa-trash[data-v-2944c083] { -webkit-transform: scale(2,2); transform: scale(2,2); cursor: pointer;\n}\n.list[data-v-2944c083]{    \n    list-style: none;\n    margin: 0;\n    padding: 0;\n}\nli.list-item[data-v-2944c083]{\n    margin: 0;\n    padding: 0;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n#friendName[data-v-2944c083]{\n    margin-left: 5px;\n}\n.fa-thumbs-up[data-v-2944c083]{\n    margin-left: 4px;\n}\n.fa-thumbs-down[data-v-2944c083]{\n    margin-left: 4px;\n}\n.friend-card[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    height: 80px;\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n.friend-photo[data-v-2944c083]{\n    width: 100px;\n    height: auto;\n}\n.search-block[data-v-2944c083]{\n    position: relative;\n    top: 50%;\n    left: 50%;\n    width: 500px;\n    margin-left: -250px;\n    height: 80px;\n}\n.golge[data-v-2944c083]{\n-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),\n0 6px 20px 0 rgba(0, 0, 0, 0.19);\n        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),\n0 6px 20px 0 rgba(0, 0, 0, 0.19);\n}\n.isteColor[data-v-2944c083]{\ncolor: #cd2147;\n}\n.isteColor[data-v-2944c083]:hover{\ncolor: #353A40;\n}\n.img-deneyim[data-v-2944c083] {\n-o-object-fit: cover;\n   object-fit: cover;\nborder-radius:50%;\nwidth: 90px;\nheight: 90px;\nborder-style: solid;\n}\n.img-arkadas[data-v-2944c083] {\n-o-object-fit: cover;\n   object-fit: cover;\nborder-radius:50%;\nwidth: 40px;\nheight: 40px;\nborder-style: solid;\n}\n.list-group-item[data-v-2944c083]{\n    width: 500px;\n}\n.friends-cards[data-v-2944c083]{\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n", ""]);
 
 // exports
 
@@ -95615,32 +95617,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             users: [],
             paginate_users: [],
-            search: '',
+            search: null,
             opened: true,
             result_search: [],
             pageNumber: 0,
             page_count: 0,
-            size: 5
+            size: 5,
+            count_result: true
         };
     },
-    mounted: function mounted() {
-        var _this = this;
 
-        var currentObj = this;
-        axios.get('/get_all_users').then(function (response) {
-            if (response) {
-                currentObj.users = response.data.users;
-                currentObj.$Progress.finish();
 
-                if (response.data.success == false) {
-                    currentObj.$Progress.fail();
-                    currentObj.$router.push('/login');
-                }
+    watch: {
+        search: function search(after, before) {
+            if (!this.search) {
+                this.opened = true;
+                this.count_result = true;
             }
-        }).then(function () {
-            _this.pageCount();
-            _this.paginatedData();
-        });
+        }
+    },
+
+    mounted: function mounted() {
+        this.getAll();
     },
 
 
@@ -95656,6 +95654,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 currentObj.$Progress.fail();
                 console.log(error);
+            });
+        },
+        getAll: function getAll() {
+            var _this = this;
+
+            var currentObj = this;
+            axios.get('/get_all_users').then(function (response) {
+                if (response) {
+                    currentObj.users = response.data.users;
+                    currentObj.$Progress.finish();
+
+                    if (response.data.success == false) {
+                        currentObj.$Progress.fail();
+                        currentObj.$router.push('/login');
+                    }
+                }
+            }).then(function () {
+                _this.pageCount();
+                _this.paginatedData();
             });
         },
         pageCount: function pageCount() {
@@ -95732,6 +95749,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     // currentObj.success = true;
                     //    currentObj.$router.push('home');
                     currentObj.result_search = response.data.result_search;
+                    if (currentObj.result_search.length <= 5) {
+                        currentObj.count_result = false;
+                    } else {
+                        currentObj.count_result = true;
+                    }
                     currentObj.$Progress.finish();
                 }
             }).then(function () {
@@ -96070,27 +96092,29 @@ var render = function() {
           2
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "pagination" }, [
-          _c(
-            "button",
-            {
-              staticClass: "previous",
-              attrs: { disabled: _vm.pageNumber === 0 },
-              on: { click: _vm.prevPage }
-            },
-            [_c("i", { staticClass: "fas fa-chevron-left" })]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "next",
-              attrs: { disabled: _vm.pageNumber >= _vm.page_count },
-              on: { click: _vm.nextPage }
-            },
-            [_c("i", { staticClass: "fas fa-chevron-right" })]
-          )
-        ])
+        _vm.count_result
+          ? _c("div", { staticClass: "pagination" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "previous",
+                  attrs: { disabled: _vm.pageNumber === 0 },
+                  on: { click: _vm.prevPage }
+                },
+                [_c("i", { staticClass: "fas fa-chevron-left" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "next",
+                  attrs: { disabled: _vm.pageNumber >= _vm.page_count },
+                  on: { click: _vm.nextPage }
+                },
+                [_c("i", { staticClass: "fas fa-chevron-right" })]
+              )
+            ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("back-to-top", { attrs: { bottom: "50px", right: "50px" } }, [

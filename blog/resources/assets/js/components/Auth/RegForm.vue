@@ -57,7 +57,7 @@
                                 </div>
                                 <input class="form-control" placeholder="Повторите пароль" type="password" v-model="password_confirmation">
                             </div> <!-- form-group// -->
-                            <div class="form-group capcha" >
+                            <div class="form-group capcha" v-if="capcha">
                                 <vue-recaptcha
                                     ref="recaptcha"
                                     :sitekey="sitekey"
